@@ -135,5 +135,5 @@
 		padding:10px
 		box-sizing:border-box
 	video
-		display:none	
+		display:none
 </style>

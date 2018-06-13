@@ -228,7 +228,7 @@ export default {
 			vertical-align: middle;
 			.span_name
 				display:inline-block
-				width: 100% 
+				width: 100%
 				height:100%
 				// background:red
 				font-size:14px
@@ -255,7 +255,7 @@ export default {
 					&:hover
 						color:$text_before_color
 						border:2px solid $text_before_color
-				
+
 		&.border-1px
 			border-1px($border_bottom_color,bottom)
 	@media screen and (max-width: 998px)
@@ -278,7 +278,7 @@ export default {
 				&.music_singer
 					width:30%!important
 				&.music_duration
-					width:20%!important	
+					width:20%!important
 	.music_list_container
 		// height:calc(100% - 50px)
 		position:absolute
@@ -310,5 +310,5 @@ export default {
 					.hover_menu
 						display:block
 	video
-		display:none	
+		display:none
 </style>

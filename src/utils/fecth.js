@@ -91,7 +91,27 @@ export default {
       }
     )
   },
-
+  postJson (url, data) {
+    return axios({
+      method: 'post',
+      baseURL: process.env.BASE_API,
+      url,
+      data: data,
+      timeout: 15000,
+      headers: {
+        // 'X-Requested-With': 'XMLHttpRequest',
+        'Content-Type': 'application/json; charset=UTF-8'
+      }
+    }).then(
+      (response) => {
+        return checkStatus(response)
+      }
+    ).then(
+      (res) => {
+        return checkCode(res)
+      }
+    )
+  },
   upload (url, data) {
     return axios({
       method: 'post',

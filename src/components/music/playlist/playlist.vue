@@ -110,5 +110,5 @@
 				color:$text_before_color
 				font-size:14px
 	video
-		display:none	
+		display:none
 </style>

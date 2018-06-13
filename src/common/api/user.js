@@ -15,6 +15,15 @@ export function fecthPromise (url, options) {
 		})
 	})
 }
+export function fecthPromiseJson (url, options) {
+  return new Promise((resolve, reject) => {
+    fecth.postJson(url, options).then((res) => {
+      resolve(res)
+    }, (err) => {
+      reject(err)
+    })
+  })
+}
 
 // 用户验证  有信息则返回信息  否则跳到login
 export function todoUserInfo () {

@@ -58,6 +58,9 @@ const User = r => require.ensure([], () => r(require('@/components/user/user.vue
 
 const Reward = r => require.ensure([], () => r(require('@/components/reward/reward.vue')), 'reward')
 
+const ArticleList = r => require.ensure([], () => r(require('@/components/blog/articlelist/articlelist.vue')), 'articlelist')
+
+const Article = r => require.ensure([], () => r(require('@/components/blog/article/article.vue')), 'article')
 Vue.use(Router)
 
 export default new Router({
@@ -151,7 +154,23 @@ export default new Router({
     {
       // 博客
       path: '/blog',
-      component: Blog
+      component: Blog,
+      children: [
+        {
+          path: '/blog/articlelist/:type',
+          name: 'articlelist',
+          components: {
+            listinfo: ArticleList
+          }
+        },
+        {
+          path: '/blog/article/:id',
+          name: 'article',
+          components: {
+            fullscreen: Article
+          }
+        }
+      ]
     },
     {
       // 关于
