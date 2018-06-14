@@ -16,9 +16,11 @@
               </span>
             </div>
             <div v-if="!getIsAPP.isHigher768" class="select_m_button">
-              <router-link tag="span" to="/blog/articlelist/2132132" class="todo_btn playing_btn">
-                分类1
-              </router-link>
+              <span v-for="obj in pc">
+                <router-link tag="span" :to="'/blog/articlelist/'+obj.type" class="todo_btn playing_btn">
+                  {{obj.type}}
+                </router-link>
+              </span>
             </div>
             <transition name="silde-top">
               <router-view class="list_content" name="listinfo"></router-view>
@@ -55,7 +57,7 @@
       getBlogType () {
         const vm = this
         let api = 'http://192.168.1.124:9999/api/admin/article/findTypeByUser?id=1'
-        fecth.get(api).then((res)=>{
+        fecth.get(api).then((res) => {
           for (var i = 0; i < res.data.data.length; i++) {
             vm.pc.push({type: res.data.data[i]})
           }

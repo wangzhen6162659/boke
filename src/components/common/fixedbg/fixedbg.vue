@@ -4,6 +4,7 @@
   </div>
 </template>
 <script>
+import store from 'store'
 import SetMaskType from './../selectmask/selectmask.js'
 import DGlobal from '@/common/js/global.js'
 import {addClass, removeClass} from '@/common/js/Dom.js'
@@ -34,16 +35,13 @@ export default {
     },
     masktype: {
       type: String,
-      default: 'default'
-    },
-    maskglobainfo: {
-      type: Object,
-      default: {}
+      default: 'radial-gradient-ellipse'
     }
   },
   computed: {
     maskType () {
-      var styleCss = SetMaskType(this.masktype, this.maskglobainfo)
+      console.log()
+      var styleCss = SetMaskType(this.masktype, store.getters.getGlobalInfo)
       return styleCss
     }
   },

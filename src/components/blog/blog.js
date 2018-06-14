@@ -1,5 +1,4 @@
 import store from 'store'
-import fecth from 'utils/fecth.js'
 import {fecthPromiseJson} from 'common/api/user.js'
 const blogApi = {
   getArticleList (axiodata, list) {

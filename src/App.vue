@@ -2,7 +2,9 @@
   <div id="app" @resize="isApp">
     <loader :isshow="getShowLoading" loaderbackground="rgba(0,0,0,0.3)"></loader>
     <div class="maincontent">
-      <fixed-bg v-if="imageInfo.url && imageSetting" :imagepath="imageInfo.url" :maskcolor="getGlobalStyle.contentInfo.bgcolor" :maskopacity="getGlobalStyle.contentInfo.opacity" :masktype="getGlobalStyle.contentInfo.type" :maskglobainfo="getGlobalStyle" ></fixed-bg>
+      <fixed-bg v-if="imageInfo.url && imageSetting" :imagepath="imageInfo.url" />
+      <!--<fixed-bg :imagepath="imageInfo.url" />-->
+      <!--<img src="http://192.168.1.124:6080/file/xiaojiejie.jpg"/>-->
     </div>
     <v-content></v-content>
     <updatetips :defaultvalue="getVersionList"></updatetips>
@@ -61,8 +63,6 @@ export default {
           // 如果是自定义壁纸 判断有没有最新的壁纸  有就更新 没有就不更新
           if (getFixedImageBg && getFixedImageBg.type === 'home') {
             fecth.get(api, {index: index}).then((res) => {
-              console.log(getFixedImageBg)
-              console.log(res)
               if (!(getFixedImageBg === null || '') && res.data.data) {
                 // 判断是否和本地数据一样  一样则用本地的数据 不一样则请求最新的数据
                 if (getFixedImageBg.url === res.data.data.url) {

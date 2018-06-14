@@ -14,7 +14,7 @@
         </div>
         <tips v-if="globalInfo.isHigher768"></tips>
         <div class="home_set">
-          <div class="set_list" v-if="imageInfo.type === 'home'" :class="index === 2 ? 'disabled' : ''" title="上一张壁纸" @click="defaultData(2)">
+          <div class="set_list" v-if="imageInfo.type === 'home'" :class="index === picNum ? 'disabled' : ''" title="上一张壁纸" @click="defaultData(2)">
             <i class="icon-left"></i>
           </div>
           <div class="set_list" :title="isBingImage ? '设置默认壁纸' : '设置为Bing壁纸'" @click="getHomeImage">
@@ -51,6 +51,7 @@
 import store from 'store'
 import tips from 'components/common/tips/tips.vue'
 import coverhistory from 'components/common/coverhistory/coverhistory'
+import fecth from 'utils/fecth.js'
 // import advertisement from 'components/common/advertisement/advertisement'
 
 // 引入背景请求的api  getBingInfo
@@ -63,7 +64,8 @@ export default {
       isFullScreen: false,
       isPlay: false,
       index: 0,
-      isShowAllList: false
+      isShowAllList: false,
+      picNum: 0
     }
   },
   computed: {
@@ -102,7 +104,15 @@ export default {
     showAllList () {
       this.isShowAllList = true
     },
-
+    getPicNum () {
+      let fecthUrl = 'http://192.168.1.124:9999/api/admin/album/findPicture'
+      fecth.get(fecthUrl, {
+      }).then((res) => {
+        this.picNum = res.data.data.length - 1
+      }, (err) => {
+        console.log(`数据请求错误${err}`)
+      })
+    },
     playpause () {
       var globalAudioEle = store.getters.getAudioEle
       if (!globalAudioEle.paused) {
@@ -144,8 +154,8 @@ export default {
 
       if (type === 2) {
         this.index++
-        if (this.index > 2) {
-          this.index = 2
+        if (this.index > this.picNum) {
+          this.index = this.picNum
           return
         }
       }
@@ -281,6 +291,7 @@ export default {
     this.screenChangeEvent()
     const fixedImageBg = localStorage.getItem('fixedImageBg')
     this.index = fixedImageBg ? JSON.parse(fixedImageBg).index : store.getters.getFixedImageInfo.index
+    this.getPicNum()
   }
 }
 </script>

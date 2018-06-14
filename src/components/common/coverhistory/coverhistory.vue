@@ -24,7 +24,8 @@
 			return {
 				imageList: [],
 				isNeedPull: true,
-				imageIndex: 0
+				imageIndex: 0,
+        picNum: 0
 			}
 		},
 		components: {
@@ -36,8 +37,9 @@
 				fecth.get(fecthUrl, {
 					index: this.imageIndex
 				}).then((res) => {
-					this.imageIndex = this.imageIndex + 8
+					this.imageIndex = this.imageIndex + res.data.data.length
 					this.imageList = this.imageList.concat(res.data.data)
+          this.picNum = res.data.data.length
 				}, (err) => {
 					console.log(`数据请求错误${err}`)
 				})

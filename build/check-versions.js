@@ -1,4 +1,3 @@
-console.log('jdasdjkljkkl')
 var chalk = require('chalk')
 console.log('1')
 var semver = require('semver')

@@ -39,7 +39,7 @@
     data () {
       return {
         bokelist: [],
-        show:false
+        show: false
       }
     },
     components: {
