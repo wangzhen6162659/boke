@@ -14,9 +14,14 @@
               评论
               <div v-for="obj in userMessage">
                 <div class="select_user">
-                  <img v-bind:src="obj.photo"/>
-                  <div class="select_user_content">
-                    还行
+                  <div>
+                    <img class="select_user_photo" v-bind:src="obj.photo"/>
+                    <div class="select_user_content">
+                      {{obj.content}}
+                    </div>
+                    <div class="select_user_name">
+                      {{obj.nickname}}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -68,11 +73,10 @@
       },
       getUserMessage () {
         var id = this.$route.params.id
-        let api = 'http://192.168.1.124:9999/api/admin/user/get?id=' + id
+        let api = 'http://192.168.1.124:9999/api/admin/reply/findReply?id=' + id
         fecth.get(api).then((res) => {
-          var data = res.data.data
-          this.userMessage.push(data)
-          this.userMessage.push(data)
+          var data = res.data
+          this.userMessage = data
           console.log(this.userMessage)
         })
       }
@@ -210,7 +214,25 @@
           text-indent:5px
           margin-bottom:10px
           border-top:1px solid $border_bottom_color
-          float:left;
+          float:left
+          .select_user_photo
+            width:20%
+            line-height:50px
+            margin:0
+            text-indent:5px
+            margin-bottom:10px
+            margin-top:20px
+            margin-right:20px
+            float:left
+	        .select_user_name
+            width:20%
+            line-height:50px
+            margin:0
+            text-indent:5px
+            margin-bottom:10px
+            margin-top:20px
+            margin-right:20px
+            /*float:left*/
 	      .select_user_content
           width:100%
           line-height:50px
