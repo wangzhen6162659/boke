@@ -1,5 +1,5 @@
 <template>
-    <div id="app" @resize="isApp" class="article" @click="back">
+    <div id="app" @resize="isApp" class="article" >
       <transition name="fade">
         <div class="bg_article" v-show="showarticle"></div>
       </transition>
@@ -14,15 +14,50 @@
               评论
               <div v-for="obj in userMessage">
                 <div class="select_user">
-                  <div>
-                    <img class="select_user_photo" v-bind:src="obj.photo"/>
-                    <div class="select_user_content">
-                      {{obj.content}}
+                  <div class="user-info">
+                    <img class="photo" :src="obj.photo">
+                  </div>
+                  <div class="right-box">
+                    <div class="user-name">{{obj.nickname}}</div>
+                    <div class="text-content">{{obj.content}}</div>
+                    <div class="receive-content-list" v-if="obj.children.length">
+                      <div class="item item1">
+                      <div class="item-title" @click="obj.activeTag = !obj.activeTag">
+                        <div v-show="obj.activeTag" style="text-align: right;padding-right:8px;">回复</div>
+                        <div v-show="!obj.activeTag" style="text-align: right;padding-right:8px;">点击展开({{obj.children.length}}条回复)</div>
+                      </div>
+                      <vertical-toggle>
+                        <div class="item-content" v-show="obj.activeTag">
+                      <div v-for="mobj in obj.children">
+                        <!--<img class="photo_reply" :src="mobj.photo">-->
+                        {{mobj.nickname}}
+                          <template v-if="mobj.replyName !== null">
+                            回复 {{mobj.replyName}}
+                          </template>
+                        : {{mobj.content}}
+                      </div>
+                        </div>
+                      </vertical-toggle>
+                      </div>
                     </div>
-                    <div class="select_user_name">
-                      {{obj.nickname}}
+                    <div class="receive-content-list" v-if="obj.children.length<1">
+                      <span>暂无评论</span>
                     </div>
                   </div>
+                  <!--<div>-->
+                    <!--<img class="select_user_photo" v-bind:src="obj.photo"/>-->
+                    <!--<div class="select_user_content">-->
+                      <!--{{obj.content}}-->
+                    <!--</div>-->
+                    <!--<div class="select_user_name">-->
+                      <!--{{obj.nickname}}-->
+                    <!--</div>-->
+                    <!--<div class="select_user_reply" v-for="mobj in obj.children">-->
+                      <!--<div>-->
+                        <!--{{mobj.content}}-->
+                      <!--</div>-->
+                    <!--</div>-->
+                  <!--</div>-->
                 </div>
               </div>
             </div>
@@ -35,6 +70,7 @@
   // import musicApi from './../music.js'
   import store from './../../../store'
   import fecth from 'utils/fecth.js'
+  import VerticalToggle from 'utils/vertical-toggle.js'
   export default {
     data () {
       return {
@@ -43,7 +79,13 @@
         userMessage: []
       }
     },
+    components: {
+      VerticalToggle
+    },
     methods: {
+      togglebox () {
+        this.boxshow = !this.boxshow
+      },
       isApp () {
         let isTrue = false
         if (document.body.clientWidth < 768) {
@@ -243,6 +285,18 @@
           margin-bottom:10px
           border-left:1px solid $border_bottom_color
           display:inline
+	      .select_user_reply
+          width:100%
+          line-height:50px
+          margin:0
+          color:$text_color
+          font-size:15px
+          text-indent:5px
+          margin-left:10px
+          float:left
+          /*border-left:1px solid $border_bottom_color*/
+          border-bottom:1px solid $border_bottom_color
+          display:inline
       .select_span
         display:inline-block
         width:auto
@@ -258,4 +312,79 @@
         &:hover
           color:$text_color
           border:1px solid $text_color
+      .user-info
+        /*width:200px;*/
+        float:left;
+      .right-box
+        float:left;
+        width: calc(100% - 200px);
+      .text-content
+        min-height: 270px;
+        box-sizing: border-box;
+      .receive-content-list
+        padding: 12px;
+        background: rgba(255,255,255,0.1);
+        border-radius: 8px;
+      .photo_reply
+        /*width: 50px;*/
+        /*height: 50px;*/
+      .item {
+        margin-bottom: 20px;
+      }
+      .item-title {
+        height: 30px;
+        line-height: 30px;
+      }
+      .item .item-content {
+        padding: 0;
+        line-height: 25px;
+      }
+    @media screen and (max-width: 700px)
+      .right-box
+        width: calc(100% - 30px) !important;
+      .receive-content-list
+        margin-left: 20px;
+        padding: 5px !important;
+        background: rgba(255,255,255,0.1);
+        border-radius: 8px;
+        font-size: 12px;
+      .text-content
+        font-size:12px;
+        padding-left: 12px;
+        min-height: 80px !important;
+      .user-info
+        width: 30px !important;
+      .photo_reply
+        width: 30px;
+        height: 30px;
+      .user-info img.photo
+        margin-top: 15px;
+        width: 30px;
+        height: 30px;
+        border-radius:30px;
+      .user-name
+        padding-left: 8px;
+        margin-top:15px;
+        line-height: 12px;
+        font-size: 14px;
+    @media screen and (min-width: 700px)
+      .right-box
+        width: calc(100% - 100px) !important;
+      .receive-content-list
+        margin-left: 30px;
+        padding: 5px !important;
+        background: rgba(255,255,255,0.1);
+        border-radius: 8px;
+      .text-content
+        min-height: 120px !important;
+      .user-info
+        width: 100px !important;
+      .user-info img.photo
+        margin-top: 15px;
+        width: 100px;
+        height: 100px;
+        border-radius:8px;
+      .user-name
+        line-height: 12px;
+        font-size: 14px;
 </style>
