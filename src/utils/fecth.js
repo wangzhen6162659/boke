@@ -150,5 +150,25 @@ export default {
         return checkCode(res)
       }
     )
+  },
+  getWhithHeaders (url, params) {
+    return axios({
+      method: 'get',
+      baseURL: process.env.BASE_API,
+      url,
+      params, // get 请求时带的参数
+      timeout: 15000,
+      headers: {
+        'X-Forwarded-For': params.ip
+      }
+    }).then(
+      (response) => {
+        return checkStatus(response)
+      }
+    ).then(
+      (res) => {
+        return checkCode(res)
+      }
+    )
   }
 }

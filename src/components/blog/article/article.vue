@@ -12,36 +12,50 @@
           <div class="select_type">
             <div class="select_message">
               评论
-              <div v-for="obj in userMessage">
+              <div v-for="(obj,index) in userMessage" style="display: inline-block; width: 100%;">
                 <div class="select_user">
                   <div class="user-info">
                     <img class="photo" :src="obj.photo">
                   </div>
                   <div class="right-box">
-                    <div class="user-name">{{obj.nickname}}</div>
-                    <div class="text-content">{{obj.content}}</div>
+                    <div class="user-name">{{obj.nickname}}
+                      <div style="text-align: right;padding-right:8px">回复</div>
+                    </div>
+
+                    <div class="user-time">{{obj.createTime}}</div>
+                    <div class="text-content" v-html="obj.content"></div>
                     <div class="receive-content-list" v-if="obj.children.length">
                       <div class="item item1">
-                      <div class="item-title" @click="obj.activeTag = !obj.activeTag">
-                        <div v-show="obj.activeTag" style="text-align: right;padding-right:8px;">回复</div>
-                        <div v-show="!obj.activeTag" style="text-align: right;padding-right:8px;">点击展开({{obj.children.length}}条回复)</div>
+                      <div class="item-title">
+                        <div v-show="!obj.activeTag" style="text-align: right;padding-right:8px;" @click="clickOpen(obj, index)">回复({{obj.children.length}}))</div>
+                        <div v-show="obj.activeTag" style="text-align: right;padding-right:8px;" @click="clickClose(obj, index)" >收起</div>
                       </div>
-                      <vertical-toggle>
-                        <div class="item-content" v-show="obj.activeTag">
-                      <div v-for="mobj in obj.children">
-                        <!--<img class="photo_reply" :src="mobj.photo">-->
-                        {{mobj.nickname}}
-                          <template v-if="mobj.replyName !== null">
-                            回复 {{mobj.replyName}}
-                          </template>
-                        : {{mobj.content}}
-                      </div>
-                        </div>
-                      </vertical-toggle>
+                        <vertical-toggle>
+                          <div class="item-content" v-show="obj.activeTag">
+                            <div v-for="(mobj) in obj.children">
+                              <!--<img class="photo_reply" :src="mobj.photo">-->
+                              {{mobj.nickname}}
+                              <template v-if="mobj.replyName !== null">
+                                回复 {{mobj.replyName}}
+                              </template>
+                              : {{mobj.content}}
+                            </div>
+                            <div class="item-content">
+                              <div class="user-input" style="text-align: right;padding-right:8px;" >发表</div>
+                            </div>
+                          </div>
+                        </vertical-toggle>
                       </div>
                     </div>
                     <div class="receive-content-list" v-if="obj.children.length<1">
-                      <span>暂无评论</span>
+                      <div v-show="!obj.activeTag" style="text-align: right;padding-right:8px;" @click="clickOpen(obj, index)" >回复({{obj.children.length}}))</div>
+                      <div v-show="obj.activeTag" style="text-align: right;padding-right:8px;" @click="clickClose(obj, index)" >收起</div>
+                      <vertical-toggle>
+                        <div v-show="obj.activeTag">
+                          <div class="item-content">
+                          </div>
+                        </div>
+                      </vertical-toggle>
                     </div>
                   </div>
                   <!--<div>-->
@@ -60,6 +74,16 @@
                   <!--</div>-->
                 </div>
               </div>
+              <div>
+                a达到啊
+                <div class="select_ueditor">
+                  <UEditor :config=config ref="ueditor"></UEditor>
+                </div>
+                <div style="text-align: right;padding-right:8px;">
+                  <button @click="getUEContent()">发表</button>
+                </div>
+              </div>
+
             </div>
           </div>
         </div>
@@ -71,20 +95,55 @@
   import store from './../../../store'
   import fecth from 'utils/fecth.js'
   import VerticalToggle from 'utils/vertical-toggle.js'
+  import UEditor from 'components/ueditor/ueditor.vue'
   export default {
     data () {
       return {
         showarticle: false,
         obj: {},
-        userMessage: []
+        userMessage: [],
+        inputIndex: -1,
+        defaultMsg: '',
+        config: {
+          /*//可以在此处定义工具栏的内容
+          toolbars: [
+            ['fullscreen', 'source','|', 'undo', 'redo','|','bold', 'italic', 'underline', 'fontborder', 'strikethrough',
+              '|','superscript','subscript','|', 'forecolor', 'backcolor','|', 'removeformat','|', 'insertorderedlist', 'insertunorderedlist',
+              '|','selectall', 'cleardoc','fontfamily','fontsize','justifyleft','justifyright','justifycenter','justifyjustify','|',
+              'link','unlink']
+          ],*/
+          autoHeightEnabled: false,
+          autoFloatEnabled: true,　　//是否工具栏可浮动
+          initialContent:'请输入内容',   //初始化编辑器的内容,也可以通过textarea/script给值，看官网例子
+          autoClearinitialContent:true, //是否自动清除编辑器初始内容，注意：如果focus属性设置为true,这个也为真，那么编辑器一上来就会触发导致初始化的内容看不到了
+          initialFrameWidth: null,
+          initialFrameHeight: 450,
+          BaseUrl: '',
+          UEDITOR_HOME_URL: 'static/ueditor/'
+        },
+        addFormVisible: false,
       }
     },
     components: {
-      VerticalToggle
+      VerticalToggle,
+      UEditor
     },
     methods: {
-      togglebox () {
-        this.boxshow = !this.boxshow
+      openWindow () {
+        this.addFormVisible = true;
+      },
+      getContent () {
+        let content = this.$refs.ue.getUEContent();
+        console.log(content);
+        alert(content);
+      },
+      clickOpen (obj, index) {
+        obj.activeTag = !obj.activeTag
+        this.inputIndex = index
+      },
+      clickClose (obj, index) {
+        obj.activeTag = !obj.activeTag
+        this.inputIndex = -1
       },
       isApp () {
         let isTrue = false
@@ -120,6 +179,22 @@
           var data = res.data
           this.userMessage = data
           console.log(this.userMessage)
+        })
+      },
+      getUEContent() {
+        let content = this.$refs.ueditor.getUEContent(); // 调用子组件方法
+        this.$notify({
+          title: '回复成功！',
+          type: 'success'
+        });
+        var articleId = this.$route.params.id;
+        var parentId = '-1';
+        let api = 'http://192.168.1.124:9999/api/admin/reply/saveReply';
+        var data = {articleId: articleId, parentId: parentId, content: content}
+        fecth.postJson(api, data).then((res) => {
+          var data = res.data;
+          this.userMessage = data
+          console.log(this.userMessage);
         })
       }
     },
@@ -240,7 +315,7 @@
           text-align:center;
       .select_message
         width:100%
-        line-height:50px
+        /*line-height:20px*/
         margin:0
         font-size:25px
         color:$text_color
@@ -367,6 +442,16 @@
         margin-top:15px;
         line-height: 12px;
         font-size: 14px;
+	    .select_ueditor
+	      width:100%
+        line-height:50px
+        margin:0
+        font-size:25px
+        color:$text_color
+        text-indent:5px
+        margin-bottom:10px
+        text-align: left;
+        border-bottom:1px solid $border_bottom_color
     @media screen and (min-width: 700px)
       .right-box
         width: calc(100% - 100px) !important;
@@ -377,6 +462,7 @@
         border-radius: 8px;
       .text-content
         min-height: 120px !important;
+        margin-left: 30px;
       .user-info
         width: 100px !important;
       .user-info img.photo
@@ -387,4 +473,19 @@
       .user-name
         line-height: 12px;
         font-size: 14px;
+        margin-left: 30px;
+        margin-top: 20px;
+      .user-time
+        line-height: 12px;
+        font-size: 14px;
+        margin-left: 30px;
+        margin-top: 10px;
+        margin-bottom: 10px;
+      .user-input
+        width: 95%;
+        height: 100%;
+        border-radius: 10px;
+        /*margin-left: 20px;*/
+        margin-top: 20px;
 </style>
+

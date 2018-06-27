@@ -11,7 +11,7 @@
         <transition name="slide-fade">
       <scroll :data ="bokelist" class="boke_l_content" :needPullUp=true v-if="show">
         <div class="content">
-          <span class="list_empty" v-if="!bokelist[0]&&!bokelist.length">暂无音乐列表哦 !</span>
+          <span class="list_empty" v-if="!bokelist[0]&&!bokelist.length">暂无文章列表哦 !</span>
         <div class="boke_list border-1px" v-for="(obj, index) in bokelist[0]" :key="obj.id" @click="getArticle(obj.id)">
           <span class="boke_index">
 						<span>{{index + 1}}</span>
