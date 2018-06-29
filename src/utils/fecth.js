@@ -25,6 +25,23 @@ axios.interceptors.response.use(response => {
 }, error => {
   return Promise.resolve(error.response)
 })
+function getCookieValue(name){
+  var name = escape(name);
+  //读cookie属性，这将返回文档的所有cookie
+  var allcookies = document.cookie;
+  //查找名为name的cookie的开始位置
+  name += "=";
+  var pos = allcookies.indexOf(name);
+  //如果找到了具有该名字的cookie，那么提取并使用它的值
+  if (pos != -1){    //如果pos值为-1则说明搜索"version="失败
+    var start = pos + name.length;   //cookie值开始的位置
+    var end = allcookies.indexOf(";",start); //从cookie值开始的位置起搜索第一个";"的位置,即cookie值结尾的位置
+    if (end == -1) end = allcookies.length; //如果end值为-1说明cookie列表里只有一个cookie
+    var value = allcookies.substring(start,end);  //提取cookie的值
+    return unescape(value);       //对它解码
+  }
+  else return "";    //搜索失败，返回空字符串
+}
 
 function checkStatus (response) {
   // loading
@@ -71,6 +88,7 @@ function checkCode (res) {
 
 export default {
   post (url, data) {
+    var token = getCookieValue("_token")
     return axios({
       method: 'post',
       baseURL: process.env.BASE_API,
@@ -78,6 +96,7 @@ export default {
       data: qs.stringify(data),
       timeout: 15000,
       headers: {
+        'token': token,
         // 'X-Requested-With': 'XMLHttpRequest',
         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
       }
@@ -92,6 +111,7 @@ export default {
     )
   },
   postJson (url, data) {
+    var token = getCookieValue("_token")
     return axios({
       method: 'post',
       baseURL: process.env.BASE_API,
@@ -99,6 +119,7 @@ export default {
       data: data,
       timeout: 15000,
       headers: {
+        'token': token,
         // 'X-Requested-With': 'XMLHttpRequest',
         'Content-Type': 'application/json; charset=UTF-8'
       }
@@ -135,12 +156,16 @@ export default {
   },
 
   get (url, params) {
+    var token = getCookieValue("_token")
     return axios({
       method: 'get',
       baseURL: process.env.BASE_API,
       url,
       params, // get 请求时带的参数
-      timeout: 15000
+      timeout: 15000,
+      headers: {
+        'token': token
+      }
     }).then(
       (response) => {
         return checkStatus(response)

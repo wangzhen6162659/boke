@@ -42,6 +42,23 @@ var dom = UE.dom = {};
  * @unfile
  * @module UE.browser
  */
+ function getCookieValue(name){
+			  var name = escape(name);
+			  //读cookie属性，这将返回文档的所有cookie
+			  var allcookies = document.cookie;
+			  //查找名为name的cookie的开始位置
+			  name += "=";
+			  var pos = allcookies.indexOf(name);
+			  //如果找到了具有该名字的cookie，那么提取并使用它的值
+			  if (pos != -1){    //如果pos值为-1则说明搜索"version="失败
+				var start = pos + name.length;   //cookie值开始的位置
+				var end = allcookies.indexOf(";",start); //从cookie值开始的位置起搜索第一个";"的位置,即cookie值结尾的位置
+				if (end == -1) end = allcookies.length; //如果end值为-1说明cookie列表里只有一个cookie
+				var value = allcookies.substring(start,end);  //提取cookie的值
+				return unescape(value);       //对它解码
+			  }
+			  else return "";    //搜索失败，返回空字符串
+			}
 var browser = UE.browser = function(){
     var agent = navigator.userAgent.toLowerCase(),
         opera = window.opera,
@@ -8084,6 +8101,8 @@ UE.Editor.defaultOptions = function(editor){
 
                 /* 发出ajax请求 */
                 me._serverConfigLoaded = false;
+				var token = getCookieValue("_token")
+				console.log(token)
                 configUrl && UE.ajax.request(configUrl,{
                     'method': 'POST',
                     'dataType': 'json',
@@ -24530,6 +24549,7 @@ UE.plugin.register('simpleupload', function (){
               var action = utils.formatUrl(imageActionUrl + (imageActionUrl.indexOf('?') == -1 ? '?' : '&') + params);
               var formData = new FormData();
               formData.append("upfile", form[0].files[0] );
+			  var token = getCookieValue("_token")
               $.ajax({
                 url: action,
                 type: 'POST',
@@ -24537,6 +24557,9 @@ UE.plugin.register('simpleupload', function (){
                 data: formData,
                 processData: false,
                 contentType: false,
+				headers: {
+					token: token
+				},
                 success: function (data) {
                   data = JSON.parse(data);
                   var link, loader,
@@ -29330,6 +29353,22 @@ UE.ui = baidu.editor.ui = {};
                 else
                     window.getSelection().removeAllRanges();
             }
+
+			function checkCode (res) {
+			  // 如果code异常(这里已经包括网络错误，服务器错误，后端抛出的错误)，可以弹出一个错误提示，告诉用户
+			  if (res.status === -404) {
+				console.log(res.msg)
+			  }
+			  if (res.data && (!res.data.success)) {
+				// alert(res.data.error_msg)
+			  }
+			  // console.log('loadding')
+			   store.dispatch({
+				type: 'set_ShowLoading',
+				data: false
+			  })
+			  return res
+			}
 
             this.enableScale = function () {
                 //trace:2868

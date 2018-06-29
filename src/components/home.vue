@@ -183,7 +183,7 @@ export default {
     },
 
     getBingImageInfo () {
-      var getbingApi = 'http://www.daiwei.org/vue/server/home.php?inAjax=1&do=getImageByBingJson'
+      var getbingApi = 'http://192.168.1.124:9999/api/admin/public/getBingDayPic'
       getBingInfo(getbingApi, 0).then((res) => {
         var globalData = store.getters.getGlobalInfo
           globalData.showBingImage = true

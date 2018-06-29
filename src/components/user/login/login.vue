@@ -34,6 +34,7 @@
 	</div>
 </template>
 <script>
+  import $ from 'jquery'
 	import fecth from 'utils/fecth.js'
 	import {Utils} from 'common/js/Utils.js'
 	import {Storage} from 'common/js/Storage.js'
@@ -52,6 +53,15 @@
 			}
 		},
 		methods: {
+      setCookie (cname, cvalue, exdays) {
+        console.log(cvalue)
+        var d = new Date();
+        d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+        var expires = "expires=" + d.toUTCString();
+        console.info(cname + "=" + cvalue + "; " + expires);
+        document.cookie = cname + "=" + cvalue + "; " + expires;
+        console.info(document.cookie);
+      },
 			loginMode () {
 				this.status = 0
 			},
@@ -70,19 +80,20 @@
 					this.$msg('请输入用户名')
 					return
 				}
-				var fecthUrl = 'http://www.daiwei.org/vue/server/user.php?inAjax=1&do=login'
-				fecth.post(fecthUrl, {
-					username: this.username,
-					password: this.password,
-					lastlogin: Utils.formatDate(new Date(), 'yyyy-MM-dd hh:mm:ss'),
-					path: process.env.NODE_ENV
+				var fecthUrl = 'http://192.168.1.124:9999/api/admin/user/login'
+				fecth.postJson(fecthUrl, {
+					account: this.username,
+					password: this.password
 				}).then((res) => {
-					if (res.data.code === '1') {
-						Storage.setCookie('c_user_info', JSON.stringify(res.data), 60 * 60 * 1000 * 24)
-						this.$router.push('/home')
-					} else {
-						this.$msg(res.data.msg)
-					}
+            if (res.data.data !== null) {
+              this.setCookie('_token',res.data.data,1);
+              this.$router.push('/home');
+            } else {
+              this.$notify({
+                title: res.data.errmsg,
+                type: 'error'
+              });
+            }
 				}, (err) => {
 					alert(`数据请求错误: ${JSON.stringify(err)}`)
 				})
@@ -184,7 +195,7 @@
 						&:before
 							content: ''
 							width: 30%
-							height: 2px 
+							height: 2px
 							background: #fff
 							position: absolute
 							bottom: 0
@@ -270,7 +281,7 @@
 						&:before
 							content: ''
 							width: 30%
-							height: 2px 
+							height: 2px
 							background: $border_color
 							position: absolute
 							bottom: 0

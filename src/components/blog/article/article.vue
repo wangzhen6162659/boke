@@ -75,7 +75,6 @@
                 </div>
               </div>
               <div>
-                a达到啊
                 <div class="select_ueditor">
                   <UEditor :config=config ref="ueditor"></UEditor>
                 </div>
