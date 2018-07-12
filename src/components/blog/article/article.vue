@@ -19,7 +19,7 @@
                   </div>
                   <div class="right-box">
                     <div class="user-name">{{obj.nickname}}
-                      <div style="text-align: right;padding-right:8px">回复</div>
+                      <div style="text-align: right;padding-right:8px; float: right;">回复</div>
                     </div>
 
                     <div class="user-time">{{obj.createTime}}</div>
@@ -27,8 +27,8 @@
                     <div class="receive-content-list" v-if="obj.children.length">
                       <div class="item item1">
                       <div class="item-title">
-                        <div v-show="!obj.activeTag" style="text-align: right;padding-right:8px;" @click="clickOpen(obj, index)">回复({{obj.children.length}}))</div>
-                        <div v-show="obj.activeTag" style="text-align: right;padding-right:8px;" @click="clickClose(obj, index)" >收起</div>
+                        <div v-show="!obj.activeTag" style="text-align: right;padding-right:8px;" @click="clickOpen(obj, index),replyThis(obj, index)">回复({{obj.children.length}}))</div>
+                        <div v-show="obj.activeTag" style="text-align: right;padding-right:8px;" @click="clickClose(obj, index),replyThis(obj, index, 2)" >收起</div>
                       </div>
                         <vertical-toggle>
                           <div class="item-content" v-show="obj.activeTag">
@@ -39,20 +39,28 @@
                                 回复 {{mobj.replyName}}
                               </template>
                               : {{mobj.content}}
+                              <button @click="replyChild(mobj, index, obj.id)">回复</button>
                             </div>
-                            <div class="item-content">
-                              <div class="user-input" style="text-align: right;padding-right:8px;" >发表</div>
+                            <div style="text-align: right;padding-right:8px;">
+                              <button @click="replyThis(obj, index)">我来说一句</button>
+                            </div>
+                            <div v-show="replyWindow(index)" style="text-align: right;padding-right:8px;" >
+                              <input class="user-input" v-model="defaultMsg" :placeholder="placeholder" ref="defaultText"></input>
+                              <button @click="getText(placeholderId, index)">发表</button>
                             </div>
                           </div>
+
                         </vertical-toggle>
                       </div>
                     </div>
                     <div class="receive-content-list" v-if="obj.children.length<1">
-                      <div v-show="!obj.activeTag" style="text-align: right;padding-right:8px;" @click="clickOpen(obj, index)" >回复({{obj.children.length}}))</div>
-                      <div v-show="obj.activeTag" style="text-align: right;padding-right:8px;" @click="clickClose(obj, index)" >收起</div>
+                      <div v-show="getEmpty(index)" style="text-align: right;padding-right:8px;" @click="clickEmpty(obj, index)" >回复({{obj.children.length}}))</div>
+                      <div v-show="!getEmpty(index)" style="text-align: right;padding-right:8px;" @click="clickEmpty(obj, index, 2)" >收起</div>
                       <vertical-toggle>
-                        <div v-show="obj.activeTag">
-                          <div class="item-content">
+                        <div v-show="!getEmpty(index)">
+                          <div class="item-content" style="text-align: right;padding-right:8px;">
+                              <input class="user-input" v-model="defaultMsg" :placeholder="placeholder" ref="defaultText"></input>
+                              <button @click="getText(placeholderId, index)">发表</button>
                           </div>
                         </div>
                       </vertical-toggle>
@@ -95,6 +103,7 @@
   import fecth from 'utils/fecth.js'
   import VerticalToggle from 'utils/vertical-toggle.js'
   import UEditor from 'components/ueditor/ueditor.vue'
+  import $ from 'jquery'
   export default {
     data () {
       return {
@@ -102,7 +111,11 @@
         obj: {},
         userMessage: [],
         inputIndex: -1,
+        emptyIndex: -1,
         defaultMsg: '',
+        placeholder: '',
+        placeholderId: '',
+        replyId: '',
         config: {
           /*//可以在此处定义工具栏的内容
           toolbars: [
@@ -128,21 +141,75 @@
       UEditor
     },
     methods: {
-      openWindow () {
-        this.addFormVisible = true;
+      getPlaceholder (obj) {
+        this.placeholder = '回复：' + obj.nickname;
+        this.placeholderId = obj.id;
+      },
+      getEmpty (index) {
+        if (index === this.emptyIndex) {
+          return false;
+        }
+          return true;
+      },
+      clickEmpty (obj, index, type) {
+        this.replyId = null;
+        this.defaultMsg = '';
+        if (this.emptyIndex === index) {
+          this.emptyIndex = -1;
+        } else {
+          if (type !== 2) {
+            this.emptyIndex = index;
+            this.inputIndex = -1;
+          }
+        }
+        this.getPlaceholder(obj);
       },
       getContent () {
         let content = this.$refs.ue.getUEContent();
-        console.log(content);
-        alert(content);
       },
       clickOpen (obj, index) {
         obj.activeTag = !obj.activeTag
-        this.inputIndex = index
+        // this.inputIndex = index
       },
       clickClose (obj, index) {
         obj.activeTag = !obj.activeTag
-        this.inputIndex = -1
+        // this.inputIndex = -1
+      },
+      replyThis (obj, index, type) {
+        this.replyId = null;
+        this.defaultMsg = '';
+        if (this.inputIndex === index){
+          this.inputIndex = -1;
+        } else {
+          if (type !== 2) {
+            this.inputIndex = index;
+            this.emptyIndex = -1;
+          }
+        }
+        this.getPlaceholder(obj);
+      },
+      replyChild (obj, index, parentId) {
+        this.replyId = null;
+        this.defaultMsg = '';
+        this.inputIndex = index;
+        this.emptyIndex = -1;
+        this.getPlaceholder(obj);
+        this.placeholderId = parentId;
+        this.replyId = obj.userId;
+      },
+      replyWindow (index) {
+        if (this.inputIndex === index){
+          return true;
+        }
+        return false;
+      },
+      initMessage() {
+        this.inputIndex = -1;
+        this.emptyIndex = -1;
+        this.defaultMsg = '';
+        this.placeholder = '';
+        this.placeholderId = '';
+        this.replyId = '';
       },
       isApp () {
         let isTrue = false
@@ -175,25 +242,56 @@
         var id = this.$route.params.id
         let api = 'http://192.168.1.124:9999/api/admin/reply/findReply?id=' + id
         fecth.get(api).then((res) => {
-          var data = res.data
+          var data = res.data.data
           this.userMessage = data
-          console.log(this.userMessage)
         })
       },
+      //一般回复
+      getText (parentId, index) {
+        // let content = this.$refs.defaultText.getUEContent(); // 调用子组件方法
+        var content = this.defaultMsg
+        var articleId = this.$route.params.id;
+        let api = 'http://192.168.1.124:9999/api/admin/reply/saveReply';
+        var data = {articleId: articleId, parentId: parentId, content: content, replyId: this.replyId}
+        fecth.postJson(api, data).then((res) => {
+          var info = res.data.data;
+          if (info != null) {
+            this.userMessage[index] = info;
+            this.$notify({
+              title: '回复成功！',
+              type: 'success'
+            });
+            this.userMessage[index].activeTag = true;
+            this.initMessage();
+          }else {
+            this.$notify({
+              title: res.data.errmsg,
+              type: 'error'
+            });
+          }
+        })
+      },
+      //富文本编辑回复
       getUEContent() {
         let content = this.$refs.ueditor.getUEContent(); // 调用子组件方法
-        this.$notify({
-          title: '回复成功！',
-          type: 'success'
-        });
         var articleId = this.$route.params.id;
         var parentId = '-1';
         let api = 'http://192.168.1.124:9999/api/admin/reply/saveReply';
         var data = {articleId: articleId, parentId: parentId, content: content}
         fecth.postJson(api, data).then((res) => {
-          var data = res.data;
-          this.userMessage = data
-          console.log(this.userMessage);
+          var info = res.data.data;
+          if (info != null) {
+            this.userMessage.push(info)
+            this.$notify({
+              title: '回复成功！',
+              type: 'success'
+            });
+          }else {
+            this.$notify({
+              title: res.data.errmsg,
+              type: 'error'
+            });
+          }
         })
       }
     },
@@ -291,12 +389,12 @@
         height:50px
         line-height:50px
         margin:0
-        font-size:18px
+        font-size:30px
         color:$text_color
         text-indent:5px
         border-bottom:1px solid $border_bottom_color
         margin-bottom:10px
-	      text-align:center
+	      /*text-align:center*/
       .select_content
         width:100%
         line-height:50px
@@ -306,7 +404,7 @@
         text-indent:5px
         margin-bottom:10px
         border-bottom:1px solid $border_bottom_color
-        text-align: center;
+        /*text-align: center;*/
         .pic_center
           /*background-image: url(http://192.168.1.124:6080/file/xiaojiejie.jpg);*/
           background-size: cover;

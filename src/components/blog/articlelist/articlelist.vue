@@ -11,18 +11,19 @@
         <transition name="slide-fade">
       <scroll :data ="bokelist" class="boke_l_content" :needPullUp=true v-if="show">
         <div class="content">
-          <span class="list_empty" v-if="!bokelist[0]&&!bokelist.length">暂无文章列表哦 !</span>
-        <div class="boke_list border-1px" v-for="(obj, index) in bokelist[0]" :key="obj.id" @click="getArticle(obj.id)">
-          <span class="boke_index">
-						<span>{{index + 1}}</span>
-					</span>
-          <div class="boke_name">
-            <span>{{obj.title}}</span>
+          <!--<span class="list_empty" v-if="isInit">暂无文章列表哦 !</span>-->
+          <span class="list_empty" v-if="bokelist[0].length==0">暂无文章列表哦 !</span>
+          <div class="boke_list border-1px" v-for="(obj, index) in bokelist[0]" :key="obj.id" @click="getArticle(obj.id)">
+            <span class="boke_index">
+              <span>{{index + 1}}</span>
+            </span>
+            <div class="boke_name">
+              <span>{{obj.title}}</span>
+            </div>
+            <span class="music_zhuanji" v-if="obj.createTime">
+              <span>{{obj.createTime}}</span>
+            </span>
           </div>
-          <span class="music_zhuanji" v-if="obj.createTime">
-						<span>{{obj.createTime}}</span>
-					</span>
-        </div>
         </div>
       </scroll>
         </transition>
@@ -38,8 +39,10 @@
   export default {
     data () {
       return {
+        userId: this.$route.params.userId,
         bokelist: [],
-        show: false
+        show: false,
+        type: ''
       }
     },
     components: {
@@ -55,30 +58,50 @@
       // }
     },
     methods: {
+      isInit () {
+        if (this.bokelist.length === 0) {
+          return true;
+        }
+      },
       getList () {
         this.bokelist = []
         this.bokelist.push(store.getters.getArticleList)
       },
       setList (type) {
         var axiodata = {
-          userId: 1,
+          userId: this.$route.params.userId,
           type: type
         }
-        blogApi.getArticleList(axiodata, this.bokelist).then((list) => {
-          this.getList()
-          this.show = true
-        })
+        if (axiodata.type !== '' && axiodata.type !== undefined){
+          blogApi.getArticleList(axiodata, this.bokelist).then((list) => {
+            this.getList()
+            this.show = true
+          })
+        }
       },
       getArticle (id) {
-        var path = '/blog/article/' + id
+        var path = '/blog/' + this.userId + '/article/' + id
         this.$router.push({path: path})
       }
     },
-    beforeRouteUpdate (to, from, next) {
-      this.show = false
-      this.setList(to.params.type)
-      next()
+    mounted () {
+      this.type = this.$route.params.type
+      this.setList(this.type);
+    },
+    watch:{
+      '$route'(){
+        if (this.$route.params.type !== undefined) {
+          this.type = this.$route.params.type;
+        }
+        this.show = false
+        this.setList(this.type)
+      }
     }
+    // beforeRouteUpdate (to, from, next) {
+    //   this.show = false
+    //   this.setList(to.params.type)
+    //   next()
+    // }
   }
 </script>
 

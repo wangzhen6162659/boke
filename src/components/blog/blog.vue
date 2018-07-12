@@ -1,52 +1,60 @@
 <template>
-  <div class="music">
-    <div class="music_bg" v-if="getIsAPP.isHigher768" :style="{background:'url(' + getCurrentMusic.picurl + ') center center / cover'}">
+  <div class="boke">
+    <div class="boke_bg" v-if="getIsAPP.isHigher768" :style="{background:'url(' + getCurrentBoke.picurl + ') center center / cover'}">
       <div class="mask_bg"></div>
     </div>
-    <div class="mask_linear_bg" v-if="getCurrentMusic.picurl && getIsAPP.isHigher768"></div>
-    <div class="music_content">
-      <div class="music_body">
+    <div class="mask_linear_bg" v-if="getCurrentBoke.picurl && getIsAPP.isHigher768"></div>
+    <div class="boke_content">
+      <div class="boke_body">
         <div class="left_list">
-          <div class="music_home">
+          <div class="boke_home">
             <div v-if="getIsAPP.isHigher768" class="select_button" ref="pc">
-              <span v-for="obj in pc">
-                <router-link tag="span" :to="'/blog/articlelist/'+obj.type" class="todo_btn playing_btn">
-                  {{obj.type}}
-                </router-link>
-              </span>
+              <router-link tag="span" :to="'/blog/'+userId+'/articlelist/'+obj.id" class="todo_btn playing_btn" v-for="(obj,index) in pc" :key="index">
+                {{obj.typeName}}
+              </router-link>
+              <router-link tag="span" :to="'/blog/'+userId+'/typeCreate'">
+                <span class="iconfont iconali-plus-circle add_type"></span>
+              </router-link>
+
             </div>
             <div v-if="!getIsAPP.isHigher768" class="select_m_button">
-              <span v-for="obj in pc">
-                <router-link tag="span" :to="'/blog/articlelist/'+obj.type" class="todo_btn playing_btn">
-                  {{obj.type}}
-                </router-link>
-              </span>
+              <router-link tag="span" :to="'/blog/'+userId+'/articlelist/'+obj.id" class="todo_btn playing_btn" v-for="(obj,index) in pc" :key="index">
+                {{obj.typeName}}
+              </router-link>
+              <router-link tag="span" :to="'/blog/'+userId+'/typeCreate'">
+                <span class="iconfont iconali-plus-circle add_type"></span>
+              </router-link>
+              <span class="icon-gerenzhongxin"></span>
             </div>
             <transition name="silde-top">
               <router-view class="list_content" name="listinfo"></router-view>
             </transition>
+            <div class="list_empty">请选择一个文集种类 !</div>
           </div>
         </div>
         <transition name="silde-top">
-          <router-view class="music_wrapper" name="fullscreen"></router-view>
+          <router-view class="boke_wrapper" name="fullscreen" :test="getBlogType"></router-view>
         </transition>
       </div>
+      <router-link tag="span" :to="'/blog/'+userId+'/articleCreate'">
+        <span class="iconfont iconali-plus-circle add_type" style="font-size:30px; text-align: right;padding-right:8px; float: right"></span>
+      </router-link>
     </div>
   </div>
 </template>
 <script>
   import store from 'store'
-  // import musicApi from 'components/music/music.js'
   import fecth from 'utils/fecth.js'
   export default {
     data () {
       return {
-        pc: []
+        pc: [],
+        userId: this.$route.params.empId
         // isgetimagebybing: store.getters.getShowBingImage
       }
     },
     computed: {
-      getCurrentMusic () {
+      getCurrentBoke () {
         return store.getters.getCurrentAudio
       },
       getIsAPP () {
@@ -56,23 +64,33 @@
     methods: {
       getBlogType () {
         const vm = this
-        let api = 'http://192.168.1.124:9999/api/admin/article/findTypeByUser?id=1'
+        let api = 'http://192.168.1.124:9999/api/admin/article/findTypeByUser?id=' + this.userId
         fecth.get(api).then((res) => {
-          for (var i = 0; i < res.data.data.length; i++) {
-            vm.pc.push({type: res.data.data[i]})
-          }
+          vm.pc = res.data.data;
+          this.getDefultLits();
         })
+      },
+      getDefultLits () {
+        // if (this.pc.length > 0) {
+        //   this.$router.push('/blog/' + this.userId + '/articlelist/' + this.pc[0].id);
+        // }
       }
     },
     mounted () {
-      this.getBlogType()
+      this.getBlogType ();
     }
+    // beforeRouteUpdate(to,from,next) {
+    //   var reg = '^(blog/)([0-9]*)$';
+    //   var patt = from.fullPath;
+    //   this.getBlogType ();
+    //   next();
+    // }
   }
 </script>
 <style lang="stylus" rel="stylesheet/stylus" scoped>
 	@import '~common/stylus/global.styl'
 	@import '~common/stylus/border-1px/index.styl'
-	.music
+	.boke
 		position:fixed
 		top:0
 		left:0;
@@ -80,7 +98,7 @@
 		width:100%
 		right:0
 		border-radius:12px
-		.music_bg
+		.boke_bg
 			position:absolute
 			top:0
 			left:0;
@@ -110,7 +128,7 @@
 			right:0
 			z-index:-2
 			background:#000
-		.music_content
+		.boke_content
 			position:fixed
 			top:80px
 			bottom:30px
@@ -128,7 +146,7 @@
 			box-sizing:border-box
 			// background:rgba(0,0,0,0.5)
 			overflow:hidden
-			.music_body
+			.boke_body
 				width:100%
 				height: calc(100% - 80px)
 				// background:red
@@ -143,13 +161,28 @@
 					overflow: hidden
 					position: relative
 					flex:1
-					.music_home
+					.boke_home
 						// display:inline-block
 						flex: 1 1 auto
 						width:100%
 						height:100%
 						// background:#A99E9E
 						vertical-align:top
+						.list_empty
+							width:100%
+							display:block
+							padding:10px 0
+							text-align:center
+							color:$text_before_color
+							font-size:14px
+							margin-top: 50px;
+							border-top: 0.5px solid
+						.add_type
+							width:100%
+							display:block
+							padding:10px 0
+							color:$text_before_color
+							font-size:30px
 						.select_m_button
 							width:100%
 							height:60px
@@ -196,14 +229,14 @@
 							overflow:hidden
 							position:relative
 							overflow:auto
-							.music_list_content
+							.boke_list_content
 								height:calc(100% - 50px)
 								position:relative
 								overflow:auto
-								.music_list
+								.boke_list
 									position:relative
 									&:hover
-										.music_name
+										.boke_name
 											.hover_menu
 												display:block
 				.right_info
@@ -231,7 +264,7 @@
 							left:0
 							right: -20px
 							bottom:0
-						.music-bg
+						.boke-bg
 							vertical-align: middle;
 							width: 176px
 							height: 176px
@@ -260,7 +293,7 @@
 							font-size:12px
 							&.active
 								color:#A7EEBE
-			.music_ctrl
+			.boke_ctrl
 				width:100%;
 				height:80px
 				// background:rgba(0,0,0,0.3)
@@ -268,7 +301,7 @@
 				.left_ctrl
 					flex: 1 1 auto
 					display:flex
-					.music_detail_ctrl
+					.boke_detail_ctrl
 						display:flex
 						align-items:center
 						i
@@ -281,7 +314,7 @@
 								font-size:46px
 							&:hover
 								color:$text_color
-					.music_progress
+					.boke_progress
 						width: 100%
 						padding: 0 20px
 						box-sizing:border-box
@@ -289,7 +322,7 @@
 						align-items:center
 						flex-direction:column
 						justify-content: center
-						.music_current_detail
+						.boke_current_detail
 							display:block
 							width:100%
 							height:auto
@@ -297,7 +330,7 @@
 							margin-bottom: 10px
 							font-size:0
 							overflow:hidden
-							.music_c_name
+							.boke_c_name
 								display:inline-block
 								// text-align:left
 								width:calc(100% - 115px)
@@ -307,7 +340,7 @@
 								font-size:16px
 								vertical-align:top
 								// float:left
-							.music_c_time
+							.boke_c_time
 								display:inline-block
 								font-size:16px
 								vertical-align:top
@@ -319,7 +352,7 @@
 								width:110px
 								// float:right
 
-						.music_progress_bar
+						.boke_progress_bar
 							width:100%
 							height:2px
 							// background:$text_color_opacity
@@ -414,52 +447,52 @@
 					.right_ctrl
 						display:none
 		@media screen and (max-width: 1440px)
-			.music_content
+			.boke_content
 				top:40px
 				bottom:20px
 				right:20px
 				left:20px
 		@media screen and (max-width: 1200px)
-			.music_content
-				.music_body
+			.boke_content
+				.boke_body
 					.left_list
 						.list_content
-							.music_list_content
-								.music_list
+							.boke_list_content
+								.boke_list
 									position:relative
 									&:hover
-										.music_name
+										.boke_name
 											.hover_menu
 												display:none
 		@media screen and (max-width: 998px)
-			.music_content
-				.music_body
+			.boke_content
+				.boke_body
 					.left_list
 						.list_content
-							.music_list
+							.boke_list
 								span
-									&.music_name
+									&.boke_name
 										width:calc(50% - 50px)
-									&.music_zhuanji
+									&.boke_zhuanji
 										display:none!important
-									&.music_singer
+									&.boke_singer
 										width:30%!important
-									&.music_duration
+									&.boke_duration
 										width:20%!important
-							.music_list_title
+							.boke_list_title
 								span
-									&.music_name
+									&.boke_name
 										font-size:14px
 										width:calc(50% - 50px)
-									&.music_zhuanji
+									&.boke_zhuanji
 										display:none
-									&.music_singer
+									&.boke_singer
 										width:30%!important
-									&.music_duration
+									&.boke_duration
 										width:20%!important
 		@media screen and (max-width: 922px)
-			.music_content
-				.music_body
+			.boke_content
+				.boke_body
 					.right_info
 						position:absolute
 						top:0
@@ -469,13 +502,13 @@
 						width:100%
 						display:none
 		@media screen and (max-width: 525px)
-			.music_content
+			.boke_content
 				top: 40px
 				bottom: 0px
 				right: 0px
 				left: 0px
 				padding:0
-				.music_body
+				.boke_body
 					height:calc(100% - 110px)
 					.left_list
 						.select_button
@@ -488,25 +521,25 @@
 								height:32px
 								line-height:32px
 						.list_content
-							.music_list
-								.music_duration
+							.boke_list
+								.boke_duration
 									// display:none!important
 									width:20%!important
-								.music_singer
+								.boke_singer
 									width:30%!important
-								.music_name
+								.boke_name
 									width:calc(100% - 50px)
-							.music_list_title
+							.boke_list_title
 								display:none
-							.music_list_container
+							.boke_list_container
 								top:0
-						.music_list_content
+						.boke_list_content
 							height:100%!important
-				.music_ctrl
+				.boke_ctrl
 					height:110px
 					.left_ctrl
 						flex-direction: column
-						.music_detail_ctrl
+						.boke_detail_ctrl
 							justify-content:space-between
 							padding:0 50px
 							margin-bottom:6px
@@ -514,8 +547,8 @@
 								font-size:32px!important
 							.playPause
 								font-size:38px!important
-						.music_progress
-							.music_current_detail
+						.boke_progress
+							.boke_current_detail
 								margin-bottom:3px
 								position:relative
 

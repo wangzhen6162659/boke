@@ -61,6 +61,10 @@ const Reward = r => require.ensure([], () => r(require('@/components/reward/rewa
 const ArticleList = r => require.ensure([], () => r(require('@/components/blog/articlelist/articlelist.vue')), 'articlelist')
 
 const Article = r => require.ensure([], () => r(require('@/components/blog/article/article.vue')), 'article')
+
+const ArticleTypeCreate = r => require.ensure([], () => r(require('@/components/blog/articleEdit/typeCreate.vue')), 'articleTypeCreate')
+
+const ArticleCreate = r => require.ensure([], () => r(require('@/components/blog/articleEdit/articleCreate.vue')), 'articleCreate')
 Vue.use(Router)
 
 export default new Router({
@@ -72,10 +76,10 @@ export default new Router({
   routes: [
     {
       path: '/',
-      redirect: '/home'
+      redirect: '/home/:empId'
     },
     {
-      path: '/home',
+      path: '/home/:empId',
       component: Home
     },
     {
@@ -153,21 +157,38 @@ export default new Router({
     },
     {
       // 博客
-      path: '/blog',
+      path: '/blog/:empId',
       component: Blog,
       children: [
         {
-          path: '/blog/articlelist/:type',
+          path: '/blog/:empId/articlelist/:type',
           name: 'articlelist',
           components: {
             listinfo: ArticleList
           }
         },
         {
-          path: '/blog/article/:id',
+          path: '/blog/:empId/article/:id',
           name: 'article',
           components: {
-            fullscreen: Article
+            fullscreen: Article,
+            listinfo: ArticleList
+          }
+        },
+        {
+          path: '/blog/:empId/typeCreate',
+          name: 'articleTypeCreate',
+          components: {
+            fullscreen: ArticleTypeCreate,
+            listinfo: ArticleList
+          }
+        },
+        {
+          path: '/blog/:empId/articleCreate',
+          name: 'articleCreate',
+          components: {
+            fullscreen: ArticleCreate,
+            listinfo: ArticleList
           }
         }
       ]

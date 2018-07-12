@@ -3,14 +3,14 @@
     <ul class="ul-header border-1px">
       <!-- pc 页面菜单 -->
       <div class="left-menu" v-show="getGlobalInfo.isHigher768">
-          <router-link class="logo" tag="a" to="/home">
-            <img width="36" height="36" src="http://www.daiwei.org/new/dw.png" title="未曾遗忘的青春 | 萌芽 - web前端_技术分享_戴伟的个人网站" alt="">
-          </router-link>
-          <router-link tag="a" to="/home">
+          <!--<router-link class="logo" tag="a" to="/home">-->
+            <!--<img width="36" height="36" src="http://www.daiwei.org/new/dw.png" title="未曾遗忘的青春 | 萌芽 - web前端_技术分享_戴伟的个人网站" alt="">-->
+          <!--</router-link>-->
+          <router-link tag="a" :to="'/home/'+getUserId">
             <li>首页</li>
           </router-link>
           <!--<a href="http://www.daiwei.org/blog" target="_black">-->
-          <router-link tag="a" to="/blog">
+          <router-link tag="a" :to="'/blog/'+getUserId">
             <li>博客</li>
           </router-link>
           <!--</a>-->
@@ -34,11 +34,11 @@
         <transition name="fade">
           <div class="fixed-fade-menu" ref="fixed_menu" :class="{ios: isIos}" v-show="showLeftMenu" @click="hideLeftContent">
             <div class="fixed-menu-content" @click="hideLeftContent">
-              <router-link tag="a" to="/home">
-              <li>首页</li>
+              <router-link tag="a" :to="'/home/'+getUserId">
+                <li>首页</li>
               </router-link>
               <!--<a href="http://www.daiwei.org/blog" target="_black">-->
-              <router-link tag="a" to="/blog">
+              <router-link tag="a" :to="'/blog/'+getUserId">
                 <li>博客</li>
               </router-link>
               <!--</a>-->
@@ -138,6 +138,11 @@ export default {
     },
     getUserInfo () {
       return store.getters.getUserInfo
+    },
+    getUserId () {
+      var empId = this.$route.params.empId;
+      console.log(this.$route.params);
+      return empId;
     }
   },
   components: {
