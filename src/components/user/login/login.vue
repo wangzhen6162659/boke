@@ -9,7 +9,7 @@
 				<div class="login_div" v-show="!status">
 					<div class="block_area">
 						<label for="userName">username</label>
-						<input type="text" id="userName" v-model="username" placeholder="登陆用户名">
+						<input type="text" id="userName" v-model="account" placeholder="登陆账户">
 					</div>
 					<div class="block_area">
 						<label for="userPwd" >password</label>
@@ -20,17 +20,21 @@
 				<div class="singin_div" v-show="status">
 					<div class="block_area">
 						<label for="suserName">username</label>
-						<input type="text" id="suserName" v-model="susername" placeholder="注册用户名">
+						<input type="text" id="suserName" v-model="saveAccount" placeholder="注册账户">
 					</div>
 					<div class="block_area">
 						<label for="suserPwd" >password</label>
-						<input type="password" id="suserPwd" ref="susePwd" v-model="spassword" placeholder="注册密码">
+						<input type="password" id="suserPwd" ref="susePwd" v-model="savePassword" placeholder="注册密码">
 					</div>
+          <div class="block_area">
+            <label for="suserName">username</label>
+            <input type="text" id="saveNickname" v-model="saveNickname" placeholder="注册昵称">
+          </div>
 					<input type="button" value="注册" @click="singin">
 				</div>
 			</div>
 		</div>
-		<usercompletion :username="rightSigninName" v-if="showSinginThen" @hidesingin="hideSingIn"></usercompletion>
+		<usercompletion :userId="rightSigninId" v-if="showSinginThen" @hidesingin="hideSingIn"></usercompletion>
 	</div>
 </template>
 <script>
@@ -46,11 +50,12 @@
 				// 0 是登录  1是注册
 				status: 0,
 				showSinginThen: false,
-				username: '',
+        account: '',
 				password: '',
-				susername: '',
-				spassword: '',
-				rightSigninName: ''
+        saveAccount: '',
+        savePassword: '',
+        saveNickname: '',
+        rightSigninId: ''
 			}
 		},
 		methods: {
@@ -80,7 +85,7 @@
 				}
 				var fecthUrl = 'http://192.168.1.124:9999/api/admin/user/login'
 				fecth.postJson(fecthUrl, {
-					account: this.username,
+					account: this.account,
 					password: this.password
 				}).then((res) => {
             if (res.data.data !== null) {
@@ -90,8 +95,7 @@
                 type: 'set_UserInfo',
                 data: res.data.data
               })
-              console.log(store.getters.getUserInfo);
-              this.$router.push('/home');
+              this.$router.go(-1);
             } else {
               this.$notify({
                 title: res.data.errmsg,
@@ -124,21 +128,27 @@
 					this.$msg('请输入用户名')
 					return
 				}
-				if (!this.testPassword(this.spassword)) {
+				if (!this.testPassword(this.savePassword)) {
 					this.$msg({text: '密码最少6位，包括至少1个大写字母，1个小写字母，1个数字', background: 'red'})
 					return
 				}
-				var fecthUrl = 'http://www.daiwei.org/vue/server/user.php?inAjax=1&do=singin'
-				fecth.post(fecthUrl, {
-					username: this.susername,
-					password: this.spassword,
-					regtime: Utils.formatDate(new Date(), 'yyyy-MM-dd hh:mm:ss'),
-					path: process.env.NODE_ENV
+				var fecthUrl = 'http://192.168.1.124:9999/api/admin/user/save'
+				fecth.postJson(fecthUrl, {
+          account: this.saveAccount,
+					password: this.savePassword,
+          nickname: this.saveNickname
 				}).then((res) => {
+          console.log(res.data.msg);
 					this.$msg(res.data.msg)
-					if (res.data.code === '1') {
-						this.rightSigninName = res.data.username
+					if (res.data.data.code !== '-1') {
+						this.rightSigninId = res.data.data.id
 						// 显示后续的操作
+            this.setCookie('_token',res.data.data.token,1);
+            this.setCookie('_user',res.data.data,1);
+            store.dispatch({
+              type: 'set_UserInfo',
+              data: res.data.data
+            })
 						this.singinThen()
 					}
 				}, (err) => {
@@ -148,6 +158,7 @@
 			testPassword (password) {
 				// 密码强度正则，最少6位，包括至少1个大写字母，1个小写字母，1个数字
 				let pPattern = /^.*(?=.{6,})(?=.*\d)(?=.*[A-Z])(?=.*[a-z]).*$/
+        console.log(password)
 				return pPattern.test(password)
 			}
 		},
@@ -159,7 +170,7 @@
 		}
 	}
 </script>
-<style lang="stylus" rel="stylesheet/stylus">
+<style lang="stylus" rel="stylesheet/stylus" scoped>
 @import '~common/stylus/global.styl'
 @import '~common/stylus/custom_input.styl'
 	.login

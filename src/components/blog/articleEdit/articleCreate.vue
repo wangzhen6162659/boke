@@ -3,7 +3,7 @@
     <transition name="fade">
       <div class="bg_article" v-show="showarticle"></div>
     </transition>
-    <div class="div_back" @click="back"><i class="icon-back"></i></div>
+    <!--<div class="div_back" @click="back"><i class="icon-back"></i></div>-->
   	<div class="suggest_content" v-show="!showList">
   		<div class="suggest_detail">
   			<p class="title">文章名称</p>
@@ -18,6 +18,7 @@
         <p class="title">文章内容</p>
           <UEditor :config=config ref="ueditor"></UEditor>
 	  		<span class="submit_suggest" @click.stop="getUEContent">提交</span>
+        <span class="submit_suggest" @click.stop="back"><i class="icon-back"></i></span>
   		</div>
   	</div>
   </div>
@@ -129,8 +130,8 @@ export default {
 			  opacity:0
 		.div_back
 			position:absolute
-			top:15px
-			left:50px
+			top:-5px
+			left:5px
 			width:40px
 			height:40px
 			color:$text_color

@@ -3,7 +3,7 @@
     <transition name="fade">
       <div class="bg_article" v-show="showarticle"></div>
     </transition>
-    <div class="div_back" @click="back"><i class="icon-back"></i></div>
+    <!--<div class="div_back" @click="back"><i class="icon-back"></i></div>-->
   	<div class="articletype_content" v-show="!showList">
   		<div class="articletype_detail">
   			<p class="title">类型名称</p>
@@ -13,6 +13,7 @@
         <p class="title">类型描述</p>
         <input class="articletype_area" v-model="articleType.typeDesc" cols="30" rows="2"></input>
 	  		<span class="submit_articletype" @click.stop="submitarticletype">提交</span>
+        <span class="submit_articletype" @click.stop="back"><i class="icon-back"></i></span>
   		</div>
   	</div>
   </div>
@@ -97,8 +98,8 @@ export default {
 			  opacity:0
 		.div_back
 			position:absolute
-			top:15px
-			left:50px
+			top:5px
+			left:10px
 			width:40px
 			height:40px
 			color:$text_color

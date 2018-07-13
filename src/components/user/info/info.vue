@@ -85,6 +85,11 @@
 		methods: {
 			loginout () {
 				Storage.deleteCookie('_user')
+        Storage.deleteCookie('_token')
+        store.dispatch({
+          type: 'set_UserInfo',
+          data: null
+        })
 				this.$router.push('/home')
 			},
 			selectSettingIndex (e) {

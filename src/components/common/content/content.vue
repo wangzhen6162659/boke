@@ -14,21 +14,21 @@
             <li>博客</li>
           </router-link>
           <!--</a>-->
-          <router-link tag="a" to="/pic">
-            <li>状态</li>
-          </router-link>
-          <router-link tag="a" to="/music">
-            <li>音乐</li>
-          </router-link>
-          <router-link tag="a" to="/about">
-            <li>关于</li>
-          </router-link>
-          <router-link tag="a" to="/reward">
-            <li>
-              <span class="icon-reward" style="font-size: 16px;vertical-align:middle"></span>
-              打赏
-            </li>
-          </router-link>
+          <!--<router-link tag="a" to="/pic">-->
+            <!--<li>状态</li>-->
+          <!--</router-link>-->
+          <!--<router-link tag="a" to="/music">-->
+            <!--<li>音乐</li>-->
+          <!--</router-link>-->
+          <!--<router-link tag="a" to="/about">-->
+            <!--<li>关于</li>-->
+          <!--</router-link>-->
+          <!--<router-link tag="a" to="/reward">-->
+            <!--<li>-->
+              <!--<span class="icon-reward" style="font-size: 16px;vertical-align:middle"></span>-->
+              <!--打赏-->
+            <!--</li>-->
+          <!--</router-link>-->
         </div>
         <!-- 移动端菜单按钮 -->
         <transition name="fade">
@@ -42,21 +42,21 @@
                 <li>博客</li>
               </router-link>
               <!--</a>-->
-              <router-link tag="a" to="/pic">
-                <li>状态</li>
-              </router-link>
-              <router-link tag="a" to="/music">
-                <li>音乐</li>
-              </router-link>
-              <router-link tag="a" to="/about">
-                <li>关于</li>
-              </router-link>
-              <router-link tag="a" to="/reward">
-                <li>
-                  <span class="icon-reward" style="font-size: 16px;vertical-align:middle"></span>
-                  打赏
-                </li>
-              </router-link>
+              <!--<router-link tag="a" to="/pic">-->
+                <!--<li>状态</li>-->
+              <!--</router-link>-->
+              <!--<router-link tag="a" to="/music">-->
+                <!--<li>音乐</li>-->
+              <!--</router-link>-->
+              <!--<router-link tag="a" to="/about">-->
+                <!--<li>关于</li>-->
+              <!--</router-link>-->
+              <!--<router-link tag="a" to="/reward">-->
+                <!--<li>-->
+                  <!--<span class="icon-reward" style="font-size: 16px;vertical-align:middle"></span>-->
+                  <!--打赏-->
+                <!--</li>-->
+              <!--</router-link>-->
             </div>
           </div>
         </transition>

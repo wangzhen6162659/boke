@@ -37,7 +37,8 @@
         </transition>
       </div>
       <router-link tag="span" :to="'/blog/'+userId+'/articleCreate'">
-        <span class="iconfont iconali-plus-circle add_type" style="font-size:30px; text-align: right;padding-right:8px; float: right"></span>
+        <input class="opacity" type="button" ref="nextBtn" value="新建文章">
+        <!--<span class="iconfont iconali-plus-circle add_type" style="font-size:30px; text-align: right;padding-right:8px; float: right"></span>-->
       </router-link>
     </div>
   </div>
@@ -71,6 +72,10 @@
         })
       }
     },
+    mounted () {
+      this.userId = this.$route.params.empId
+      this.getBlogType ();
+    },
     watch: {
       '$route'(){
         this.userId = this.$route.params.empId
@@ -86,8 +91,22 @@
   }
 </script>
 <style lang="stylus" rel="stylesheet/stylus" scoped>
-	@import '~common/stylus/global.styl'
-	@import '~common/stylus/border-1px/index.styl'
+  @import '~common/stylus/global.styl'
+  @import '~common/stylus/custom_input.styl'
+  input.opacity
+    background: rgba(255,12,12,0.03);
+    border: 1px solid rgba(255,12,12,0.03);
+    height: 32px;
+    padding:3px 15px;
+    border-radius: 2px;
+    color: #fff;
+    height: 36px;
+    float:right;
+    margin-top: 30px;
+    margin-bottom: 10px;
+    outline: none;
+    cursor: pointer;
+    -webkit-appearance: none;
 	.boke
 		position:fixed
 		top:0

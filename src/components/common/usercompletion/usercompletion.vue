@@ -10,29 +10,29 @@
 			<div class="select_content">
 				<div class="content_list" v-show="singinThenStatus === 0">
 					<div class="block_area">
-						<label for="nickname">起个昵称吧！</label>
-						<input type="text" id="nickname" v-model="nickname" placeholder="少年，来一个有故事的名字吧">
+						<label for="nickname">姓名</label>
+						<input type="text" id="nickname" v-model="name" placeholder="请输入您的姓名">
 					</div>
 					<div class="block_area">
 						<label>你是GG还是MM？</label>
 						<div class="div_check">
-							<input class="custom_input" type="radio" value="0" v-model="usersex" name="usersex" id="boy"> <label class="inline custom_input" for="boy">男</label>
-						</div> 
+							<input class="custom_input" type="radio" value="0" v-model="sex" name="sex" id="boy"> <label class="inline custom_input" for="boy">男</label>
+						</div>
 						<div class="div_check">
-							<input class="custom_input" type="radio" value="1" v-model="usersex" name="usersex" id="girl"> <label class="inline custom_input" for="girl">女</label> 
-						</div> 
+							<input class="custom_input" type="radio" value="1" v-model="sex" name="sex" id="girl"> <label class="inline custom_input" for="girl">女</label>
+						</div>
 					</div>
 				</div>
 				<div class="content_list" v-show="singinThenStatus === 1">
-					<textarea id="userdesc" v-model="userdesc" placeholder="给自己一个简单的描述吧" rows="5"></textarea>
+					<textarea id="autograph" v-model="autograph" placeholder="给自己一个简单的描述吧" rows="5"></textarea>
 				</div>
 				<div class="content_list" v-show="singinThenStatus === 2">
 					<div class="tips">
 						<i class="icon-smile"></i>
-						<p class="desc">注册成功，去登陆吧</p>
+						<p class="desc">前往首页</p>
 					</div>
 				</div>
-				<input type="button" ref="nextBtn" :value="singinThenStatus === 2 ? '去登陆':'下一步'" @click="nextSub">
+				<input type="button" ref="nextBtn" :value="singinThenStatus === 2 ? 'Ok':'下一步'" @click="nextSub">
 			</div>
 		</div>
 	</div>
@@ -44,14 +44,14 @@
 			return {
 				// 0 是第一步。1 是第二步。2 是第三步
 				singinThenStatus: 0,
-				nickname: '',
-				usersex: '',
-				userdesc: ''
+        name: '',
+				sex: '',
+        autograph: ''
 			}
 		},
 		props: {
 			// 显示的正确内容
-			username: {
+			userId: {
 				type: String,
 				default: ''
 			}
@@ -70,41 +70,37 @@
 					this.showSinginThen = false
 					this.$emit('hidesingin')
 					this.status = 0
+          this.$router.push('/home/' + this.userId)
 					return
 				}
 			},
 			updateUserSigninInfo () {
-				let reslutNickName = this.nickname.replace(/(^\s*)|(\s*$)/g, '')
+				let reslutNickName = this.name.replace(/(^\s*)|(\s*$)/g, '')
 				if (reslutNickName === '' || reslutNickName.includes(' ')) {
-					this.$msg({text: '昵称中间不能为空', background: 'red'})
+					this.$msg({text: '名字中间不能为空', background: 'red'})
 					return
 				}
-				if (this.usersex === '') return
+				if (this.sex === '') return
 				this.singinThenStatus = this.singinThenStatus + 1
 			},
 			updateUserDesc () {
-				if (this.userdesc.length < 10) {
-					this.$msg({text: '描述不能少于10个字', background: 'red'})
-				} else {
-					let fecthUrl = 'http://www.daiwei.org/vue/server/user.php?inAjax=1&do=updateSigninInfo'
-					fecth.post(fecthUrl, {
-						username: this.username,
-						nickname: this.nickname,
-						usersex: this.usersex,
-						userdesc: this.userdesc
+					let fecthUrl = 'http://192.168.1.124:9999/api/admin/user/update'
+					fecth.postJson(fecthUrl, {
+            name: this.name,
+            sex: this.sex,
+            autograph: this.autograph
 					}).then((res) => {
 						console.log(res.data)
-						if (res.data.code === '1') {
-							this.$msg({text: '恭喜，已激活注册的账号，可直接登录', background: '#00d032'})
+						if (res.data.errcode === 0) {
+							this.$msg({text: '恭喜，已激活注册的账号', background: '#00d032'})
 							this.singinThenStatus ++
 						}
 					}, (err) => {
-						alert(`数据请求错误: ${JSON.stringify(err)}`)
+						alert(`数据请求错误: ${JSON.stringify(res.data.errmsg)}`)
 					})
-				}
 			}
 		}
 	}
 </script>
-<style lang="stylus" rel="stylesheet/stylus"> 
+<style lang="stylus" rel="stylesheet/stylus">
 </style>
