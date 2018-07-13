@@ -49,7 +49,7 @@
     data () {
       return {
         pc: [],
-        userId: this.$route.params.empId
+        userId: ''
         // isgetimagebybing: store.getters.getShowBingImage
       }
     },
@@ -63,21 +63,19 @@
     },
     methods: {
       getBlogType () {
+        // console.log(11111)
         const vm = this
         let api = 'http://192.168.1.124:9999/api/admin/article/findTypeByUser?id=' + this.userId
         fecth.get(api).then((res) => {
           vm.pc = res.data.data;
-          this.getDefultLits();
         })
-      },
-      getDefultLits () {
-        // if (this.pc.length > 0) {
-        //   this.$router.push('/blog/' + this.userId + '/articlelist/' + this.pc[0].id);
-        // }
       }
     },
-    mounted () {
-      this.getBlogType ();
+    watch: {
+      '$route'(){
+        this.userId = this.$route.params.empId
+        this.getBlogType ();
+      }
     }
     // beforeRouteUpdate(to,from,next) {
     //   var reg = '^(blog/)([0-9]*)$';

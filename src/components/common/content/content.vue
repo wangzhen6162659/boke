@@ -73,6 +73,7 @@
         <router-link v-if="getUserInfo !== null" class="listmenu" tag="a" to="/user/info">
           {{getUserInfo.nickname === '' ? (getUserInfo.username === '' ? '点击设置用户名' : getUserInfo.username) : getUserInfo.nickname}}
         </router-link>
+
         <router-link v-else class="listmenu" tag="a" to="/user/login">
           登陆
         </router-link>
@@ -99,7 +100,15 @@ export default {
   data () {
     return {
       showLeftMenu: false,
-      showWeatherList: false
+      showWeatherList: false,
+      empId: this.$route.params.empId,
+      user: {
+        id: '',
+        nickname: '',
+        photo: '',
+        selfLable: [],
+        sex: ''
+      }
     }
   },
   methods: {
@@ -137,12 +146,14 @@ export default {
       return /iPhone|iPod/i.test(navigator.userAgent)
     },
     getUserInfo () {
+      console.log(store.getters.getUserInfo)
       return store.getters.getUserInfo
     },
     getUserId () {
-      var empId = this.$route.params.empId;
-      console.log(this.$route.params);
-      return empId;
+      if(this.$route.params.empId !=undefined){
+        this.empId = this.$route.params.empId;
+      }
+      return this.empId;
     }
   },
   components: {

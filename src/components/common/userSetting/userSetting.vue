@@ -3,7 +3,7 @@
     div(class="user-setting", v-if="userSetting.isShow")
       div.content
         div(class="useravatar")
-          img(:src="newavatar || userSetting.avatar")
+          img(:src="newavatar || userSetting.photo")
           .upload
             .text 点击上传
             input(type="file", @change="getPicUrl($event)", accept="image/*")
@@ -13,7 +13,7 @@
           input(v-model="userSetting.nickname")
         div(class="userdisc setting-list")
           .lable 用户描述：
-          textarea(v-model="userSetting.desc")
+          textarea(v-model="userSetting.autograph")
       div.div-exit
         span.exit(@click="exit") 退出
         span.save(@click="save") 保存
@@ -21,6 +21,7 @@
 </template>
 <script>
 import fecth from 'utils/fecth.js'
+import store from 'store'
 export default {
   data () {
     return {
@@ -35,10 +36,9 @@ export default {
       default: {
         isShow: false,
         id: 0,
-        username: '',
-        avatar: '',
+        photo: '',
         nickname: '',
-        desc: '',
+        autograph: '',
         sex: 0
       }
     }
@@ -49,12 +49,11 @@ export default {
       let file = e.target.files[0]
       let formdata = new FormData()
       formdata.append('file', file)
-      formdata.append('userId', this.userSetting.id)
-      const url = 'http://www.daiwei.org/vue/server/upload.php'
+      const url = 'http://192.168.1.124:9999/api/file/file/upload'
       fecth.upload(url, formdata).then((res) => {
-        if (res.data.code === '1') {
-          this.newUserInfo.avatar = res.data.imageUrl + '?data=' + Math.random()
-          this.newavatar = res.data.imageUrl + '?data=' + Math.random()
+        if (res.data.data.code !== '-1') {
+          this.newUserInfo.photo = res.data.data.url
+          this.newavatar = res.data.data.url
           this.newavatarname = '头像上传成功，请完善其他信息并保存'
           this.$msg(res.data.msg)
         } else {
@@ -69,16 +68,19 @@ export default {
       this.$emit('exit', this.newUserInfo)
     },
     save () {
-      const url = 'http://www.daiwei.org/vue/server/user.php?inAjax=1&do=updateUserInfo'
-      fecth.post(url, {
-        userid: this.userSetting.id,
+      const url = 'http://192.168.1.124:9999/api/admin/user/update'
+      fecth.postJson(url, {
         nickname: this.userSetting.nickname,
-        desc: this.userSetting.desc
+        autograph: this.userSetting.autograph,
+        photo: this.newUserInfo.photo
       }).then((res) => {
-        this.newUserInfo = {
-          isShow: false,
-          ...res.data.data,
-          avatar: res.data.data.avatar + '?data=' + Math.random()
+        if (res.data.errcode === 0) {
+          this.newUserInfo = res.data.data
+          store.dispatch({
+            type: 'set_UserInfo',
+            data: res.data.data
+          })
+          this.newavatarname = res.data.data.nickname
         }
         this.$emit('save', this.newUserInfo)
       }, (err) => {
@@ -120,7 +122,7 @@ export default {
         align-items center
         justify-content center
         flex-direction column
-        img 
+        img
           width 100px
           height 100px
           border-radius: 50%
@@ -136,7 +138,7 @@ export default {
           input[type="file"]
             width 100%
             height 100%
-            position absolute 
+            position absolute
             top 0
             left 0
             right 0
@@ -159,13 +161,13 @@ export default {
           overflow hidden
           text-overflow ellipsis
           white-space nowrap
-        input 
+        input
           flex 1 1 auto
           background transparent
           color $text_color
           text-indent 5px
           border: 1px solid $text_color_active
-          outline none 
+          outline none
           height 30px
         &.userdisc
           align-items flex-start
@@ -174,7 +176,7 @@ export default {
             color $text_color
             text-indent 5px
             border: 1px solid $text_color_active
-            outline none 
+            outline none
             resize none
             flex 1 1 auto
             height 80px

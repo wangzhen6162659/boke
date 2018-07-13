@@ -35,6 +35,7 @@
 </template>
 <script>
   import $ from 'jquery'
+  import store from 'store'
 	import fecth from 'utils/fecth.js'
 	import {Utils} from 'common/js/Utils.js'
 	import {Storage} from 'common/js/Storage.js'
@@ -54,13 +55,10 @@
 		},
 		methods: {
       setCookie (cname, cvalue, exdays) {
-        console.log(cvalue)
         var d = new Date();
         d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
         var expires = "expires=" + d.toUTCString();
-        console.info(cname + "=" + cvalue + "; " + expires);
         document.cookie = cname + "=" + cvalue + "; " + expires;
-        console.info(document.cookie);
       },
 			loginMode () {
 				this.status = 0
@@ -86,7 +84,13 @@
 					password: this.password
 				}).then((res) => {
             if (res.data.data !== null) {
-              this.setCookie('_token',res.data.data,1);
+              this.setCookie('_token',res.data.data.token,1);
+              this.setCookie('_user',res.data.data,1);
+              store.dispatch({
+                type: 'set_UserInfo',
+                data: res.data.data
+              })
+              console.log(store.getters.getUserInfo);
               this.$router.push('/home');
             } else {
               this.$notify({

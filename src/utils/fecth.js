@@ -57,10 +57,6 @@ function checkStatus (response) {
 
   if (!store.getters.userInfo) {
     const userInfo = DGlobal.storage.getCookie('c_user_info')
-    store.dispatch({
-      type: 'set_UserInfo',
-      data: userInfo
-    })
   }
 
   // 异常状态下，把错误信息返回去
@@ -134,6 +130,7 @@ export default {
     )
   },
   upload (url, data) {
+    var token = getCookieValue("_token")
     return axios({
       method: 'post',
       baseURL: process.env.BASE_API,
@@ -142,6 +139,7 @@ export default {
       timeout: 15000,
       headers: {
         // 'X-Requested-With': 'XMLHttpRequest',
+        'token': token,
         'Content-Type': 'multipart/form-data'
       }
     }).then(

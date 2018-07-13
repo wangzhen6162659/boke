@@ -7,11 +7,11 @@
 			<div class="user-basic-info" v-if='personalCenter && personalCenter'>
 				<div class="user-basic-l">
 					<div class="user-avatar">
-						<div class="image-avatar" :style="{backgroundImage : 'url(' + personalCenter.avatar || 'http://daiwei.org/vue/bg/avatar1.jpg' + ')', backgroundSize:'cover', backgroundPosition:'center'}"></div>
+						<div class="image-avatar" :style="{backgroundImage : 'url(' + personalCenter.photo || 'http://daiwei.org/vue/bg/avatar1.jpg' + ')', backgroundSize:'cover', backgroundPosition:'center'}"></div>
 					</div>
 					<div class="user-basic">
-						<h3 class="user-nickname">{{personalCenter.nickname == '' ? personalCenter.username : personalCenter.nickname}}</h3>
-						<p class="user-disc">{{personalCenter.desc !== '' ? personalCenter.desc : '暂无描述'}}</p>
+						<h3 class="user-nickname">{{personalCenter.nickname == '' ? personalCenter.nickname : personalCenter.nickname}}</h3>
+						<p class="user-disc">{{personalCenter.autograph !== '' ? personalCenter.autograph : '暂无描述'}}</p>
 					</div>
 				</div>
 				<div class="user-basic-r">
@@ -30,7 +30,7 @@
 				</div>
 			</div>
 			<div class="mode-info">
-				
+
 			</div>
 			<div class="user-detail-info">
 				<!-- 用户的具体信息。音乐收藏。评价 点赞 互相评论的功能 -->
@@ -64,6 +64,7 @@
 	import store from 'store'
 	import musicApi from 'components/music/music.js'
   import {fecthPromise, todoUserInfo} from 'common/api/user.js'
+  import fecth from 'utils/fecth.js'
   import userSetting from 'components/common/userSetting/userSetting'
 	export default {
 		data () {
@@ -83,7 +84,7 @@
 		},
 		methods: {
 			loginout () {
-				Storage.deleteCookie('c_user_info')
+				Storage.deleteCookie('_user')
 				this.$router.push('/home')
 			},
 			selectSettingIndex (e) {
@@ -96,12 +97,11 @@
 			},
 			initData () {
 				todoUserInfo().then((res) => {
-					const fecthUrl = 'http://www.daiwei.org/vue/server/user.php?inAjax=1&do=personalCenter'
-					fecthPromise(fecthUrl, {
-						userid: store.getters.getUserInfo.id || 0
+					const fecthUrl = 'http://192.168.1.124:9999/api/admin/user/get'
+          fecth.get(fecthUrl, {
+						id: store.getters.getUserInfo.id || 0
 					}).then((res) => {
 						this.personalCenter = res.data.data
-						this.suggestList = res.data.suggestList
 						this.userSetting = {...this.userSetting, ...res.data.data}
 					}, (err) => {
 						this.$msg(err)
@@ -129,10 +129,6 @@
 					...this.personalCenter,
 					...data
 				}
-				store.dispatch({
-					type: 'set_UserInfo',
-					data: this.personalCenter
-				})
 			}
 		},
 		computed: {
@@ -303,8 +299,8 @@ $c_max_w = 1040px
 					display:block
 					.user-basic-r
 						margin: 10px 0
-						justify-content:flex-start		
-					
+						justify-content:flex-start
+
 		@media screen and (max-width: 768px)
 			&
 				left: 0
@@ -317,7 +313,7 @@ $c_max_w = 1040px
 				left: 50%
 				right: unset
 				box-sizing: border-box
-				transform: translate(-50%, 0)		
+				transform: translate(-50%, 0)
 		.user-detail-info
 			width: 100%
 			.detail-title
@@ -332,10 +328,10 @@ $c_max_w = 1040px
 					font-size: 14px
 					margin: 0 10px 0 0
 					color: $text_color
-					box-sizing:border-box 
+					box-sizing:border-box
 					&.active
 						color: $text_color_active
-						border-bottom: 1px solid $border_color		
+						border-bottom: 1px solid $border_color
 			.detail-content
 				position:relative
 				height: 400px

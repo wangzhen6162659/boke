@@ -173,11 +173,6 @@ export default {
       if (DGlobal.storage.getCookie('c_user_info')) {
         DGlobal.storage.setCookie('c_user_info', unescape(DGlobal.storage.getCookie('c_user_info')), 60 * 60 * 1000 * 24)
       }
-
-      store.dispatch({
-        type: 'set_UserInfo',
-        data: JSON.parse(unescape(DGlobal.storage.getCookie('c_user_info')))
-      })
     }
   },
   watch: {
