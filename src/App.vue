@@ -245,7 +245,7 @@ export default {
     padding:0
     box-sizing:border-box
     background:#f0f0f0f0
-    user-select:none
+    /*user-select:none*/
     -webkit-tap-highlight-color: transparent
   #app
     position: fixed

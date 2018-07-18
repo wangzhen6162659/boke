@@ -7,7 +7,7 @@
         <div class="article_select" v-show="showarticle">
           <div class="select_type">
             <div class="select_title">{{obj.title}}</div>
-            <div class="select_content" v-html="obj.content"></div>
+            <div class="select_content" v-html="obj.content" v-hljs></div>
           </div>
           <div class="select_type">
             <div class="select_message">
@@ -23,7 +23,7 @@
                     </div>
 
                     <div class="user-time">{{obj.createTime}}</div>
-                    <div class="text-content" v-html="obj.content"></div>
+                    <div class="text-content" v-html="obj.content"  v-hljs></div>
                     <div class="receive-content-list" v-if="obj.children.length">
                       <div class="item item1">
                       <div class="item-title">
@@ -103,7 +103,15 @@
   import fecth from 'utils/fecth.js'
   import VerticalToggle from 'utils/vertical-toggle.js'
   import UEditor from 'components/ueditor/ueditor.vue'
+  import hljs from 'highlight.js'
+  import Vue from 'vue'
   import $ from 'jquery'
+  Vue.directive('hljs', el => {
+    let blocks = el.querySelectorAll('pre');
+    console.log(blocks)
+    Array.prototype.forEach.call(blocks, hljs.highlightBlock);
+  });
+
   export default {
     data () {
       return {
@@ -236,6 +244,7 @@
         fecth.get(api).then((res) => {
           var data = res.data.data
           this.obj = data
+          this.initHighlight()
         })
       },
       getUserMessage () {
@@ -293,12 +302,17 @@
             });
           }
         })
+      },
+      initHighlight () {
+        hljs.initHighlightingOnLoad();
       }
     },
     mounted () {
       this.init()
       this.getUserMessage()
       this.showarticle = true
+      // this.getReady(); // Ready
+      // hljs.initHighlightingOnLoad();
       this.$nextTick(() => {
         this.$refs.articleVal.focus()
       })
@@ -309,6 +323,7 @@
 @import '~common/response.css'
 @import '~common/stylus/global.styl'
 @import '~common/stylus/style.styl'
+@import "~highlight.js/styles/railscasts.css";
 .article
   position:fixed
   left:0
