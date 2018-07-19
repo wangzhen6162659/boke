@@ -12,6 +12,7 @@
           <div class="select_type">
             <div class="select_message">
               评论
+              <div class="select_user" v-if="userMessage.length==0" style="text-align: center;float: none;">暂无评论</div>
               <div v-for="(obj,index) in userMessage" style="display: inline-block; width: 100%;">
                 <div class="select_user">
                   <div class="user-info">
@@ -19,7 +20,7 @@
                   </div>
                   <div class="right-box">
                     <div class="user-name">{{obj.nickname}}
-                      <div style="text-align: right;padding-right:8px; float: right;">回复</div>
+                      <div style="text-align: right;padding-right:8px; float: right;">#{{index+1}}</div>
                     </div>
 
                     <div class="user-time">{{obj.createTime}}</div>
@@ -27,8 +28,8 @@
                     <div class="receive-content-list" v-if="obj.children.length">
                       <div class="item item1">
                       <div class="item-title">
-                        <div v-show="!obj.activeTag" style="text-align: right;padding-right:8px;" @click="clickOpen(obj, index),replyThis(obj, index)">回复({{obj.children.length}}))</div>
-                        <div v-show="obj.activeTag" style="text-align: right;padding-right:8px;" @click="clickClose(obj, index),replyThis(obj, index, 2)" >收起</div>
+                        <div v-show="!obj.activeTag" style="text-align: right;padding-right:8px;margin-bottom: -10px;" @click="clickOpen(obj, index),replyThis(obj, index)">回复({{obj.children.length}}))</div>
+                        <div v-show="obj.activeTag" style="text-align: right;padding-right:8px;margin-bottom: -10px;" @click="clickClose(obj, index),replyThis(obj, index, 2)" >收起</div>
                       </div>
                         <vertical-toggle>
                           <div class="item-content" v-show="obj.activeTag">
@@ -44,9 +45,10 @@
                             <div style="text-align: right;padding-right:8px;">
                               <button @click="replyThis(obj, index)">我来说一句</button>
                             </div>
-                            <div v-show="replyWindow(index)" style="text-align: right;padding-right:8px;" >
-                              <input class="user-input" v-model="defaultMsg" :placeholder="placeholder" ref="defaultText"></input>
-                              <button @click="getText(placeholderId, index)">发表</button>
+                            <div v-show="replyWindow(index)" style="text-align: center;padding-right:8px;" >
+                              <input class="user-input" v-model="defaultMsg" :placeholder="placeholder" ref="defaultText">
+                                <button @click="getText(placeholderId, index)">发表</button>
+                              </input>
                             </div>
                           </div>
 
@@ -54,13 +56,14 @@
                       </div>
                     </div>
                     <div class="receive-content-list" v-if="obj.children.length<1">
-                      <div v-show="getEmpty(index)" style="text-align: right;padding-right:8px;" @click="clickEmpty(obj, index)" >回复({{obj.children.length}}))</div>
-                      <div v-show="!getEmpty(index)" style="text-align: right;padding-right:8px;" @click="clickEmpty(obj, index, 2)" >收起</div>
+                      <div v-show="getEmpty(index)" style="text-align: right;padding-right:8px;margin-bottom: -10px;" @click="clickEmpty(obj, index)" >回复({{obj.children.length}}))</div>
+                      <div v-show="!getEmpty(index)" style="text-align: right;padding-right:8px;margin-bottom: -10px;" @click="clickEmpty(obj, index, 2)" >收起</div>
                       <vertical-toggle>
                         <div v-show="!getEmpty(index)">
-                          <div class="item-content" style="text-align: right;padding-right:8px;">
-                              <input class="user-input" v-model="defaultMsg" :placeholder="placeholder" ref="defaultText"></input>
+                          <div class="item-content" style="text-align: center;padding-right:8px;">
+                            <input class="user-input" v-model="defaultMsg" :placeholder="placeholder" ref="defaultText">
                               <button @click="getText(placeholderId, index)">发表</button>
+                            </input>
                           </div>
                         </div>
                       </vertical-toggle>
@@ -134,7 +137,7 @@
           ],*/
           autoHeightEnabled: false,
           autoFloatEnabled: true,　　//是否工具栏可浮动
-          initialContent:'请输入内容',   //初始化编辑器的内容,也可以通过textarea/script给值，看官网例子
+          initialContent:'',   //初始化编辑器的内容,也可以通过textarea/script给值，看官网例子
           autoClearinitialContent:true, //是否自动清除编辑器初始内容，注意：如果focus属性设置为true,这个也为真，那么编辑器一上来就会触发导致初始化的内容看不到了
           initialFrameWidth: null,
           initialFrameHeight: 450,
@@ -259,6 +262,13 @@
       getText (parentId, index) {
         // let content = this.$refs.defaultText.getUEContent(); // 调用子组件方法
         var content = this.defaultMsg
+        if (content.length == 0){
+          this.$notify({
+            title: '请输入回复内容！',
+            type: 'error'
+          });
+          return
+        }
         var articleId = this.$route.params.id;
         let api = 'http://192.168.1.124:9999/api/admin/reply/saveReply';
         var data = {articleId: articleId, parentId: parentId, content: content, replyId: this.replyId}
@@ -283,6 +293,13 @@
       //富文本编辑回复
       getUEContent() {
         let content = this.$refs.ueditor.getUEContent(); // 调用子组件方法
+        if (content.length == 0){
+          this.$notify({
+            title: '请输入回复内容！',
+            type: 'error'
+          });
+          return
+        }
         var articleId = this.$route.params.id;
         var parentId = '-1';
         let api = 'http://192.168.1.124:9999/api/admin/reply/saveReply';
@@ -436,7 +453,7 @@
         text-align: left;
         .select_user
           width:100%
-          line-height:50px
+          line-height:35px
           margin:0
           color:$text_color
           font-size:15px
@@ -508,6 +525,9 @@
       .text-content
         min-height: 270px;
         box-sizing: border-box;
+	img {
+	 width: 100%;
+	}
       .receive-content-list
         padding: 12px;
         background: rgba(255,255,255,0.1);
@@ -594,10 +614,11 @@
         margin-top: 10px;
         margin-bottom: 10px;
       .user-input
-        width: 95%;
+        width: 80%;
         height: 100%;
         border-radius: 10px;
         /*margin-left: 20px;*/
         margin-top: 20px;
+
 </style>
 

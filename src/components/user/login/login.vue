@@ -90,7 +90,7 @@
 				}).then((res) => {
             if (res.data.data !== null) {
               this.setCookie('_token',res.data.data.token,1);
-              this.setCookie('_user',res.data.data,1);
+              this.setCookie('_user',JSON.stringify(res.data.data),1);
               store.dispatch({
                 type: 'set_UserInfo',
                 data: res.data.data

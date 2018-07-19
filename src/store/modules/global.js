@@ -1,3 +1,4 @@
+import store from 'store'
 const globalStore = {
 	state: {
 		globalInfo: {
@@ -23,7 +24,13 @@ const globalStore = {
 		getShowLoading: state => state.showloading,
 		getWeatherInfo: state => state.weather,
 		getMusicRouter: state => state.musicRouter,
-		getUserInfo: state => state.userInfo
+		getUserInfo: function(state){
+    if (state.userInfo == null){
+        console.log(JSON.parse(localStorage.getItem('FLASH_USER')))
+        state.userInfo = JSON.parse(localStorage.getItem('FLASH_USER'))
+      }
+      return state.userInfo;
+    }
 	},
 	mutations: {
 		setGlobalInfo (state, obj) {
@@ -58,6 +65,7 @@ const globalStore = {
 		},
 		setUserInfo (state, obj) {
 			state.userInfo = obj.data
+      localStorage.setItem('FLASH_USER', JSON.stringify(obj.data))
 		}
 	},
 	actions: {

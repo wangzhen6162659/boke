@@ -39,7 +39,7 @@
   export default {
     data () {
       return {
-        userId: this.$route.params.userId,
+        empId: this.$route.params.empId,
         bokelist: [],
         show: false,
         type: ''
@@ -80,7 +80,7 @@
         }
       },
       getArticle (id) {
-        var path = '/blog/' + this.userId + '/article/' + id
+        var path = '/blog/' + this.empId + '/article/' + id
         this.$router.push({path: path})
       }
     },

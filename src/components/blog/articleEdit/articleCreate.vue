@@ -77,7 +77,7 @@ export default {
         this.articleTypes = res.data.data;
       })
     },
-    //富文本编辑回复
+    //富文本编辑
     getUEContent() {
       let content = this.$refs.ueditor.getUEContent(); // 调用子组件方法
       this.articleSave.content = content;

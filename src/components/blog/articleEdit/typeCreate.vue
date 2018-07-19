@@ -36,7 +36,6 @@ export default {
 	},
 	methods: {
     back () {
-      console.log(1)
       this.$router.go(-1)
     },
     showarticletypeList() {
@@ -57,7 +56,7 @@ export default {
               type: 'success'
             });
             this.test();
-            this.$router.push('/blog');
+            this.back();
           }else {
             this.$notify({
               title: res.data.errmsg,
