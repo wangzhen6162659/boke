@@ -52,6 +52,7 @@ import store from 'store'
 import tips from 'components/common/tips/tips.vue'
 import coverhistory from 'components/common/coverhistory/coverhistory'
 import fecth from 'utils/fecth.js'
+import apiList from 'common/api/albumApiList.js'
 // import advertisement from 'components/common/advertisement/advertisement'
 
 // 引入背景请求的api  getBingInfo
@@ -105,8 +106,7 @@ export default {
       this.isShowAllList = true
     },
     getPicNum () {
-      let fecthUrl = 'http://192.168.1.124:9999/api/admin/album/findPicture'
-      fecth.get(fecthUrl, {
+      fecth.get(apiList.findPicture, {
       }).then((res) => {
         this.picNum = res.data.data.length - 1
       }, (err) => {
@@ -166,8 +166,7 @@ export default {
 
       var index = this.index
 
-      const url = 'http://192.168.1.124:9999/api/admin/album/getByIndex'
-      getMineBgByIndex(url, index).then((res) => {
+      getMineBgByIndex(apiList.getByIndex, index).then((res) => {
         var globalData = store.getters.getGlobalInfo
         globalData.showBingImage = false
         // 全局设置
@@ -183,8 +182,7 @@ export default {
     },
 
     getBingImageInfo () {
-      var getbingApi = 'http://192.168.1.124:9999/api/admin/public/getBingDayPic'
-      getBingInfo(getbingApi, 0).then((res) => {
+      getBingInfo(apiList.getBingDayPic, 0).then((res) => {
         var globalData = store.getters.getGlobalInfo
           globalData.showBingImage = true
           store.dispatch({

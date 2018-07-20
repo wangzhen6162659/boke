@@ -46,6 +46,7 @@
 <script>
   import store from 'store'
   import fecth from 'utils/fecth.js'
+  import apiList from 'common/api/articleApiList.js'
   export default {
     data () {
       return {
@@ -66,8 +67,7 @@
       getBlogType () {
         // console.log(11111)
         const vm = this
-        let api = 'http://192.168.1.124:9999/api/admin/article/findTypeByUser?id=' + this.userId
-        fecth.get(api).then((res) => {
+        fecth.get(apiList.findTypeByUser, {id: this.userId}).then((res) => {
           vm.pc = res.data.data;
         })
       }

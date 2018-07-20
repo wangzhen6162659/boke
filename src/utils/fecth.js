@@ -4,6 +4,7 @@ import store from './../store'
 import DGlobal from 'common/js/global.js'
 
 // request拦截器
+var roots = process.env.API_ROOT
 axios.interceptors.request.use(
   config => {
   // loading
@@ -84,6 +85,7 @@ function checkCode (res) {
 
 export default {
   post (url, data) {
+    url = roots + url;
     var token = getCookieValue("_token")
     return axios({
       method: 'post',
@@ -107,6 +109,7 @@ export default {
     )
   },
   postJson (url, data) {
+    url = roots + url;
     var token = getCookieValue("_token")
     return axios({
       method: 'post',
@@ -130,6 +133,7 @@ export default {
     )
   },
   upload (url, data) {
+    url = roots + url;
     var token = getCookieValue("_token")
     return axios({
       method: 'post',
@@ -154,6 +158,7 @@ export default {
   },
 
   get (url, params) {
+    url = roots + url;
     var token = getCookieValue("_token")
     return axios({
       method: 'get',
@@ -175,6 +180,7 @@ export default {
     )
   },
   getWhithHeaders (url, params) {
+    url = roots + url;
     return axios({
       method: 'get',
       baseURL: process.env.BASE_API,

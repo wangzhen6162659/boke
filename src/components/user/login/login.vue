@@ -44,6 +44,7 @@
 	import {Utils} from 'common/js/Utils.js'
 	import {Storage} from 'common/js/Storage.js'
 	import usercompletion from 'components/common/usercompletion/usercompletion.vue'
+  import apiList from 'common/api/userApiList.js'
 	export default{
 		data () {
 			return {
@@ -83,8 +84,7 @@
 					this.$msg('请输入用户名')
 					return
 				}
-				var fecthUrl = 'http://192.168.1.124:9999/api/admin/user/login'
-				fecth.postJson(fecthUrl, {
+				fecth.postJson(apiList.login, {
 					account: this.account,
 					password: this.password
 				}).then((res) => {
@@ -132,8 +132,7 @@
 					this.$msg({text: '密码最少6位，包括至少1个大写字母，1个小写字母，1个数字', background: 'red'})
 					return
 				}
-				var fecthUrl = 'http://192.168.1.124:9999/api/admin/user/save'
-				fecth.postJson(fecthUrl, {
+				fecth.postJson(apiList.save, {
           account: this.saveAccount,
 					password: this.savePassword,
           nickname: this.saveNickname

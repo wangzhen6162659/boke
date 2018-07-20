@@ -27,6 +27,7 @@
 import store from 'store'
 import fecth from 'utils/fecth.js'
 import UEditor from 'components/ueditor/ueditor.vue'
+import apiList from 'common/api/articleApiList.js'
 export default {
   props: ['test'],
 	data () {
@@ -72,8 +73,7 @@ export default {
     },
     getBlogType () {
       const vm = this
-      let api = 'http://192.168.1.124:9999/api/admin/article/findTypeByUser?id=' + this.userId
-      fecth.get(api).then((res) => {
+      fecth.get(apiList.findTypeByUser, {id: this.userId}).then((res) => {
         this.articleTypes = res.data.data;
       })
     },
@@ -81,9 +81,8 @@ export default {
     getUEContent() {
       let content = this.$refs.ueditor.getUEContent(); // 调用子组件方法
       this.articleSave.content = content;
-      let api = 'http://192.168.1.124:9999/api/admin/article/saveArticle';
       var data = this.articleSave;
-      fecth.postJson(api, data).then((res) => {
+      fecth.postJson(apiList.saveArticle, data).then((res) => {
         var info = res.data.data;
         if (info != null) {
           this.$notify({

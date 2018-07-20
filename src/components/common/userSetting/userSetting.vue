@@ -22,6 +22,8 @@
 <script>
 import fecth from 'utils/fecth.js'
 import store from 'store'
+import apiUserList from 'common/api/userApiList.js'
+import apiFileList from 'common/api/fileApiList.js'
 export default {
   data () {
     return {
@@ -49,8 +51,7 @@ export default {
       let file = e.target.files[0]
       let formdata = new FormData()
       formdata.append('file', file)
-      const url = 'http://192.168.1.124:9999/api/file/file/upload'
-      fecth.upload(url, formdata).then((res) => {
+      fecth.upload(apiFileList.upload, formdata).then((res) => {
         if (res.data.data.code !== '-1') {
           this.newUserInfo.photo = res.data.data.url
           this.newavatar = res.data.data.url
@@ -68,8 +69,7 @@ export default {
       this.$emit('exit', this.newUserInfo)
     },
     save () {
-      const url = 'http://192.168.1.124:9999/api/admin/user/update'
-      fecth.postJson(url, {
+      fecth.postJson(apiUserList.update, {
         nickname: this.userSetting.nickname,
         autograph: this.userSetting.autograph,
         photo: this.newUserInfo.photo

@@ -104,6 +104,7 @@
   // import musicApi from './../music.js'
   import store from './../../../store'
   import fecth from 'utils/fecth.js'
+  import apiList from 'common/api/articleApiList.js'
   import VerticalToggle from 'utils/vertical-toggle.js'
   import UEditor from 'components/ueditor/ueditor.vue'
   import hljs from 'highlight.js'
@@ -243,8 +244,7 @@
       },
       init () {
         var id = this.$route.params.id
-        let api = 'http://192.168.1.124:9999/api/admin/article/getArticle?id=' + id
-        fecth.get(api).then((res) => {
+        fecth.get(apiList.getArticle, {id : id}).then((res) => {
           var data = res.data.data
           this.obj = data
           this.initHighlight()
@@ -252,8 +252,7 @@
       },
       getUserMessage () {
         var id = this.$route.params.id
-        let api = 'http://192.168.1.124:9999/api/admin/reply/findReply?id=' + id
-        fecth.get(api).then((res) => {
+        fecth.get(apiList.findReply, {id : id}).then((res) => {
           var data = res.data.data
           this.userMessage = data
         })
@@ -270,9 +269,8 @@
           return
         }
         var articleId = this.$route.params.id;
-        let api = 'http://192.168.1.124:9999/api/admin/reply/saveReply';
         var data = {articleId: articleId, parentId: parentId, content: content, replyId: this.replyId}
-        fecth.postJson(api, data).then((res) => {
+        fecth.postJson(apiList.saveReply, data).then((res) => {
           var info = res.data.data;
           if (info != null) {
             this.userMessage[index] = info;

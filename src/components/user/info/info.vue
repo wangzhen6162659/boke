@@ -66,6 +66,7 @@
   import {fecthPromise, todoUserInfo} from 'common/api/user.js'
   import fecth from 'utils/fecth.js'
   import userSetting from 'components/common/userSetting/userSetting'
+  import apiList from 'common/api/userApiList.js'
 	export default {
 		data () {
 			return {
@@ -102,8 +103,7 @@
 			},
 			initData () {
 				todoUserInfo().then((res) => {
-					const fecthUrl = 'http://192.168.1.124:9999/api/admin/user/get'
-          fecth.get(fecthUrl, {
+          fecth.get(apiList.get, {
 						id: store.getters.getUserInfo.id || 0
 					}).then((res) => {
 						this.personalCenter = res.data.data

@@ -1,6 +1,7 @@
 import fecth from 'utils/fecth.js'
 import store from 'store'
 import Global from 'common/js/global.js'
+var roots = process.env.API_ROOT
 export function getBingInfo (url, index = 0) {
 	return new Promise((resolve, reject) => {
 		fecth.get(url).then((res) => {
@@ -53,6 +54,7 @@ export function getBingInfo (url, index = 0) {
 // 	})
 // }
 export function getMineBgByIndex (url, index) {
+  url = roots + url;
   return new Promise((resolve, reject) => {
     fecth.get(url, {index: index}).then((res) => {
       let imageInfo = {

@@ -21,6 +21,7 @@
 <script>
 import store from 'store'
 import fecth from 'utils/fecth.js'
+import apiList from 'common/api/articleApiList.js'
 export default {
   props: ['test'],
 	data () {
@@ -43,12 +44,11 @@ export default {
       this.getarticletypeInfo()
     },
     submitarticletype() {
-      let api = 'http://192.168.1.124:9999/api/admin/article/saveArticleType'
       var data = this.articleType;
       if (data.typeName === '') {
         this.$msg('类型名称不能为空！')
       } else {
-        fecth.postJson(api, data).then((res) => {
+        fecth.postJson(apiList.saveArticleType, data).then((res) => {
           var info = res.data.data;
           if (info != null) {
             this.$notify({
