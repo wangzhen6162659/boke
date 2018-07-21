@@ -15,6 +15,8 @@
 // import axios from 'axios'
 import store from 'store'
 import fecth from 'utils/fecth.js'
+import apiPublicList from 'common/api/publicApiList.js'
+import apiAblumList from 'common/api/albumApiList.js'
 import home from 'components/home.vue'
 import fixedbg from 'components/common/fixedbg/fixedbg.vue'
 import content from 'components/common/content/content.vue'
@@ -45,7 +47,7 @@ export default {
       // 是否需要获取壁纸信息
       const isShowBingImage = store.getters.getGlobalInfo.showBingImage
       // api地址
-      let api = isShowBingImage ? 'http://192.168.1.124:9999/api/admin/public/getBingDayPic' : 'http://192.168.1.124:9999/api/admin/album/getByIndex'
+      let api = isShowBingImage ? apiPublicList.getBingDayPic : apiAblumList.getByIndex
       // 判断本地是否有背景设置的数据信息
       const hasFixedImageBg = localStorage.getItem('fixedImageBg')
       // bing 的每日一图

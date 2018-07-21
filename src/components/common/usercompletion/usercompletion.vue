@@ -39,6 +39,7 @@
 </template>
 <script>
 	import fecth from 'utils/fecth.js'
+  import apiUserList from 'common/api/userApiList.js'
 	export default {
 		data () {
 			return {
@@ -84,7 +85,7 @@
 				this.singinThenStatus = this.singinThenStatus + 1
 			},
 			updateUserDesc () {
-					let fecthUrl = 'http://192.168.1.124:9999/api/admin/user/update'
+					let fecthUrl = apiUserList.update
 					fecth.postJson(fecthUrl, {
             name: this.name,
             sex: this.sex,

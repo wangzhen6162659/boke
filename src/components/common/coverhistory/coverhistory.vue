@@ -18,6 +18,7 @@
 </template>
 <script>
 	import fecth from 'utils/fecth.js'
+  import apiAblumList from 'common/api/albumApiList.js'
 	import Scroll from 'components/common/bscroll/bscroll.vue'
 	export default {
 		data () {
@@ -33,7 +34,7 @@
 		},
 		methods: {
 			initImageList () {
-				let fecthUrl = 'http://192.168.1.124:9999/api/admin/album/findPicture'
+				let fecthUrl = apiAblumList.findPicture
 				fecth.get(fecthUrl, {
 					index: this.imageIndex
 				}).then((res) => {

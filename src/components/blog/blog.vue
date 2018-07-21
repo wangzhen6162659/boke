@@ -65,7 +65,6 @@
     },
     methods: {
       getBlogType () {
-        // console.log(11111)
         const vm = this
         fecth.get(apiList.findTypeByUser, {id: this.userId}).then((res) => {
           vm.pc = res.data.data;

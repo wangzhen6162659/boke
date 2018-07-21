@@ -11,7 +11,8 @@ const serviceModule = {
   saveArticleType: '/api/admin/article/saveArticleType',
   saveReply: '/api/admin/reply/saveReply',
   findReply: '/api/admin/reply/findReply',
-  getArticle: '/api/admin/article/getArticle'
+  getArticle: '/api/admin/article/getArticle',
+  pageByUser: '/api/admin/article/pageByUser',
 }
 const ApiList = { ...serviceModule }
 

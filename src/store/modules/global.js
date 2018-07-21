@@ -1,4 +1,5 @@
 import store from 'store'
+import fecth from '../../utils/fecth.js'
 const globalStore = {
 	state: {
 		globalInfo: {
@@ -25,9 +26,13 @@ const globalStore = {
 		getWeatherInfo: state => state.weather,
 		getMusicRouter: state => state.musicRouter,
 		getUserInfo: function(state){
-    if (state.userInfo == null){
-        console.log(JSON.parse(localStorage.getItem('FLASH_USER')))
-        state.userInfo = JSON.parse(localStorage.getItem('FLASH_USER'))
+      var user = fecth.getCookieValue('_user');
+      console.log(user)
+      if (state.userInfo == null && user.length>0){
+        console.log(123)
+        // console.log(JSON.parse(localStorage.getItem('FLASH_USER')))
+        // state.userInfo = JSON.parse(localStorage.getItem('FLASH_USER'))
+        state.userInfo = JSON.parse(user)
       }
       return state.userInfo;
     }
@@ -65,7 +70,6 @@ const globalStore = {
 		},
 		setUserInfo (state, obj) {
 			state.userInfo = obj.data
-      localStorage.setItem('FLASH_USER', JSON.stringify(obj.data))
 		}
 	},
 	actions: {

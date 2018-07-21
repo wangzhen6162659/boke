@@ -1,9 +1,10 @@
 import store from 'store'
 import {fecthPromiseJson} from 'common/api/user.js'
+import apiList from 'common/api/articleApiList.js'
 const blogApi = {
   getArticleList (axiodata, list) {
     return new Promise((resolve, reject) => {
-      let apiUrl = 'http://192.168.1.124:9999/api/admin/article/pageByUser'
+      let apiUrl = apiList.pageByUser
       fecthPromiseJson(apiUrl, axiodata).then((res) => {
         store.dispatch({
           type: 'set_ArticList',

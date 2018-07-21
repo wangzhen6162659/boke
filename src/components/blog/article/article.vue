@@ -35,9 +35,18 @@
                           <div class="item-content" v-show="obj.activeTag">
                             <div v-for="(mobj) in obj.children">
                               <!--<img class="photo_reply" :src="mobj.photo">-->
-                              {{mobj.nickname}}
+                              <router-link tag="a" :to="'/home/'+mobj.userId">
+                                <span style="color:#3a8ee6;">
+                                  {{mobj.nickname}}
+                                </span>
+                              </router-link>
                               <template v-if="mobj.replyName !== null">
-                                回复 {{mobj.replyName}}
+                                回复
+                                <router-link tag="a" :to="'/home/'+mobj.replyId">
+                                  <span style="color:#3a8ee6;">
+                                  {{mobj.replyName}}
+                                  </span>
+                                </router-link>
                               </template>
                               : {{mobj.content}}
                               <button @click="replyChild(mobj, index, obj.id)">回复</button>
@@ -56,7 +65,7 @@
                       </div>
                     </div>
                     <div class="receive-content-list" v-if="obj.children.length<1">
-                      <div v-show="getEmpty(index)" style="text-align: right;padding-right:8px;margin-bottom: -10px;" @click="clickEmpty(obj, index)" >回复({{obj.children.length}}))</div>
+                      <div v-show="getEmpty(index)" style="text-align: right;padding-right:8px;margin-bottom: -5px;" @click="clickEmpty(obj, index)" >回复({{obj.children.length}}))</div>
                       <div v-show="!getEmpty(index)" style="text-align: right;padding-right:8px;margin-bottom: -10px;" @click="clickEmpty(obj, index, 2)" >收起</div>
                       <vertical-toggle>
                         <div v-show="!getEmpty(index)">
@@ -300,7 +309,7 @@
         }
         var articleId = this.$route.params.id;
         var parentId = '-1';
-        let api = 'http://192.168.1.124:9999/api/admin/reply/saveReply';
+        let api = apiList.saveReply;
         var data = {articleId: articleId, parentId: parentId, content: content}
         fecth.postJson(api, data).then((res) => {
           var info = res.data.data;
@@ -351,7 +360,7 @@
   vertical-align:middle
   .bg_article
     background:rgba(0,0,0,0.8)
-    position:absolute
+    position:fixed
     left:0
     right:0
     bottom:0
@@ -534,7 +543,6 @@
         /*width: 50px;*/
         /*height: 50px;*/
       .item {
-        margin-bottom: 20px;
       }
       .item-title {
         height: 30px;
@@ -572,6 +580,12 @@
         margin-top:15px;
         line-height: 12px;
         font-size: 14px;
+      .user-input
+        width: 80%;
+        height: 100%;
+        border-radius: 10px;
+        /*margin-left: 20px;*/
+        margin-top: 20px;
 	    .select_ueditor
 	      width:100%
         line-height:50px
