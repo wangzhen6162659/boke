@@ -17,9 +17,9 @@
           <!--<router-link tag="a" to="/pic">-->
             <!--<li>状态</li>-->
           <!--</router-link>-->
-          <!--<router-link tag="a" to="/music">-->
-            <!--<li>音乐</li>-->
-          <!--</router-link>-->
+          <router-link tag="a" to="/music">
+            <li>音乐</li>
+          </router-link>
           <!--<router-link tag="a" to="/about">-->
             <!--<li>关于</li>-->
           <!--</router-link>-->

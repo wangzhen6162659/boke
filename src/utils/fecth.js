@@ -5,6 +5,7 @@ import DGlobal from 'common/js/global.js'
 
 // request拦截器
 var roots = process.env.API_ROOT
+var rootMusics = process.env.API_MUSIC_ROOT
 axios.interceptors.request.use(
   config => {
   // loading
@@ -168,6 +169,24 @@ export default {
       headers: {
         'token': token
       }
+    }).then(
+      (response) => {
+        return checkStatus(response)
+      }
+    ).then(
+      (res) => {
+        return checkCode(res)
+      }
+    )
+  },
+  getOut (url,params) {
+    url = rootMusics + url;
+    return axios({
+      method: 'get',
+      baseURL: process.env.BASE_API,
+      url,
+      params, // get 请求时带的参数
+      timeout: 15000
     }).then(
       (response) => {
         return checkStatus(response)

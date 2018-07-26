@@ -81,60 +81,67 @@ const musicApi = {
 
     // 获取歌词
     getMusicLrc (data, that) {
+        var picUrl = ''
         const ele = store.getters.getAudioEle
         // alert(data.id)
-        const apiLyric = `http://www.daiwei.org/vue/server/music.php?inAjax=1&do=lyric&id=${data.id}`
-        fecth.get(apiLyric).then((res) => {
-            let parseLrc = {}
-            if (res.data.lrc === undefined) {
+        const apiLyric = `/lyric?id=${data.id}`
+        const apiDetail = `/song/detail?ids=${data.id}`
+        fecth.getOut(apiDetail).then((res) => {
+          if (res.data.songs[0].al.picUrl !== undefined) {
+            picUrl = res.data.songs[0].al.picUrl
+            fecth.getOut(apiLyric).then((res) => {
+              let parseLrc = {}
+              if (res.data.lrc === undefined) {
                 parseLrc = {'0': '纯音乐,请欣赏'}
-            } else {
+              } else {
                 parseLrc = this.parseLrc(res.data.lrc.lyric)
-                this.lyric = this.parseLrc(res.data.lrc.lyric)
-            }
+                this.lyric = parseLrc
+              }
 
-            // 初始化最後一個lrc
-            this.lastLyric = -1
-            const currentMusic = {
+              // 初始化最後一個lrc
+              this.lastLyric = -1
+              const currentMusic = {
                 id: data.id,
                 name: data.name,
                 url: musicApi.replaceUrl(data.url),
                 singer: data.singer,
                 duration: data.duration,
-                picurl: data.picurl,
+                picurl: picUrl,
                 index: data.musicndex,
                 lyric: parseLrc,
                 lrcContent: store.getters.getAudioLrcContent
-            }
-            store.commit({
+              }
+              store.commit({
                 type: 'setCurrentAudio',
                 data: currentMusic
-            })
+              })
 
-            if (data.type !== 'unupdate' && data.type === '') {
+              if (data.type !== 'unupdate' && data.type === '') {
                 store.dispatch({
-                    type: 'set_MusicPlayList',
-                    data: data.list
+                  type: 'set_MusicPlayList',
+                  data: data.list
                 })
-            }
-            that.$nextTick(() => {
+              }
+              that.$nextTick(() => {
                 try {
-                    store.getters.getAudioEle.load()
-                    store.getters.getAudioEle.play()
+                  store.getters.getAudioEle.load()
+                  store.getters.getAudioEle.play()
                 } catch (e) {
-                    return
+                  return
                 }
                 // 设置歌词位置
                 store.commit({
-                    type: 'setAudiolrcIndex',
-                    data: 0
+                  type: 'setAudiolrcIndex',
+                  data: 0
                 })
-                $('.lrc-content').stop().animate({scrollTop: 0}, 1000)
+                this.scrollAnimate(document.getElementsByClassName('lrc-wrapper')[0], 0)
                 // 设置播放状态
                 store.commit('setAudioIsPlay', !ele.paused)
+              })
+            }, (err) => {
+              console.log(err)
             })
-        }, (err) => {
-            console.log(err)
+          }
         })
     },
     // 获取音乐时长
@@ -160,48 +167,47 @@ const musicApi = {
     // 参数：当前播放时间（单位：秒）
     scrollLyric (time, that) {
         // aler)
-        if (this.lyric === '') return false
+      if (this.lyric === '') return false
 
-        time = parseInt(time)  // 时间取整
+      time = parseInt(time)  // 时间取整
 
-        if (this.lyric === undefined || this.lyric[time] === undefined) return false  // 当前时间点没有歌词
+      if (this.lyric === undefined || this.lyric[time] === undefined) return false  // 当前时间点没有歌词
 
-        if (this.lastLyric === time) return true // 歌词没发生改变
+      if (this.lastLyric === time) return true // 歌词没发生改变
 
-        var i = 0  // 获取当前歌词是在第几行
+      var i = 0  // 获取当前歌词是在第几行
 
-        // 将此行数 放入vuex
-        store.commit({
-            type: 'setAudiolrcIndex',
-            data: i
-        })
+      // 将此行数 放入vuex
+      store.commit({
+        type: 'setAudiolrcIndex',
+        data: i
+      })
 
-        for (var k in this.lyric) {
-            if (k > time) break
-            i++
-        }
-        this.lastLyric = time  // 记录方便下次使用
-        // $(".lplaying").removeClass("lplaying")     // 移除其余句子的正在播放样式
-        // $(".lrc-item[data-no='" + i + "']").addClass("lplaying")    // 加上正在播放样式
-        // 再次添加 放入vuex
-        store.commit({
-            type: 'setAudiolrcIndex',
-            data: i
-        })
+      for (var k in this.lyric) {
+        if (k > time) break
+        i++
+      }
+      this.lastLyric = time  // 记录方便下次使用
+      // $(".lplaying").removeClass("lplaying")     // 移除其余句子的正在播放样式
+      // $(".lrc-item[data-no='" + i + "']").addClass("lplaying")    // 加上正在播放样式
+      // 再次添加 放入vuex
+      store.commit({
+        type: 'setAudiolrcIndex',
+        data: i
+      })
 
-        try {
-            var scroll = (document.getElementsByClassName('lrc-item')[0].offsetHeight * i) - store.getters.getAudioLrcContent.offsetHeight / 2
-            $('.lrc-content').stop().animate({scrollTop: scroll}, 1000)
-        } catch (e) {
-            return
-        }
+      try {
+        this.scrollAnimate(that.$refs.lrcWrapper, i * document.getElementsByClassName('lrc-item')[0].offsetHeight)
+      } catch (e) {
+        return
+      }
     },
 
     // 点击播放歌曲
     clickIndex (data, that) {
         var reqId = data.music_id ? data.music_id : data.id
-        const apiUrl = `http://www.daiwei.org/vue/server/music.php?inAjax=1&do=musicInfo&id=${reqId}`
-        fecth.get(apiUrl).then((res) => {
+        const apiUrl = `/music/url?id=${reqId}`
+        fecth.getOut(apiUrl).then((res) => {
             // 如果代码不允许被播放（付费音乐）
             if (res.data.data[0].url === null) {
                 that.$msg('音乐无法播放,请播放其他音频...')
@@ -236,14 +242,13 @@ const musicApi = {
 
     // 搜索音乐
     searchMusic (word, pages, that) {
-        const apiUrl = `http://www.daiwei.org/vue/server/music.php?inAjax=1&do=search&count=30&pages=${pages}&name=${word}`
-        fecth.get(apiUrl, {
+        const apiUrl = `/search?keywords=${word}`
+        fecth.getOut(apiUrl, {
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
             }
         }).then((res) => {
             try {
-                console.log(that.searchMusicList)
                 res.data.result.songs.forEach((value, index, array) => {
                     that.searchMusicList.push(value)
                 })
@@ -392,8 +397,8 @@ const musicApi = {
         }
 
         var reqId = musicplaylist[index].music_id ? musicplaylist[index].music_id : musicplaylist[index].id
-        const apiUrl = `http://www.daiwei.org/vue/server/music.php?inAjax=1&do=musicInfo&id=${reqId}`
-        fecth.get(apiUrl).then((res) => {
+        const apiUrl = `/music/url?id=${reqId}`
+        fecth.getOut(apiUrl).then((res) => {
             if (res.data.data[0].url === null) {
                 let initIndex = 0
                 const currentMusic = {
@@ -411,8 +416,8 @@ const musicApi = {
                 name: musicplaylist[index].name ? musicplaylist[index].name : musicplaylist[index].music_name,
                 url: musicApi.replaceUrl(res.data.data[0].url),
                 singer: musicplaylist[index].ar ? musicplaylist[index].ar[0].name : musicplaylist[index].singer_name,
-                duration: musicApi.getMusicDurantionType(musicplaylist[index].dt ? musicplaylist[index].dt : musicplaylist[index].music_dur),
-                picurl: musicplaylist[index].al ? musicplaylist[index].al.picUrl : musicplaylist[index].music_picurl,
+                duration: musicApi.getMusicDurantionType(musicplaylist[index].duration ? musicplaylist[index].duration : musicplaylist[index].music_dur),
+                picurl: musicplaylist[index].artists.picUrl,
                 musicndex: index,
                 list: store.getters.getMusicList,
                 type: 'unupdate'
@@ -572,32 +577,32 @@ const musicApi = {
     },
 
     insetMusicListen () {
-        todoUserInfo().then((res) => {
-            let index = store.getters.getCurrentAudio.index
-            let musicplaylist = store.getters.getMusicPlayList
-            let options = {
-                userid: res.id,
-                username: res.username,
-                music_id: musicplaylist[index].music_id || musicplaylist[index].id,
-                music_name: musicplaylist[index].music_name || musicplaylist[index].name,
-                singer_id: musicplaylist[index].singer_id || musicplaylist[index].ar[0].id,
-                singer_name: musicplaylist[index].singer_name || musicplaylist[index].ar[0].name,
-                album_id: musicplaylist[index].album_id || musicplaylist[index].al.id,
-                album_name: musicplaylist[index].album_name || musicplaylist[index].al.name,
-                music_dur: musicplaylist[index].music_dur || musicplaylist[index].dt,
-                music_picurl: musicplaylist[index].music_picurl || musicplaylist[index].al.picUrl,
-                listen_time: Utils.formatDate(new Date(), 'yyyy-MM-dd hh:mm:ss')
-            }
-            let fecthUrl = 'http://www.daiwei.org/vue/server/user.php?inAjax=1&do=userMusicListen'
-            fecthPromise(fecthUrl, options).then((res) => {
-                console.log(options.music_name + '播放完成')
-            }, (err) => {
-                vueExp.$msg(err)
-            })
-        }, (err) => {
-            vueExp.$msg(err.msg)
-            vueExp.$router.push({ path: '/user/login' })
-        })
+        // todoUserInfo().then((res) => {
+        //     let index = store.getters.getCurrentAudio.index
+        //     let musicplaylist = store.getters.getMusicPlayList
+        //     // let options = {
+        //     //     userid: res.id,
+        //     //     username: res.username,
+        //     //     music_id: musicplaylist[index].music_id || musicplaylist[index].id,
+        //     //     music_name: musicplaylist[index].music_name || musicplaylist[index].name,
+        //     //     singer_id: musicplaylist[index].singer_id || musicplaylist[index].ar[0].id,
+        //     //     singer_name: musicplaylist[index].singer_name || musicplaylist[index].ar[0].name,
+        //     //     album_id: musicplaylist[index].album_id || musicplaylist[index].al.id,
+        //     //     album_name: musicplaylist[index].album_name || musicplaylist[index].al.name,
+        //     //     music_dur: musicplaylist[index].music_dur || musicplaylist[index].dt,
+        //     //     music_picurl: musicplaylist[index].music_picurl || musicplaylist[index].al.picUrl,
+        //     //     listen_time: Utils.formatDate(new Date(), 'yyyy-MM-dd hh:mm:ss')
+        //     // }
+        //     // let fecthUrl = 'http://www.daiwei.org/vue/server/user.php?inAjax=1&do=userMusicListen'
+        //     // fecthPromise(fecthUrl, options).then((res) => {
+        //     //     console.log(options.music_name + '播放完成')
+        //     // }, (err) => {
+        //     //     vueExp.$msg(err)
+        //     // })
+        // }, (err) => {
+        //     // vueExp.$msg(err.msg)
+        //     // vueExp.$router.push({ path: '/user/login' })
+        // })
     },
 
     setPlayType (type) {
