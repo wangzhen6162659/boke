@@ -17,7 +17,8 @@ const globalStore = {
 		showloading: true,
 		musicRouter: '/music/sheet/124995419',
 		host: 'http://www.daiwei.org',
-		userInfo: null
+		userInfo: null,
+    analyser: null
 	},
 	getters: {
 		getGlobalInfo: state => state.globalInfo,
@@ -35,7 +36,8 @@ const globalStore = {
         state.userInfo = JSON.parse(user)
       }
       return state.userInfo;
-    }
+    },
+    getAnalyser: state => state.analyser
 	},
 	mutations: {
 		setGlobalInfo (state, obj) {
@@ -70,7 +72,10 @@ const globalStore = {
 		},
 		setUserInfo (state, obj) {
 			state.userInfo = obj.data
-		}
+		},
+    setAnalyser (state, obj) {
+      state.analyser = obj
+    }
 	},
 	actions: {
 		set_GlobalInfo ({commit}, obj) {
@@ -102,7 +107,10 @@ const globalStore = {
 		},
 		set_UserInfo ({commit}, obj) {
 			commit('setUserInfo', obj)
-		}
+		},
+    set_Analyser ({commit}, obj) {
+      commit('setAnalyser', obj)
+    }
 	}
 }
 

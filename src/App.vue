@@ -8,7 +8,7 @@
     </div>
     <v-content></v-content>
     <updatetips :defaultvalue="getVersionList"></updatetips>
-    <audio :src="getCurrentMusic.url" ref="myAudio"></audio>
+    <audio :src="getCurrentMusic.url" ref="myAudio" crossOrigin="anonymous"></audio>
   </div>
 </template>
 <script>
@@ -16,6 +16,7 @@
 import store from 'store'
 import fecth from 'utils/fecth.js'
 import apiPublicList from 'common/api/publicApiList.js'
+import musicApi from 'components/music/music.js'
 import apiAblumList from 'common/api/albumApiList.js'
 import home from 'components/home.vue'
 import fixedbg from 'components/common/fixedbg/fixedbg.vue'
@@ -43,6 +44,18 @@ export default {
     updatetips
   },
   methods: {
+    createAnalyser () {
+      const AC = new (window.AudioContext || window.webkitAudioContext)();
+      const analyser = AC.createAnalyser();
+      const gainnode = AC.createGain();
+      gainnode.gain.value = 1;
+      const source = AC.createMediaElementSource(this.$refs.myAudio);
+      source.connect(analyser);
+      analyser.connect(gainnode);
+      gainnode.connect(AC.destination);
+      //
+      store.commit('setAnalyser', analyser);
+    },
     fetchData () {
       // 是否需要获取壁纸信息
       const isShowBingImage = store.getters.getGlobalInfo.showBingImage
@@ -228,6 +241,10 @@ export default {
     this.fetchData()
     // 判断是否登录
     this.updateLoginInfo()
+    /**
+     *  设置音乐分析器
+     */
+    this.createAnalyser();
     // 挂载 onresize事件
     window.onresize = () => {
       this.isApp()

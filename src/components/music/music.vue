@@ -54,6 +54,8 @@
   						<p class="lrc-item" v-if="getMusicLrcLists" v-for="(item, index) in getMusicLrcLists" :class="getCurrentMusicLrcIndex === index + 1 ? `active` : ``">{{item}}</p>
   					</div>
   				</div>
+
+          <musicCanvas></musicCanvas>
   			</div>
   		</div>
   		<div class="music_ctrl">
@@ -88,6 +90,7 @@
   // import fecth from './../../utils/fecth.js'
   import store from 'store'
   import musicApi from 'components/music/music.js'
+  import musicCanvas from '../music/musicCanvas/musicCanvas';
   // import axios from 'axios'
   // import qs from 'qs'
   export default {
@@ -99,6 +102,9 @@
   			textPlayType: ''
   		}
   	},
+    components: {
+      musicCanvas
+    },
   	methods: {
   		searchMusic (e) {
   			musicApi.searchMusic(e.target.innerHTML, 1, this)

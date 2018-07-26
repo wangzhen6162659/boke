@@ -151,18 +151,6 @@ const musicApi = {
         return minT + ':' + minS
     },
 
-    // 刷新進度的歌詞
-    refreshLyric (time, that) {
-        if (this.lyric === '') return false
-        time = parseInt(time)  // 时间取整
-        var i = 0
-        for (var k in this.lyric) {
-            if (k >= time) break
-            i = k      // 记录上一句的
-        }
-        this.scrollLyric(i, that)
-    },
-
     // 滚动歌词到指定句
     // 参数：当前播放时间（单位：秒）
     scrollLyric (time, that) {
@@ -195,7 +183,7 @@ const musicApi = {
         type: 'setAudiolrcIndex',
         data: i
       })
-
+      console.log(i)
       try {
         this.scrollAnimate(that.$refs.lrcWrapper, i * document.getElementsByClassName('lrc-item')[0].offsetHeight)
       } catch (e) {
@@ -269,12 +257,8 @@ const musicApi = {
     },
 
     scrollAnimate (ele, position) {
-        var t = setInterval(function () {
-            ele.scrollTop = ele.scrollTop + 2
-            if (ele.scrollTop >= position) {
-                clearInterval(t)
-            }
-        }, 1)
+      ele.style.WebkitTransform = `translate3d(-50%, -${position}px, 0)`
+      ele.style.transform = `transform: translate3d(-50%, -${position}px, 0)`
     },
 
     // 添加到我喜欢的音乐 使用本地存储的方法
