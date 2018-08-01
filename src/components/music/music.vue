@@ -9,7 +9,7 @@
   			<div class="left_list">
   				<div class="music_home">
   					<div v-if="getIsAPP.isHigher768" class="select_button">
-  						<router-link tag="span" to="/music/playlist" class="todo_btn playing_btn">
+  						<router-link tag="span" :to="'/music/'+empId+'/playlist'" class="todo_btn playing_btn">
 				        	正在播放
 				        </router-link>
 			  			<router-link tag="span" to="/music/collection" class="todo_btn collect_btn">
@@ -18,12 +18,12 @@
 				        <router-link tag="span" to="/music/toplist" class="todo_btn top_btn">
 				        	排行榜/歌单
 				        </router-link>
-			  			<router-link tag="span" to="/music/search" class="todo_btn search_btn">
+			  			<router-link tag="span" to="/music/module/search" class="todo_btn search_btn">
 				        	搜索音乐
 				        </router-link>
 			  		</div>
 			  		<div v-if="!getIsAPP.isHigher768" class="select_m_button">
-			  			<router-link tag="span" to="/music/playlist" class="todo_btn playing_btn">
+			  			<router-link tag="span" :to="'/music/'+empId+'/playlist'" class="todo_btn playing_btn">
 				        	正在播放
 				        </router-link>
 			  			<router-link tag="span" to="/music/collection" class="todo_btn collect_btn">
@@ -32,7 +32,7 @@
 				        <router-link tag="span" to="/music/toplist" class="todo_btn top_btn">
 				        	排行榜/歌单
 				        </router-link>
-			  			<router-link tag="span" to="/music/search" class="todo_btn search_btn">
+			  			<router-link tag="span" to="/music/module/search" class="todo_btn search_btn">
 				        	搜索
 				        </router-link>
 
@@ -68,7 +68,7 @@
   				</div>
   				<div class="music_progress" id="music_progress">
   					<div class="music_current_detail">
-  						<span class="music_c_name">{{getCurrentMusic.name ? getCurrentMusic.name : '未曾遗忘的青春'}} - {{getCurrentMusic.singer ? getCurrentMusic.singer : '戴维戴维'}}</span>
+  						<span class="music_c_name">{{getCurrentMusic.name ? getCurrentMusic.name : '暂无播放音乐'}} - {{getCurrentMusic.singer ? getCurrentMusic.singer : '未知艺术家'}}</span>
   						<span class="music_c_time">{{getMusicCurrentT !== NaN & getMusicCurrentT !== '00:00' ? getMusicDurationType(getMusicCurrentT * 1000) : '00:00'}} / {{getCurrentMusic.duration ? getCurrentMusic.duration : '00:00'}}</span>
   					</div>
   					<div class="music_progress_bar" id="music_progress">
@@ -97,6 +97,7 @@
   export default {
   	data () {
   		return {
+  		  empId: '',
   			isDrag: false,
   			currentMusic: {},
   			bufferingP: 0,
@@ -273,7 +274,14 @@
   			this.initAudioEvent()
   			this.keypress()
   		})
-  	}
+  	},
+    watch: {
+      '$route' (to, from) {
+        if (this.$route.params.empId !=undefined){
+          this.empId = this.$route.params.empId
+        }
+      }
+    }
   }
 </script>
 <style lang="stylus" rel="stylesheet/stylus" scoped>

@@ -58,12 +58,14 @@
   	methods: {
   		// 初始化音乐播放器
 		initMusic () {
-			musicApi.getMusicSheet(this.params.id, this)
+		  console.log(this.params.empId)
+			musicApi.getLocalMusic(this.params.empId, this)
   		}
   	},
   	computed: {
   		musicList () {
-  			return store.getters.getMusicPlayList
+  		  console.log(store.getters.getMusicCollectList)
+  			return store.getters.getMusicCollectList
   		}
   	},
   	watch: {

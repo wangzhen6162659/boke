@@ -89,7 +89,7 @@ export default new Router({
     },
     {
       // 音乐
-      path: '/music',
+      path: '/music/:empId',
       component: Music,
       children: [
         {
@@ -100,7 +100,7 @@ export default new Router({
           }
         },
         {
-          path: '/music/search',
+          path: '/music/module/search',
           components: {
             fullscreen: MusicSearch
           }
@@ -121,21 +121,21 @@ export default new Router({
           }
         },
         {
-          path: '/music/sheet/:id',
+          path: '/music/:empId/sheet/:id',
           name: 'musicindex',
           components: {
             listinfo: MusicSheet
           }
         },
         {
-          path: '/music/sheet/',
+          path: '/music/:empId/sheet/',
           redirect: store.getters.getMusicRouter,
           components: {
             listinfo: MusicSheet
           }
         },
         {
-          path: '/music/playlist/',
+          path: '/music/:empId/playlist/',
           components: {
             listinfo: MusicPlayList
           }

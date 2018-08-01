@@ -17,7 +17,7 @@
           <!--<router-link tag="a" to="/pic">-->
             <!--<li>状态</li>-->
           <!--</router-link>-->
-          <router-link tag="a" to="/music">
+          <router-link tag="a" :to="'/music/'+getUserId">
             <li>音乐</li>
           </router-link>
           <!--<router-link tag="a" to="/about">-->
@@ -45,7 +45,7 @@
               <!--<router-link tag="a" to="/pic">-->
                 <!--<li>状态</li>-->
               <!--</router-link>-->
-              <router-link tag="a" to="/music">
+              <router-link tag="a" :to="'/music/'+getUserId">
                 <li>音乐</li>
               </router-link>
               <!--<router-link tag="a" to="/about">-->

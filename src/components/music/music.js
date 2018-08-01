@@ -85,6 +85,7 @@ const musicApi = {
         var picUrl = ''
         const ele = store.getters.getAudioEle
         // alert(data.id)
+        if (data.picurl === null){
         fecth.getOut(apiList.getDetail,{ids: data.id}).then((res) => {
           if (res.data.songs[0].al.picUrl !== undefined) {
             picUrl = res.data.songs[0].al.picUrl
@@ -145,6 +146,69 @@ const musicApi = {
             })
           }
         })
+        }
+        else {
+          fecth.getOut(apiList.getDetail,{ids: data.id}).then((res) => {
+            if (res.data.songs[0].al.picUrl !== undefined) {
+              picUrl = res.data.songs[0].al.picUrl
+              fecth.getOut(apiList.getLyric,{id: data.id}).then((res) => {
+                let parseLrc = {}
+                if (res.data.lrc === undefined) {
+                  parseLrc = {'0': '纯音乐,请欣赏'}
+                } else {
+                  parseLrc = this.parseLrc(res.data.lrc.lyric)
+                  this.lyric = parseLrc
+                }
+
+                // 初始化最後一個lrc
+                this.lastLyric = -1
+                const currentMusic = {
+                  id: data.id,
+                  name: data.name,
+                  url: musicApi.replaceUrl(data.url),
+                  singer: data.singer,
+                  duration: data.duration,
+                  picurl: data.picurl,
+                  index: data.musicndex,
+                  lyric: parseLrc,
+                  lrcContent: store.getters.getAudioLrcContent
+                }
+                store.commit({
+                  type: 'setCurrentAudio',
+                  data: currentMusic
+                })
+
+                if (data.type !== 'unupdate' && data.type === '') {
+                  store.dispatch({
+                    type: 'set_MusicPlayList',
+                    data: data.list
+                  })
+                }
+                that.$nextTick(() => {
+                  try {
+                    store.getters.getAudioEle.load()
+                    if (store.getters.getAudioEle.paused) {
+                      store.getters.getAudioEle.play()
+                    }
+                  } catch (e) {
+                    return
+                  }
+                  // 设置歌词位置
+                  store.commit({
+                    type: 'setAudiolrcIndex',
+                    data: 0
+                  })
+                  this.scrollAnimate(document.getElementsByClassName('lrc-wrapper')[0], 0)
+                  // 设置播放状态
+                  store.getters.getAudioEle.play()
+                  store.commit('setAudioIsPlay', !ele.paused)
+                })
+              }, (err) => {
+                console.log(err)
+              })
+            }
+          })
+        }
     },
     // 获取音乐时长
     getMusicDurantionType (time) {
@@ -247,18 +311,6 @@ const musicApi = {
                     type: 'set_MusicList',
                     data: that.searchMusicList
                 })
-              // console.log(that.searchMusicList)
-              //   let data = {
-              //     id: that.searchMusicList[0].id,
-              //     name: that.searchMusicList[0].name,
-              //     pic: that.searchMusicList[0].pic,
-              //     singer: that.searchMusicList[0].singer,
-              //     duration: that.searchMusicList[0].duration,
-              //     index: that.searchMusicList[0].index,
-              //     list: that.searchMusicList,
-              //     type: that.musictype
-              //   }
-              //   this.clickIndex(data,that)
             } catch (e) {
                 return
             }
@@ -274,48 +326,80 @@ const musicApi = {
 
     // 添加到我喜欢的音乐 使用本地存储的方法
     collectMusic (opt) {
-        todoUserInfo().then((res) => {
-            let options = {
-                userid: res.id,
-                music_id: opt.id,
-                music_name: opt.name,
-                singer_id: opt.ar[0].id,
-                singer_name: opt.ar[0].name,
-                album_id: opt.al.id,
-                album_name: opt.al.name,
-                music_dur: opt.dt,
-                music_picurl: opt.al.picUrl
+        var picUrl = '';
+        fecth.getOut(apiList.getDetail,{ids: opt.id}).then((res) => {
+          if (res.data.songs[0].al.picUrl !== undefined) {
+            picUrl = res.data.songs[0].al.picUrl
+          }
+          var userInfo = fecth.getCookieValue("_user");
+          let options = {
+            userId: userInfo.id,
+            musicId: opt.id,
+            musicName: opt.name,
+            singerId: opt.artists[0].id,
+            singerName: opt.artists[0].name,
+            albumId: opt.album.id,
+            albumName: opt.album.name,
+            musicDur: opt.duration,
+            musicPicurl: picUrl
+          }
+          let fecthUrl = '/api/admin/collect/saveCollectMusic'
+          fecth.postJson(fecthUrl, options).then((res) => {
+            res = res.data
+            if (res.data) {
+              this.$msg('收藏成功！')
+            }else{
+              this.$msg(res.errmsg)
             }
-            let fecthUrl = 'http://www.daiwei.org/vue/server/user.php?inAjax=1&do=collectMusic'
-            fecthPromise(fecthUrl, options).then((res) => {
-                this.$msg(res.data.msg)
-            }, (err) => {
-                this.$msg(err)
-            })
+          }, (err) => {
+            this.$msg(err)
+          })
         }, (err) => {
-            this.$msg(err.msg)
-            this.$router.push({ path: '/user/login' })
-        })
+              this.$msg(err)
+            })
     },
 
     // 获取本地的音乐
     getLocalMusic () {
-        todoUserInfo().then((res) => {
-            let fecthUrl = 'http://www.daiwei.org/vue/server/user.php?inAjax=1&do=getCollectMusic'
-            fecthPromise(fecthUrl, {
-                userid: res.id
-            }).then((res) => {
-                store.commit({
-                    type: 'setMusicCollectList',
-                    data: res.data
-                })
-            }, (err) => {
-                this.$msg(err)
-            })
-        }, (err) => {
-            this.$msg(err.msg)
-            this.$router.push({ path: '/user/login' })
-        })
+          var userInfo = fecth.getCookieValue("_user");
+          let fecthUrl = '/api/admin/collect/getCollectMusic';
+          fecth.get(fecthUrl, {
+              userId: parseInt(JSON.parse(userInfo).id)
+          }).then((res) => {
+                var list = [];
+                if (res.data){
+                  res = res.data;
+                  res.data.forEach((value, index, array) => {
+                    var artists = {
+                      picUrl: value.musicPicurl,
+                      name: value.albumName
+                    }
+                    var album = {
+                      id: value.albumId,
+                      name: value.albumName
+                    }
+                    var data = {
+                      duration: value.musicDur,
+                      id: value.musicId,
+                      name: value.musicName,
+                      album: album,
+                      artists:{
+                        0: artists,
+                        picUrl: value.musicPicurl
+                      },
+                      singer_id: value.singerId,
+                      singer_name: value.singerName
+                    }
+                    list.push(data)
+                  })
+                }
+              store.commit({
+                  type: 'setMusicCollectList',
+                  data: list
+              })
+          }, (err) => {
+              this.$msg(err)
+          })
     },
 
     // 删除收藏的音乐
