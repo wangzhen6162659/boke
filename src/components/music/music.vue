@@ -35,6 +35,7 @@
 			  			<router-link tag="span" to="/music/search" class="todo_btn search_btn">
 				        	搜索
 				        </router-link>
+
 			  		</div>
 			  		<transition name="silde-top">
 			  			<router-view class="list_content" name="listinfo"></router-view>
@@ -48,6 +49,7 @@
   				<div class="bg-info">
   					<img class="music-bg" :src="getCurrentMusic.picurl ? getCurrentMusic.picurl : 'http://www.daiwei.org/vue/bg/657952152722629515.jpg'">
   				</div>
+          <musicCanvas></musicCanvas>
   				<div class="lrc-content" ref="lrcContent">
   					<div class="lrc-wrapper" ref="lrcWrapper">
   						<p class="lrc-item" v-if="!getMusicLrcLists" ></p>
@@ -55,7 +57,6 @@
   					</div>
   				</div>
 
-          <musicCanvas></musicCanvas>
   			</div>
   		</div>
   		<div class="music_ctrl">

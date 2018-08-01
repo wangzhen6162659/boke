@@ -186,10 +186,12 @@
             }
         },
         mounted() {
+          if (store.getters.getGlobalInfo.isHigher768){
             const ctx = this.createCtx();
             window.requestAnimationFrame(() => {
                 this.animateCanvas(ctx);
             });
+          }
         }
     }
 </script>

@@ -8,7 +8,8 @@
     </div>
     <v-content></v-content>
     <updatetips :defaultvalue="getVersionList"></updatetips>
-    <audio :src="getCurrentMusic.url" ref="myAudio" crossOrigin="anonymous"></audio>
+    <!--<musicCanvas></musicCanvas>-->
+    <audio :src="getCurrentMusic.url" ref="myAudio" crossorigin="anonymous">凉了</audio>
   </div>
 </template>
 <script>
@@ -45,14 +46,22 @@ export default {
   },
   methods: {
     createAnalyser () {
-      const AC = new (window.AudioContext || window.webkitAudioContext)();
+      try {
+        window.AudioContext = window.AudioContext || window.webkitAudioContext || window.mozAudioContext || window.msAudioContext;
+      } catch (err){
+        alert('!Your browser does not support Web Audio API!');
+      }
+      const AC = new window.AudioContext();
       const analyser = AC.createAnalyser();
       const gainnode = AC.createGain();
       gainnode.gain.value = 1;
-      const source = AC.createMediaElementSource(this.$refs.myAudio);
-      source.connect(analyser);
-      analyser.connect(gainnode);
-      gainnode.connect(AC.destination);
+
+      if (store.getters.getGlobalInfo.isHigher768) {
+        const source = AC.createMediaElementSource(this.$refs.myAudio);
+        source.connect(analyser);
+        analyser.connect(gainnode);
+        gainnode.connect(AC.destination);
+      }
       //
       store.commit('setAnalyser', analyser);
     },

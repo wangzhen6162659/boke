@@ -4,6 +4,7 @@ import {Utils} from 'common/js/Utils.js'
 import $ from 'jquery'
 import {fecthPromise, todoUserInfo} from 'common/api/user.js'
 import vueExp from '@/main.js'
+import apiList from 'common/api/musicApiList.js'
 const musicApi = {
     lastLyric: 0,
     typeType: localStorage.getItem('audioPlayType') || store.getters.getAudioPlayType,
@@ -84,12 +85,10 @@ const musicApi = {
         var picUrl = ''
         const ele = store.getters.getAudioEle
         // alert(data.id)
-        const apiLyric = `/lyric?id=${data.id}`
-        const apiDetail = `/song/detail?ids=${data.id}`
-        fecth.getOut(apiDetail).then((res) => {
+        fecth.getOut(apiList.getDetail,{ids: data.id}).then((res) => {
           if (res.data.songs[0].al.picUrl !== undefined) {
             picUrl = res.data.songs[0].al.picUrl
-            fecth.getOut(apiLyric).then((res) => {
+            fecth.getOut(apiList.getLyric,{id: data.id}).then((res) => {
               let parseLrc = {}
               if (res.data.lrc === undefined) {
                 parseLrc = {'0': '纯音乐,请欣赏'}
@@ -125,7 +124,9 @@ const musicApi = {
               that.$nextTick(() => {
                 try {
                   store.getters.getAudioEle.load()
-                  store.getters.getAudioEle.play()
+                  if (store.getters.getAudioEle.paused) {
+                    store.getters.getAudioEle.play()
+                  }
                 } catch (e) {
                   return
                 }
@@ -136,6 +137,7 @@ const musicApi = {
                 })
                 this.scrollAnimate(document.getElementsByClassName('lrc-wrapper')[0], 0)
                 // 设置播放状态
+                store.getters.getAudioEle.play()
                 store.commit('setAudioIsPlay', !ele.paused)
               })
             }, (err) => {
@@ -183,7 +185,6 @@ const musicApi = {
         type: 'setAudiolrcIndex',
         data: i
       })
-      console.log(i)
       try {
         this.scrollAnimate(that.$refs.lrcWrapper, i * document.getElementsByClassName('lrc-item')[0].offsetHeight)
       } catch (e) {
@@ -194,8 +195,7 @@ const musicApi = {
     // 点击播放歌曲
     clickIndex (data, that) {
         var reqId = data.music_id ? data.music_id : data.id
-        const apiUrl = `/music/url?id=${reqId}`
-        fecth.getOut(apiUrl).then((res) => {
+        fecth.getOut(apiList.getUrl,{id: reqId}).then((res) => {
             // 如果代码不允许被播放（付费音乐）
             if (res.data.data[0].url === null) {
                 that.$msg('音乐无法播放,请播放其他音频...')
@@ -230,8 +230,7 @@ const musicApi = {
 
     // 搜索音乐
     searchMusic (word, pages, that) {
-        const apiUrl = `/search?keywords=${word}`
-        fecth.getOut(apiUrl, {
+        fecth.getOut(apiList.getSearch,{keywords: word}, {
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
             }
@@ -248,6 +247,18 @@ const musicApi = {
                     type: 'set_MusicList',
                     data: that.searchMusicList
                 })
+              // console.log(that.searchMusicList)
+              //   let data = {
+              //     id: that.searchMusicList[0].id,
+              //     name: that.searchMusicList[0].name,
+              //     pic: that.searchMusicList[0].pic,
+              //     singer: that.searchMusicList[0].singer,
+              //     duration: that.searchMusicList[0].duration,
+              //     index: that.searchMusicList[0].index,
+              //     list: that.searchMusicList,
+              //     type: that.musictype
+              //   }
+              //   this.clickIndex(data,that)
             } catch (e) {
                 return
             }
@@ -381,8 +392,7 @@ const musicApi = {
         }
 
         var reqId = musicplaylist[index].music_id ? musicplaylist[index].music_id : musicplaylist[index].id
-        const apiUrl = `/music/url?id=${reqId}`
-        fecth.getOut(apiUrl).then((res) => {
+        fecth.getOut(apiList.getUrl,{id: reqId}).then((res) => {
             if (res.data.data[0].url === null) {
                 let initIndex = 0
                 const currentMusic = {

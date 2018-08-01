@@ -8,7 +8,7 @@
 						<span v-show="getCurrentMusic.id !== list.music_id">{{index + 1}}</span>
 						<img v-show="getCurrentMusic.id === list.music_id" src="http://www.daiwei.org/vue/bg/wave.gif" alt="未曾遗忘的青春">
 					</span>
-					<div class="music_name">
+					<div class="music_name" ref="musicName">
 						<span class="span_name">{{list.music_name}}</span>
 						<div class="hover_menu">
 							<i class="icon-delete" v-if="showdelicon" @click.stop="deleteMusic(list.music_id)"></i>
@@ -106,6 +106,9 @@ export default {
 				list: this.musiclist,
 				type: this.musictype
 			}
+      const ele = store.getters.getAudioEle
+      ele.load();
+			ele.play()
 			musicApi.clickIndex(data, this)
 		},
 
@@ -164,6 +167,16 @@ export default {
 			return this.$route.path.includes('/music/searchlist')
 		}
 	},
+  mounted () {
+    // const ele = store.getters.getAudioEle
+    // musicApi.clickIndex(that.searchMusicList[0].id,this)
+    // this.$el.addEventListener('touchstart', function () {
+    //   if(ele.paused){
+    //     ele.load();
+    //   }
+    //   ele.play();
+    // });
+  },
 	watch: {
 		// currentMusic (newval, oldval) {
 		// 	alert(newval.lyric)
