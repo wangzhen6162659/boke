@@ -248,9 +248,6 @@
       back () {
         this.$router.go(-1)
       },
-      clickarticleMusic (e) {
-        this.$router.push({name: 'articlelist', params: { w: e.target.innerHTML }})
-      },
       init () {
         var id = this.$route.params.id
         fecth.get(apiList.getArticle, {id : id}).then((res) => {

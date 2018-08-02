@@ -9,19 +9,19 @@
         <div class="left_list">
           <div class="boke_home">
             <div v-if="getIsAPP.isHigher768" class="select_button" ref="pc">
-              <router-link tag="span" :to="'/blog/'+userId+'/articlelist/'+obj.id" class="todo_btn playing_btn" v-for="(obj,index) in pc" :key="index">
+              <router-link tag="span" :to="'/blog/articlelist/'+obj.id" class="todo_btn playing_btn" v-for="(obj,index) in pc" :key="index">
                 {{obj.typeName}}
               </router-link>
-              <router-link tag="span" :to="'/blog/'+userId+'/typeCreate'">
+              <router-link tag="span" to="/blog/typeCreate">
                 <span class="iconfont iconali-plus-circle add_type"></span>
               </router-link>
 
             </div>
             <div v-if="!getIsAPP.isHigher768" class="select_m_button">
-              <router-link tag="span" :to="'/blog/'+userId+'/articlelist/'+obj.id" class="todo_btn playing_btn" v-for="(obj,index) in pc" :key="index">
+              <router-link tag="span" :to="'/blog/articlelist/'+obj.id" class="todo_btn playing_btn" v-for="(obj,index) in pc" :key="index">
                 {{obj.typeName}}
               </router-link>
-              <router-link tag="span" :to="'/blog/'+userId+'/typeCreate'">
+              <router-link tag="span" to="/blog/typeCreate">
                 <span class="iconfont iconali-plus-circle add_type"></span>
               </router-link>
               <span class="icon-gerenzhongxin"></span>
@@ -36,7 +36,7 @@
           <router-view class="boke_wrapper" name="fullscreen" :test="getBlogType"></router-view>
         </transition>
       </div>
-      <router-link tag="span" :to="'/blog/'+userId+'/articleCreate'">
+      <router-link tag="span" to="/blog/articleCreate">
         <input class="opacity" type="button" ref="nextBtn" value="新建文章">
         <!--<span class="iconfont iconali-plus-circle add_type" style="font-size:30px; text-align: right;padding-right:8px; float: right"></span>-->
       </router-link>
@@ -72,12 +72,12 @@
       }
     },
     mounted () {
-      this.userId = this.$route.params.empId
+      this.userId = store.getters.getEmpInfo;
       this.getBlogType ();
     },
     watch: {
       '$route'(){
-        this.userId = this.$route.params.empId
+        this.userId = store.getters.getEmpInfo;
         this.getBlogType ();
       }
     }

@@ -9,13 +9,13 @@
   			<div class="left_list">
   				<div class="music_home">
   					<div v-if="getIsAPP.isHigher768" class="select_button">
-  						<router-link tag="span" :to="'/music/'+empId+'/playlist'" class="todo_btn playing_btn">
-				        	正在播放
+  						<router-link tag="span" to="/music/playlist" class="todo_btn playing_btn">
+				        	{{collectName}}
 				        </router-link>
-			  			<router-link tag="span" to="/music/collection" class="todo_btn collect_btn">
-				        	我的收藏
-				        </router-link>
-				        <router-link tag="span" to="/music/toplist" class="todo_btn top_btn">
+			  			<!--<router-link tag="span" to="/music/module/collection" class="todo_btn collect_btn">-->
+				        	<!--我的收藏-->
+				        <!--</router-link>-->
+				        <router-link tag="span" to="/music/module/toplist" class="todo_btn top_btn">
 				        	排行榜/歌单
 				        </router-link>
 			  			<router-link tag="span" to="/music/module/search" class="todo_btn search_btn">
@@ -23,13 +23,13 @@
 				        </router-link>
 			  		</div>
 			  		<div v-if="!getIsAPP.isHigher768" class="select_m_button">
-			  			<router-link tag="span" :to="'/music/'+empId+'/playlist'" class="todo_btn playing_btn">
-				        	正在播放
+			  			<router-link tag="span" to="/music/playlist" class="todo_btn playing_btn">
+				        	{{collectName}}
 				        </router-link>
-			  			<router-link tag="span" to="/music/collection" class="todo_btn collect_btn">
-				        	收藏
-				        </router-link>
-				        <router-link tag="span" to="/music/toplist" class="todo_btn top_btn">
+			  			<!--<router-link tag="span" to="/music/module/collection" class="todo_btn collect_btn">-->
+				        	<!--收藏-->
+				        <!--</router-link>-->
+				        <router-link tag="span" to="/music/module/toplist" class="todo_btn top_btn">
 				        	排行榜/歌单
 				        </router-link>
 			  			<router-link tag="span" to="/music/module/search" class="todo_btn search_btn">
@@ -92,11 +92,13 @@
   import store from 'store'
   import musicApi from 'components/music/music.js'
   import musicCanvas from '../music/musicCanvas/musicCanvas';
+  import fecth from 'utils/fecth.js'
   // import axios from 'axios'
   // import qs from 'qs'
   export default {
   	data () {
   		return {
+  		  collectName: '他的收藏',
   		  empId: '',
   			isDrag: false,
   			currentMusic: {},
@@ -208,7 +210,6 @@
   					audioEle.loop = false
   					break
   				default:
-  					console.log('haha')
   					break
   			}
 			musicApi.setPlayType(atype)
@@ -273,12 +274,21 @@
   		this.$nextTick(() => {
   			this.initAudioEvent()
   			this.keypress()
+        this.empId = store.getters.getEmpInfo;
+
+        var userInfo = fecth.getCookieValue("_user")
+        if (userInfo !== '' && this.empId === JSON.parse(userInfo).id){
+          this.collectName = '我的收藏';
+        }
   		})
   	},
     watch: {
       '$route' (to, from) {
-        if (this.$route.params.empId !=undefined){
-          this.empId = this.$route.params.empId
+        this.empId = store.getters.getEmpInfo;
+
+        var userInfo = fecth.getCookieValue("_user")
+        if (userInfo !== '' && this.empId === JSON.parse(userInfo).id){
+            this.collectName = '我的收藏';
         }
       }
     }

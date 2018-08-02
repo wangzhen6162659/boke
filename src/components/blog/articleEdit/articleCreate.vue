@@ -32,7 +32,7 @@ export default {
   props: ['test'],
 	data () {
 		return {
-      userId: this.$route.params.empId,
+      userId: store.getters.getEmpInfo,
       showarticle: false,
 			showList: false,
       articleTypes: [],

@@ -23,7 +23,7 @@
 					<!--</span>-->
 					<!--<span class="music_duration">{{getMusicDurationType(list.music_dur)}}</span>-->
 				<!--</div>-->
-				<div class="music_list border-1px" @mouseenter="showIcon" @mouseleave="hideIcon" v-for="(list, index) in musiclist" :key="list.id" :data-musicid="list.id" :data-pic="list.artists.picUrl" @click="clickPlayList(list.id, list.name, list.artists[0].picUrl, list.artists[0].name, getMusicDurationType(list.duration),index), musiclist">
+        <div class="music_list border-1px" @mouseenter="showIcon" @mouseleave="hideIcon" v-if="musiclist && musiclist[0].al"v-for="(list, index) in musiclist" :key="list.id" :data-musicid="list.id" :data-pic="list.al.picUrl" @click="clickPlayList(list.id, list.name, list.al.picUrl, list.ar[0].name, getMusicDurationType(list.dt),index), musiclist">
 					<span class="music_index">
 						<span v-show="getCurrentMusic.id !== list.id">{{index + 1}}</span>
 						<img v-show="getCurrentMusic.id === list.id" src="http://www.daiwei.org/vue/bg/wave.gif" alt="未曾遗忘的青春">
@@ -31,17 +31,17 @@
 					<div class="music_name">
 						<span class="span_name">{{list.name}}</span>
 						<div class="hover_menu">
-							<i class="icon-delete" v-if="showdelicon" @click.stop="deleteMusic(list.music_id)"></i>
+							<i class="icon-delete" v-if="showdelicon" @click.stop="deleteMusic(list.id)"></i>
 							<i class="icon-add" v-if="!showdelicon" @click.stop="collectMusic(index)"></i>
 						</div>
 					</div>
-					<span class="music_singer" v-if="list.artists">
-						<span @click.stop="searchMusic($event)">{{list.artists[0].name}}</span>
+					<span class="music_singer" v-if="list.ar">
+						<span @click.stop="searchMusic($event)">{{list.ar[0].name}}</span>
 					</span>
-					<span class="music_zhuanji" v-if="list.album">
-						<span @click.stop="getAlbum(list.album.id)">{{list.album.name}}</span>
+					<span class="music_zhuanji" v-if="list.al">
+						<span @click.stop="getAlbum(list.al.id)">{{list.al.name}}</span>
 					</span>
-					<span class="music_duration">{{getMusicDurationType(list.duration)}}</span>
+					<span class="music_duration">{{getMusicDurationType(list.dt)}}</span>
 				</div>
 			</div>
 		</scroll>
@@ -53,6 +53,7 @@ import store from 'store'
 import musicApi from 'components/music/music.js'
 import Scroll from 'components/common/bscroll/bscroll.vue'
 import {addClass, removeClass} from 'common/js/Dom.js'
+import fecth from 'utils/fecth.js'
 export default {
 	data () {
 		return {
@@ -170,14 +171,11 @@ export default {
 		}
 	},
   mounted () {
-    // const ele = store.getters.getAudioEle
-    // musicApi.clickIndex(that.searchMusicList[0].id,this)
-    // this.$el.addEventListener('touchstart', function () {
-    //   if(ele.paused){
-    //     ele.load();
-    //   }
-    //   ele.play();
-    // });
+    this.params = this.$route.params
+    var userInfo = fecth.getCookieValue("_user")
+    if (userInfo !== '' && store.getters.getEmpInfo === JSON.parse(userInfo).id){
+      this.showdelicon = true;
+    }
   },
 	watch: {
 		// currentMusic (newval, oldval) {
@@ -185,6 +183,11 @@ export default {
 		// }
 		'$route' (to, from) {
 			this.params = this.$route.params
+
+      var userInfo = fecth.getCookieValue("_user")
+      if (userInfo !== '' && store.getters.getEmpInfo === JSON.parse(userInfo).id){
+        this.showdelicon = true;
+      }
 		}
 	}
 }

@@ -37,8 +37,7 @@ const musicApi = {
     // 获取对应的表单歌曲
     getMusicSheet (id) {
         // const id = 3778678  // 云音乐热歌榜
-        const apiUrl = `http://www.daiwei.org/vue/server/music.php?inAjax=1&do=playlist&id=${id}`
-        fecth.get(apiUrl, {
+        fecth.getOut(apiList.getPlaylist,{id: id},{
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
             }
@@ -60,8 +59,7 @@ const musicApi = {
 
     // 获取专辑信息
     getAlbum (id) {
-        const apiUrl = `http://www.daiwei.org/vue/server/music.php?inAjax=1&do=album&id=${id}`
-        fecth.get(apiUrl, {
+        fecth.getOut(apiList.getAlbum,{id:id}, {
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
             }
@@ -97,7 +95,6 @@ const musicApi = {
                 parseLrc = this.parseLrc(res.data.lrc.lyric)
                 this.lyric = parseLrc
               }
-
               // 初始化最後一個lrc
               this.lastLyric = -1
               const currentMusic = {
@@ -159,7 +156,6 @@ const musicApi = {
                   parseLrc = this.parseLrc(res.data.lrc.lyric)
                   this.lyric = parseLrc
                 }
-
                 // 初始化最後一個lrc
                 this.lastLyric = -1
                 const currentMusic = {
@@ -301,7 +297,24 @@ const musicApi = {
         }).then((res) => {
             try {
                 res.data.result.songs.forEach((value, index, array) => {
-                    that.searchMusicList.push(value)
+                    var ar = {
+                      name: value.artists[0].name
+                    }
+                    var al = {
+                      picUrl: value.artists[0].picUrl,
+                      id: value.album.id,
+                      name: value.album.name
+                    }
+                    var data = {
+                      dt: value.duration,
+                      id: value.id,
+                      name: value.name,
+                      al: al,
+                      ar:{
+                        0: ar
+                      }
+                    }
+                    that.searchMusicList.push(data)
                 })
                 store.dispatch({
                     type: 'set_MusicSearchList',
@@ -360,31 +373,30 @@ const musicApi = {
     },
 
     // 获取本地的音乐
-    getLocalMusic () {
-          var userInfo = fecth.getCookieValue("_user");
+    getLocalMusic (userId, tag) {
           let fecthUrl = '/api/admin/collect/getCollectMusic';
           fecth.get(fecthUrl, {
-              userId: parseInt(JSON.parse(userInfo).id)
+              userId: userId
           }).then((res) => {
                 var list = [];
                 if (res.data){
                   res = res.data;
                   res.data.forEach((value, index, array) => {
-                    var artists = {
-                      picUrl: value.musicPicurl,
-                      name: value.albumName
+                    var ar = {
+                      name: value.singerName
                     }
-                    var album = {
+                    var al = {
+                      picUrl: value.musicPicurl,
                       id: value.albumId,
                       name: value.albumName
                     }
                     var data = {
-                      duration: value.musicDur,
+                      dt: value.musicDur,
                       id: value.musicId,
                       name: value.musicName,
-                      album: album,
-                      artists:{
-                        0: artists,
+                      al: al,
+                      ar:{
+                        0: ar,
                         picUrl: value.musicPicurl
                       },
                       singer_id: value.singerId,
@@ -393,10 +405,22 @@ const musicApi = {
                     list.push(data)
                   })
                 }
-              store.commit({
+              if (tag == 1){
+                store.commit({
                   type: 'setMusicCollectList',
                   data: list
-              })
+                })
+                store.commit({
+                  type: 'setMusicList',
+                  data: list
+                })
+              }
+              if (tag == 2){
+                store.commit({
+                  type: 'setMusicCollectListMyself',
+                  data: list
+                })
+              }
           }, (err) => {
               this.$msg(err)
           })
@@ -404,11 +428,9 @@ const musicApi = {
 
     // 删除收藏的音乐
     deleteMusic (id) {
-        todoUserInfo().then((res) => {
-            let fecthUrl = 'http://www.daiwei.org/vue/server/user.php?inAjax=1&do=delCollectMusic'
-            fecthPromise(fecthUrl, {
-                userid: res.id,
-                music_id: id
+            let fecthUrl = '/api/admin/collect/deleteCollectMusic'
+            fecth.get(fecthUrl, {
+                musicId: id
             }).then((res) => {
                 let collectlist = store.getters.getMusicCollectList
                 collectlist.forEach((v, i, a) => {
@@ -421,14 +443,14 @@ const musicApi = {
                     type: 'setMusicCollectList',
                     data: collectlist
                 })
-                this.$msg(res.data.msg)
+                if (res.data.data){
+                  this.$msg('取消收藏成功！')
+                } else {
+                  this.$msg(res.data.errmsg);
+                }
             }, (err) => {
                 this.$msg(err)
             })
-        }, (err) => {
-            this.$msg(err.msg)
-            this.$router.push({ path: '/user/login' })
-        })
     },
 
     // 播放暂停
@@ -493,9 +515,9 @@ const musicApi = {
                 id: reqId,
                 name: musicplaylist[index].name ? musicplaylist[index].name : musicplaylist[index].music_name,
                 url: musicApi.replaceUrl(res.data.data[0].url),
-                singer: musicplaylist[index].ar ? musicplaylist[index].ar[0].name : musicplaylist[index].singer_name,
-                duration: musicApi.getMusicDurantionType(musicplaylist[index].duration ? musicplaylist[index].duration : musicplaylist[index].music_dur),
-                picurl: musicplaylist[index].artists.picUrl,
+                singer: musicplaylist[index].al.name ? musicplaylist[index].al.name : musicplaylist[index].singer_name,
+                duration: musicApi.getMusicDurantionType(musicplaylist[index].dt ? musicplaylist[index].dt : musicplaylist[index].music_dur),
+                picurl: musicplaylist[index].al.picUrl,
                 musicndex: index,
                 list: store.getters.getMusicList,
                 type: 'unupdate'

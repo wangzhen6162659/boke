@@ -10,6 +10,8 @@ const serviceModule = {
   getLyric: '/lyric',
   getUrl: '/music/url',
   getSearch: '/search',
+  getAlbum: '/album',
+  getPlaylist: '/playlist/detail',
 }
 const ApiList = { ...serviceModule }
 

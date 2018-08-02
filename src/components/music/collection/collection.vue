@@ -65,7 +65,7 @@
 		initMusic () {
 			// 获取本地音乐
 			// musicApi.getAlbum(this.params.id)
-			musicApi.getLocalMusic.call(this)
+			musicApi.getLocalMusic.call(this,1)
   		}
   	},
   	computed: {
@@ -119,5 +119,5 @@
 					.hover_menu
 						display:block
 	video
-		display:none	
+		display:none
 </style>

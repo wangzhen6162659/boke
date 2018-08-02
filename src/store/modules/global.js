@@ -15,9 +15,10 @@ const globalStore = {
 		place: {},
 		weather: {},
 		showloading: true,
-		musicRouter: '/music/:empId/sheet/124995419',
+		musicRouter: '/music/playlist',
 		host: 'http://www.daiwei.org',
 		userInfo: null,
+    empInfo: null,
     analyser: null
 	},
 	getters: {
@@ -28,14 +29,16 @@ const globalStore = {
 		getMusicRouter: state => state.musicRouter,
 		getUserInfo: function(state){
       var user = fecth.getCookieValue('_user');
-      console.log(user)
       if (state.userInfo == null && user.length>0){
-        console.log(123)
         // console.log(JSON.parse(localStorage.getItem('FLASH_USER')))
         // state.userInfo = JSON.parse(localStorage.getItem('FLASH_USER'))
         state.userInfo = JSON.parse(user)
       }
       return state.userInfo;
+    },
+    getEmpInfo: function(state){
+      state.empInfo = localStorage.getItem('FLASH_USER')
+      return state.empInfo;
     },
     getAnalyser: state => state.analyser
 	},
@@ -73,6 +76,10 @@ const globalStore = {
 		setUserInfo (state, obj) {
 			state.userInfo = obj.data
 		},
+    setEmpInfo (state, obj) {
+      state.userInfo = obj.data
+      localStorage.setItem('FLASH_USER',obj.data)//将value存储到key字段
+    },
     setAnalyser (state, obj) {
       state.analyser = obj
     }
@@ -108,6 +115,9 @@ const globalStore = {
 		set_UserInfo ({commit}, obj) {
 			commit('setUserInfo', obj)
 		},
+    set_EmpInfo ({commit}, obj) {
+      commit('setEmpInfo', obj)
+    },
     set_Analyser ({commit}, obj) {
       commit('setAnalyser', obj)
     }

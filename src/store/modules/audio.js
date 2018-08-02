@@ -29,7 +29,9 @@ const audio = {
 		// 播放列表
 		musicPlayList: {},
 		// 收集歌曲的内容
-		musicCollectList: []
+		musicCollectList: [],
+    // 收集歌曲的内容(登录人)
+    musicCollectListMyself: []
 	},
 	getters: {
 		getCurrentAudio: state => state.currentAudio,
@@ -39,6 +41,7 @@ const audio = {
 		getMusicSheetList: state => state.musicSheetList,
 		getMusicPlayList: state => state.musicPlayList,
 		getMusicCollectList: state => state.musicCollectList,
+    getMusicCollectListMyself: state => state.musicCollectListMyself,
 		getAudioLrcContent: state => state.audioLrcContent,
 		getAudiolrcIndex: state => state.lrcIndex,
 		getAudioIsPlay: state => state.isPlaying,
@@ -68,6 +71,9 @@ const audio = {
 		setMusicCollectList (state, obj) {
 			state.musicCollectList = obj.data
 		},
+    setMusicCollectListMyself (state, obj) {
+      state.musicCollectListMyself = obj.data
+    },
 		setAudioLrcContent (state, obj) {
 			state.audioLrcContent = obj.data
 		},
@@ -110,6 +116,9 @@ const audio = {
 		set_MusicCollectList ({commit}, obj) {
 			commit('setMusicCollectList', obj)
 		},
+    set_MusicCollectListMyself ({commit}, obj) {
+      commit('setMusicCollectListMyself', obj)
+    },
 		set_AudioCurrentTime ({commit}, obj) {
 			commit('setAudioCurrentTime', obj)
 		},

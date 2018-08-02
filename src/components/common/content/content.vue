@@ -10,14 +10,14 @@
             <li>首页</li>
           </router-link>
           <!--<a href="http://www.daiwei.org/blog" target="_black">-->
-          <router-link tag="a" :to="'/blog/'+getUserId">
+          <router-link tag="a" to="/blog">
             <li>博客</li>
           </router-link>
           <!--</a>-->
           <!--<router-link tag="a" to="/pic">-->
             <!--<li>状态</li>-->
           <!--</router-link>-->
-          <router-link tag="a" :to="'/music/'+getUserId">
+          <router-link tag="a" to="/music/">
             <li>音乐</li>
           </router-link>
           <!--<router-link tag="a" to="/about">-->
@@ -38,14 +38,14 @@
                 <li>首页</li>
               </router-link>
               <!--<a href="http://www.daiwei.org/blog" target="_black">-->
-              <router-link tag="a" :to="'/blog/'+getUserId">
+              <router-link tag="a" to="/blog">
                 <li>博客</li>
               </router-link>
               <!--</a>-->
               <!--<router-link tag="a" to="/pic">-->
                 <!--<li>状态</li>-->
               <!--</router-link>-->
-              <router-link tag="a" :to="'/music/'+getUserId">
+              <router-link tag="a" to="/music/">
                 <li>音乐</li>
               </router-link>
               <!--<router-link tag="a" to="/about">-->
@@ -70,7 +70,7 @@
           {{getPlace.city}}
           <weather :isShow="showWeatherList"></weather>
         </span> -->
-        <router-link v-if="getUserInfo !== null" class="listmenu" tag="a" to="/user/info">
+        <router-link v-if="getUserInfo !== null" class="listmenu" tag="a" :to="'/user/'+getUserId+'/info'">
           {{getUserInfo.nickname === '' ? (getUserInfo.username === '' ? '点击设置用户名' : getUserInfo.username) : getUserInfo.nickname}}
         </router-link>
 
@@ -95,12 +95,14 @@
 <script>
 import store from 'store'
 import weather from 'components/common/weather/weather.vue'
+import fecth from 'utils/fecth.js'
 let t
 export default {
   data () {
     return {
       showLeftMenu: false,
       showWeatherList: false,
+      getUserInfo: null,
       empId: this.$route.params.empId,
       user: {
         id: '',
@@ -129,6 +131,26 @@ export default {
       t = setTimeout(function () {
           _that.showWeatherList = false
       }, 800)
+    },
+    setUserInfo () {
+      if (fecth.getCookieValue("_user") != ''){
+        this.getUserInfo = JSON.parse(fecth.getCookieValue("_user"))
+      } else {
+        this.getUserInfo = null;
+      }
+    },
+    setEmpInfo () {
+      if(this.$route.params.empId !=undefined){
+        store.dispatch({
+          type: 'set_EmpInfo',
+          data: this.$route.params.empId
+        })
+      } else if(store.getters.getEmpInfo != null){
+        store.dispatch({
+          type: 'set_EmpInfo',
+          data: store.getters.getEmpInfo
+        })
+      }
     }
     // getRightWendu (l, h) {
     //   return l.split(' ')[l.split(' ').length - 1] + ' ~ ' + h.split(' ')[l.split(' ').length - 1]
@@ -145,19 +167,23 @@ export default {
     isIos () {
       return /iPhone|iPod/i.test(navigator.userAgent)
     },
-    getUserInfo () {
-      console.log(store.getters.getUserInfo)
-      return store.getters.getUserInfo
-    },
     getUserId () {
       if(this.$route.params.empId !=undefined){
         this.empId = this.$route.params.empId;
+      } else if(store.getters.getEmpInfo != null){
+        this.empId = store.getters.getEmpInfo;
       }
       return this.empId;
     }
   },
   components: {
     weather
+  },
+  watch: {
+    '$route' (to) {
+      this.setUserInfo();
+      this.setEmpInfo();
+    }
   }
 }
 </script>

@@ -70,6 +70,7 @@
 	export default {
 		data () {
 			return {
+			  userInfo: {},
 				selectIndex: 0,
 				personalCenter: [],
 				suggestList: [],
@@ -99,10 +100,9 @@
 			initMusic () {
 				// 获取本地音乐
 				// musicApi.getAlbum(this.params.id)
-				musicApi.getLocalMusic.call(this)
+				musicApi.getLocalMusic(this.userInfo.id,2)
 			},
 			initData () {
-				todoUserInfo().then((res) => {
           fecth.get(apiList.get, {
 						id: store.getters.getUserInfo.id || 0
 					}).then((res) => {
@@ -111,9 +111,6 @@
 					}, (err) => {
 						this.$msg(err)
 					})
-				}, (err) => {
-					this.$msg(err)
-				})
 			},
 			selectImage () {
 				this.$refs.selectimgbtn.click()
@@ -138,15 +135,28 @@
 		},
 		computed: {
 			musicList () {
-				return store.getters.getMusicCollectList
+				return store.getters.getMusicCollectListMyself
 			}
 		},
 		mounted () {
+      if (fecth.getCookieValue("_user") === ''){
+        this.$router.push('/user/login')
+      }
+      this.userInfo = JSON.parse(fecth.getCookieValue("_user"))
 			this.$nextTick(() => {
+        this.initData()
 				this.initMusic()
-				this.initData()
 			})
-		}
+		},
+    watch: {
+      '$route' (to, from) {
+        if (fecth.getCookieValue("_user") === ''){
+          this.$router.push('/user/login')
+        }else {
+          this.userInfo = JSON.parse(fecth.getCookieValue("_user"))
+        }
+      }
+      }
 	}
 </script>
 <style lang="stylus" rel="stylesheet/stylus">

@@ -190,10 +190,10 @@
 						height:0
 						padding-top:100%
 					}
-			@media screen and (max-width: 1550px) 
+			@media screen and (max-width: 1550px)
 				.toplist_l
 					padding: 15px
-			@media screen and (max-width: 768px) 
+			@media screen and (max-width: 768px)
 				.toplist_l
 					padding: 10px
 </style>

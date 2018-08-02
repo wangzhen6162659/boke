@@ -80,7 +80,7 @@
         }
       },
       getArticle (id) {
-        var path = '/blog/' + this.empId + '/article/' + id
+        var path = '/blog/article/' + id
         this.$router.push({path: path})
       }
     },

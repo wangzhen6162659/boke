@@ -89,7 +89,7 @@ export default new Router({
     },
     {
       // 音乐
-      path: '/music/:empId',
+      path: '/music',
       component: Music,
       children: [
         {
@@ -106,7 +106,7 @@ export default new Router({
           }
         },
         {
-          path: '/music/albumlist/:id',
+          path: '/music/module/albumlist/:id',
           name: 'albumlist',
           components: {
             listinfo: MusicAlbumList
@@ -114,34 +114,34 @@ export default new Router({
         },
         // 收藏的列表
         {
-          path: '/music/collection',
+          path: '/music/module/collection',
           name: 'collection',
           components: {
             listinfo: MusicCollection
           }
         },
         {
-          path: '/music/:empId/sheet/:id',
+          path: '/music/sheet/:id',
           name: 'musicindex',
           components: {
             listinfo: MusicSheet
           }
         },
         {
-          path: '/music/:empId/sheet/',
+          path: '/music/sheet/',
           redirect: store.getters.getMusicRouter,
           components: {
             listinfo: MusicSheet
           }
         },
         {
-          path: '/music/:empId/playlist/',
+          path: '/music/playlist/',
           components: {
             listinfo: MusicPlayList
           }
         },
         {
-          path: '/music/toplist/',
+          path: '/music/module/toplist/',
           components: {
             listinfo: MusicToplist
           }
@@ -157,18 +157,18 @@ export default new Router({
     },
     {
       // 博客
-      path: '/blog/:empId',
+      path: '/blog',
       component: Blog,
       children: [
         {
-          path: '/blog/:empId/articlelist/:type',
+          path: '/blog/articlelist/:type',
           name: 'articlelist',
           components: {
             listinfo: ArticleList
           }
         },
         {
-          path: '/blog/:empId/article/:id',
+          path: '/blog/article/:id',
           name: 'article',
           components: {
             fullscreen: Article,
@@ -176,7 +176,7 @@ export default new Router({
           }
         },
         {
-          path: '/blog/:empId/typeCreate',
+          path: '/blog/typeCreate',
           name: 'articleTypeCreate',
           components: {
             fullscreen: ArticleTypeCreate,
@@ -184,7 +184,7 @@ export default new Router({
           }
         },
         {
-          path: '/blog/:empId/articleCreate',
+          path: '/blog/articleCreate',
           name: 'articleCreate',
           components: {
             fullscreen: ArticleCreate,
@@ -295,7 +295,7 @@ export default new Router({
           component: Login
         },
         {
-          path: '/user/info',
+          path: '/user/:empId/info',
           component: UserInfo
         }
       ]
