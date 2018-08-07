@@ -36,6 +36,7 @@
   import store from 'store'
   import blogApi from 'components/blog/blog.js'
   import Scroll from 'components/common/bscroll/bscroll.vue'
+  import myUtiles from 'utils/myUtiles.js'
   export default {
     data () {
       return {
@@ -87,14 +88,18 @@
     mounted () {
       this.type = this.$route.params.type
       this.setList(this.type);
+      myUtiles.setTitle('NoteX-' + '博客');
     },
     watch:{
-      '$route'(){
+      '$route'(to){
         if (this.$route.params.type !== undefined) {
           this.type = this.$route.params.type;
         }
-        this.show = false
-        this.setList(this.type)
+        this.show = false;
+        this.setList(this.type);
+        if (to.matched[1] && to.matched[1].path == '/blog/articlelist/:type'){
+          myUtiles.setTitle('NoteX-' + '博客');
+        }
       }
     }
     // beforeRouteUpdate (to, from, next) {

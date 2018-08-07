@@ -3,6 +3,9 @@
   	<div class="music_bg" v-if="getIsAPP.isHigher768" :style="{background:'url(' + getCurrentMusic.picurl + ') center center / cover'}">
   		<div class="mask_bg"></div>
   	</div>
+    <div>
+      <musicCanvas></musicCanvas>
+    </div>
   	<div class="mask_linear_bg" v-if="getCurrentMusic.picurl && getIsAPP.isHigher768"></div>
   	<div class="music_content">
   		<div class="music_body">
@@ -35,7 +38,6 @@
 			  			<router-link tag="span" to="/music/module/search" class="todo_btn search_btn">
 				        	搜索
 				        </router-link>
-
 			  		</div>
 			  		<transition name="silde-top">
 			  			<router-view class="list_content" name="listinfo"></router-view>
@@ -49,7 +51,6 @@
   				<div class="bg-info">
   					<img class="music-bg" :src="getCurrentMusic.picurl ? getCurrentMusic.picurl : 'http://www.daiwei.org/vue/bg/657952152722629515.jpg'">
   				</div>
-          <musicCanvas></musicCanvas>
   				<div class="lrc-content" ref="lrcContent">
   					<div class="lrc-wrapper" ref="lrcWrapper">
   						<p class="lrc-item" v-if="!getMusicLrcLists" ></p>
@@ -93,6 +94,7 @@
   import musicApi from 'components/music/music.js'
   import musicCanvas from '../music/musicCanvas/musicCanvas';
   import fecth from 'utils/fecth.js'
+  import myUtiles from 'utils/myUtiles.js'
   // import axios from 'axios'
   // import qs from 'qs'
   export default {
@@ -281,6 +283,7 @@
           this.collectName = '我的收藏';
         }
   		})
+      myUtiles.setTitle('NoteX-' + '音乐');
   	},
     watch: {
       '$route' (to, from) {
@@ -289,6 +292,9 @@
         var userInfo = fecth.getCookieValue("_user")
         if (userInfo !== '' && this.empId === JSON.parse(userInfo).id){
             this.collectName = '我的收藏';
+        }
+        if (to.path === '/music'){
+          myUtiles.setTitle('NoteX-' + '音乐');
         }
       }
     }

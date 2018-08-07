@@ -38,7 +38,7 @@
 				</div>
 			</div>
 			<div class="mode-info">
-				
+
 			</div>
 			<div class="user-detail-info">
 				<!-- 用户的具体信息。音乐收藏。评价 点赞 互相评论的功能 -->
@@ -105,7 +105,6 @@
 					}).then((res) => {
 						this.personalCenter = res.data.data
 						this.suggestList = res.data.suggestList
-						console.log(this.personalCenter)
 					}, (err) => {
 						this.$msg(err)
 					})
@@ -292,8 +291,8 @@ $c_max_w = 1040px
 					display:block
 					.user-basic-r
 						margin: 10px 0
-						justify-content:flex-start		
-					
+						justify-content:flex-start
+
 		@media screen and (max-width: 768px)
 			&
 				left: 0
@@ -306,7 +305,7 @@ $c_max_w = 1040px
 				left: 50%
 				right: unset
 				box-sizing: border-box
-				transform: translate(-50%, 0)		
+				transform: translate(-50%, 0)
 		.user-detail-info
 			width: 100%
 			.detail-title
@@ -321,10 +320,10 @@ $c_max_w = 1040px
 					font-size: 14px
 					margin: 0 10px 0 0
 					color: $text_color
-					box-sizing:border-box 
+					box-sizing:border-box
 					&.active
 						color: $text_color_active
-						border-bottom: 1px solid $border_color		
+						border-bottom: 1px solid $border_color
 			.detail-content
 				position:relative
 				height: 400px

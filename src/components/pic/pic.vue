@@ -7,14 +7,14 @@
     </scroll>
     <transition name="fade-scale">
       <div class="image_detail" v-show="showImageDetail">
-        <swiper :options="swiperOption" ref="mySwiper" v-if="picListInfo.detail && globalInfo.contentInfo">  
-                <!-- 这部分放你要渲染的那些内容 -->  
+        <swiper :options="swiperOption" ref="mySwiper" v-if="picListInfo.detail && globalInfo.contentInfo">
+                <!-- 这部分放你要渲染的那些内容 -->
                 <swiper-slide v-for="(item, index) in picListInfo.detail" :key="item.id">
                   <!-- <div class="swiper-lazy-preloader"></div> -->
-                  <img class="image_info" :id="'detail_' + index" :src="item.url" alt="未曾遗忘的青春" :data-disc="picListInfo.disc" :data-title="picListInfo.place" :data-date="picListInfo.datetime">
+                  <img class="image_info" :id="'detail_' + index" :src="item.url" alt="" :data-disc="picListInfo.disc" :data-title="picListInfo.place" :data-date="picListInfo.datetime">
                 </swiper-slide>
-                <!-- 这是轮播的小圆点 -->  
-                <div class="swiper-pagination" slot="pagination"></div>  
+                <!-- 这是轮播的小圆点 -->
+                <div class="swiper-pagination" slot="pagination"></div>
             </swiper>
             <div class="colse_image_detail" @click.stop="hideSwiper">
               <div class="bg_colse_image_detail">
@@ -166,8 +166,8 @@
     }
   }
 </script>
-<style lang="stylus" rel="stylesheet/stylus"> 
-@import '~common/stylus/global.styl'       
+<style lang="stylus" rel="stylesheet/stylus">
+@import '~common/stylus/global.styl'
   .pic
     position:fixed
     top:0
@@ -208,7 +208,7 @@
       transform:translate3d(-50%,0,0) scale(1)
       transform-origin:center center
       &.fade-scale-enter-active,&.fade-scale-leave-active
-        transition: all 0.5s 
+        transition: all 0.5s
       &.fade-scale-enter,&.fade-scale-leave-to
         opacity:0
         transform:translate3d(-50%,0,0) scale(0)

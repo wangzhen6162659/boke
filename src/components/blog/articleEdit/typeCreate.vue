@@ -69,7 +69,6 @@ export default {
   },
 	mounted () {
     this.showarticle = true
-		console.log(store.getters.getUserInfo)
 	}
 }
 </script>

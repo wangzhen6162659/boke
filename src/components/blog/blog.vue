@@ -46,6 +46,7 @@
 <script>
   import store from 'store'
   import fecth from 'utils/fecth.js'
+  import myUtiles from 'utils/myUtiles.js'
   import apiList from 'common/api/articleApiList.js'
   export default {
     data () {
@@ -74,11 +75,15 @@
     mounted () {
       this.userId = store.getters.getEmpInfo;
       this.getBlogType ();
+      myUtiles.setTitle('NoteX-' + '博客');
     },
     watch: {
-      '$route'(){
+      '$route'(to,from){
         this.userId = store.getters.getEmpInfo;
         this.getBlogType ();
+        if (to.path === '/blog'){
+          myUtiles.setTitle('NoteX-' + '博客');
+        }
       }
     }
     // beforeRouteUpdate(to,from,next) {

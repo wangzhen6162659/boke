@@ -77,9 +77,15 @@
         <router-link v-else class="listmenu" tag="a" to="/user/login">
           登陆
         </router-link>
-        <a href="https://www.github.com/ifmiss/vue-website" target="_black">
-          <li class="li-icon" title="github"><i class="icon-github"></i></li>
-        </a>
+
+        <router-link v-if="getUserInfo !== null" tag="a" :to="'/home/'+getUserInfo.id" class="a-icon">
+          <li class="li-icon" title="我的主页" @click="hideLeftContent"><i class="iconfont iconali-gerenzhongxin"></i></li>
+        </router-link>
+
+        <!--<a href="https://www.github.com/ifmiss/vue-website" target="_black">-->
+          <!--<li class="li-icon" title="github"><i class="icon-github"></i></li>-->
+        <!--</a>-->
+
         <router-link tag="a" to="/setting" class="a-icon">
           <li class="li-icon" title="设置" @click="hideLeftContent"><i class="icon-setting"></i></li>
         </router-link>
@@ -134,7 +140,10 @@ export default {
     },
     setUserInfo () {
       if (fecth.getCookieValue("_user") != ''){
-        this.getUserInfo = JSON.parse(fecth.getCookieValue("_user"))
+        var user = JSON.parse(fecth.getCookieValue("_user"));
+        // console.log(fecth.getCookieValue("_user"))
+        user.nickname = decodeURI(user.nickname);
+        this.getUserInfo = user;
       } else {
         this.getUserInfo = null;
       }
@@ -172,12 +181,18 @@ export default {
         this.empId = this.$route.params.empId;
       } else if(store.getters.getEmpInfo != null){
         this.empId = store.getters.getEmpInfo;
+      } else {
+        this.empId = 1;
       }
       return this.empId;
     }
   },
   components: {
     weather
+  },
+  mounted (){
+    this.setUserInfo();
+    this.setEmpInfo();
   },
   watch: {
     '$route' (to) {

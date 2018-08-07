@@ -80,7 +80,7 @@ export default {
       var end = allcookies.indexOf(";",start); //从cookie值开始的位置起搜索第一个";"的位置,即cookie值结尾的位置
       if (end == -1) end = allcookies.length; //如果end值为-1说明cookie列表里只有一个cookie
       var value = allcookies.substring(start,end);  //提取cookie的值
-      return unescape(value);       //对它解码
+      return decodeURI(value);       //对它解码
     }
     else return "";    //搜索失败，返回空字符串
   },
@@ -196,6 +196,51 @@ export default {
         return checkCode(res)
       }
     )
+  },
+  getOutProxy (url,params) {
+    var ip = this.createIp();
+    // const crypto = require('crypto');
+
+    // let timestamp = parseInt(new Date().getTime()/1000);
+    // // 新用户更换orderno,secret
+    // let orderno = 'GB20180807092230scdJO9ec';
+    // let secret = '6f595097f1c4d24c0c93aaa85b73e6c4';
+    //
+    // let txt = 'orderno='+orderno+',secret='+secret+',timestamp='+timestamp;
+    // let md5 = crypto.createHash('md5');
+    // md5.update(txt);
+    // let sign = md5.digest('hex');
+    // sign = sign.toUpperCase();
+
+    url = rootMusics + url;
+    return axios({
+      method: 'get',
+      // proxy: "http://dynamic.xiongmaodaili.com:8088",
+      headers: {
+        'x-forwarded-for': ip,
+        //  'Proxy-Client-IP': ip,
+        'WL-Proxy-Client-IP': ip
+      },
+      baseURL: process.env.BASE_API,
+      url,
+      params, // get 请求时带的参数
+      timeout: 15000
+    }).then(
+      (response) => {
+        return checkStatus(response)
+      }
+    ).then(
+      (res) => {
+        return checkCode(res)
+      }
+    )
+  },
+  createIp() {
+  var a = Math.round(Math.random() * 250) + 1,
+    b = Math.round(Math.random() * 250) + 1,
+    c = Math.round(Math.random() * 240) + 1,
+    d = Math.round(Math.random() * 240) + 1;
+  return [a, b, c, d].join('.');
   },
   getWhithHeaders (url, params) {
     url = roots + url;

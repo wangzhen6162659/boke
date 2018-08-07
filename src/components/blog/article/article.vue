@@ -117,11 +117,11 @@
   import VerticalToggle from 'utils/vertical-toggle.js'
   import UEditor from 'components/ueditor/ueditor.vue'
   import hljs from 'highlight.js'
+  import myUtiles from 'utils/myUtiles.js'
   import Vue from 'vue'
   import $ from 'jquery'
   Vue.directive('hljs', el => {
     let blocks = el.querySelectorAll('pre');
-    console.log(blocks)
     Array.prototype.forEach.call(blocks, hljs.highlightBlock);
   });
 
@@ -254,6 +254,7 @@
           var data = res.data.data
           this.obj = data
           this.initHighlight()
+          myUtiles.setTitle('NoteX-' + '博客-' + this.obj.title);
         })
       },
       getUserMessage () {
@@ -334,10 +335,18 @@
       this.showarticle = true
       // this.getReady(); // Ready
       // hljs.initHighlightingOnLoad();
-      this.$nextTick(() => {
-        this.$refs.articleVal.focus()
-      })
+      // this.$nextTick(() => {
+      //   this.$refs.articleVal.focus()
+      // })
     }
+    // watch: {
+    //   '$route' (to, from) {
+    //     console.log(to)
+    //     // this.init()
+    //     this.getUserMessage()
+    //     this.showarticle = true
+    //   }
+    // }
   }
 </script>
 <style lang="stylus" rel="stylesheet/stylus">
@@ -433,13 +442,14 @@
 	      /*text-align:center*/
       .select_content
         width:100%
-        line-height:50px
+        line-height:15px
         margin:0
-        font-size:18px
+        font-size:4px
         color:$text_color
         text-indent:5px
         margin-bottom:10px
         border-bottom:1px solid $border_bottom_color
+        width: 80%;
         /*text-align: center;*/
         .pic_center
           /*background-image: url(http://192.168.1.124:6080/file/xiaojiejie.jpg);*/

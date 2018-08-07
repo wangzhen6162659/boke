@@ -12,6 +12,7 @@ const serviceModule = {
   getSearch: '/search',
   getAlbum: '/album',
   getPlaylist: '/playlist/detail',
+  getCloudMusicUrl: '/playlist/detail'
 }
 const ApiList = { ...serviceModule }
 

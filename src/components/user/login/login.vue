@@ -138,7 +138,6 @@
 					password: this.savePassword,
           nickname: this.saveNickname
 				}).then((res) => {
-          console.log(res.data.msg);
 					this.$msg(res.data.msg)
 					if (res.data.data.code !== '-1') {
 						this.rightSigninId = res.data.data.id
@@ -158,7 +157,6 @@
 			testPassword (password) {
 				// 密码强度正则，最少6位，包括至少1个大写字母，1个小写字母，1个数字
 				let pPattern = /^.*(?=.{6,})(?=.*\d)(?=.*[A-Z])(?=.*[a-z]).*$/
-        console.log(password)
 				return pPattern.test(password)
 			}
 		},

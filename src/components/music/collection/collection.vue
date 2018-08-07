@@ -8,7 +8,7 @@
 			<span class="music_zhuanji">专辑</span>
 			<span class="music_duration">时长</span>
 		</div>
-		<musiclist v-if="musicList" :musiclist = "musicList" showdelicon="false" @init = "initMusic"></musiclist>
+		<musiclist v-if="musicList" :musiclist = "musicList" :showdelicon="showedIcon" @init = "initMusic"></musiclist>
 	</div>
   </div>
 </template>
@@ -16,6 +16,7 @@
   // import fecth from './../../utils/fecth.js'
   import store from 'store'
   import musicApi from 'components/music/music.js'
+  import fecth from 'utils/fecth.js'
   // import axios from 'axios'
   // import qs from 'qs'
   import musiclist from 'components/common/musiclist/musiclist.vue'
@@ -25,7 +26,8 @@
   			// musicInfo: {},
   			currentMusic: {},
   			params: this.$route.params,
-  			currentMusicLrcIndex: 0
+  			currentMusicLrcIndex: 0,
+        showedIcon: false
   		}
   	},
   	props: {
@@ -82,6 +84,10 @@
   		// }
   		'$route' (to, from) {
   			this.params = this.$route.params
+        var userInfo = fecth.getCookieValue("_user")
+        if (userInfo !== '' && store.getters.getEmpInfo === JSON.parse(userInfo).id){
+          this.showdelicon = true;
+        }
   		}
   	},
   	components: {
@@ -90,6 +96,10 @@
   	mounted () {
   		this.$nextTick(() => {
 			this.initMusic()
+      var userInfo = fecth.getCookieValue("_user")
+      if (userInfo !== '' && store.getters.getEmpInfo === JSON.parse(userInfo).id){
+        this.showdelicon = true;
+      }
 		})
   	}
   }

@@ -77,7 +77,7 @@ const globalStore = {
 			state.userInfo = obj.data
 		},
     setEmpInfo (state, obj) {
-      state.userInfo = obj.data
+      state.empInfo = obj.data
       localStorage.setItem('FLASH_USER',obj.data)//将value存储到key字段
     },
     setAnalyser (state, obj) {

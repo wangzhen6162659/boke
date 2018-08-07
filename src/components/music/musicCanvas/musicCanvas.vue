@@ -1,7 +1,7 @@
 <!-- Created By liuhuihao 2018/6/1 19:36  -->
 <!-- 播放器Canvas组件 -->
 <template>
-    <canvas ref="canvas" id="canvas" width="300" height="200"></canvas>
+    <canvas ref="canvas" id="canvas" width="600" height="600" style="top: -5%; left:20%; width: 50%; -webkit-filter: blur(8px); "></canvas>
 </template>
 
 <script>
@@ -44,7 +44,7 @@
                 var g = this.color.g;
                 var b = this.color.b;
                 //R
-                if (r >200 || r<80){
+                if (r >200 || r<120){
                     this.color.tagR = !this.color.tagR;
                 }
                 if (this.color.tagR){
@@ -53,7 +53,7 @@
                     this.color.r--;
                 }
                 //G
-                if (g >200 || g<80){
+                if (g >200 || g<120){
                     this.color.tagG = !this.color.tagG;
                 }
                 if (this.color.tagG){
@@ -62,7 +62,7 @@
                     this.color.g--;
                 }
                 //B
-                if (b >200 || b<80){
+                if (b >200 || b<120){
                     this.color.tagB = !this.color.tagB;
                 }
                 if (this.color.tagB){
@@ -75,31 +75,20 @@
                     colorStr = "0" + colorStr;
                 }
                 ctx.strokeStyle = "#"+colorStr;
-                ctx.clearRect(0, 0, 300, 600);
-                this.analyser.fftSize = 8192;
+                ctx.clearRect(0, 0, 600, 600);
+                this.analyser.fftSize = 16384;
                 const arrayLength = this.analyser.frequencyBinCount;
                 const array = new Uint8Array(arrayLength);
-                // ctx.beginPath();
-                var _x = 3;
-                var arr = [];
+                ctx.beginPath();
                 this.analyser.getByteFrequencyData(array);
-                for (var j=10; j<array.length;j++){
-                    var value = -(array[j]*array[j]/200*Math.sqrt(j)) * 8 / 256;
-                    if (value < -40) {
-                        value = (value + 40) * 70 / 100 +150;
-                    } else {
-                        value = 0 + 150;
-                    }
-
-                    arr.push({x:(j-50)*_x ,y:value})
-                    this.lastArray = arr;
+                for (let i = 0; i < 512; i++) {
+                  this.drawOuter(array, i, ctx);
+                  this.drawInner(array, i, ctx);
                 }
-                    // this.drawInner(array, i, ctx);
-                this.drawOuter(arr,ctx);
-                // ctx.stroke();
-                // ctx.fill();
+                ctx.stroke();
+                ctx.fill();
                 requestAnimationFrame(() => {
-                    this.animateCanvas(ctx);
+                  this.animateCanvas(ctx);
                 });
             },
 
@@ -110,8 +99,8 @@
                 if (i < 136) {
                     var point = i % 9 > 4 ? (9 - i % 9) : (i % 9);
                     var value = (array[i]) * 120 / 256 * ((5 - point) / 5);
-                    if (value > 70) {
-                        value = ((value - 70) * 120 / 50);
+                    if (value > 80) {
+                        value = ((value - 80) * 120 / 50);
                     } else {
                         value = 0;
                     }
@@ -126,37 +115,37 @@
             /**
              * 绘制外圈 bar
              */
-            drawOuter(array,ctx) {
+            drawOuter(array,i,ctx) {
                 // console.log(array)
-                // if (i > 130 && i < 271) {
-                //     var value = (array[i]*array[i]/200*Math.sqrt(i)) * 8 / 256;
-                //     if (value > 20) {
-                //         value = (value - 20) * 70 / 100;
-                //     } else {
-                //         value = 0;
-                //     }
-                //     ctx.moveTo(( Math.sin((i * 4 / 3) / 180 * Math.PI) * 200 + 300), Math.cos((i * 4 / 3) / 180 * Math.PI) * 200 + 300);
-                //     ctx.lineTo(( Math.sin((i * 4 / 3) / 180 * Math.PI) * (200 + value) + 300), Math.cos((i * 4 / 3) / 180 * Math.PI) * (200 + value) + 300);
-                //
-                //     ctx.moveTo(( -Math.sin((i * 4 / 3) / 180 * Math.PI) * 200 + 300), Math.cos((i * 4 / 3) / 180 * Math.PI) * 200 + 300);
-                //     ctx.lineTo(( -Math.sin((i * 4 / 3) / 180 * Math.PI) * (200 + value) + 300), Math.cos((i * 4 / 3) / 180 * Math.PI) * (200 + value) + 300);
-                //
-                // }
-
-                ctx.lineWidth=1;
-                ctx.beginPath();
-                ctx.font="20px SimSun";
-                for(var i=0;i<array.length;i++){
-                    if(i==0){
-                        ctx.moveTo(array[i].x,array[i].y);
-                        ctx.moveTo(array[i].x,array[i].y);
-                    }else{//注意是从1开始
-                        var ctrlP=this.getCtrlPoint(array,i-1);
-                        ctx.bezierCurveTo(ctrlP.pA.x, ctrlP.pA.y, ctrlP.pB.x,ctrlP.pB.y, array[i].x, array[i].y);
-                        //ctx.fillText("("+point[i].x+","+point[i].y+")",point[i].x,point[i].y);
+                if (i > 130 && i < 271) {
+                    var value = (array[i]*array[i]/200*Math.sqrt(i)) * 8 / 256;
+                    if (value > 20) {
+                        value = (value - 20) * 70 / 100;
+                    } else {
+                        value = 0;
                     }
+                    ctx.moveTo(( Math.sin((i * 4 / 3) / 180 * Math.PI) * 200 + 300), Math.cos((i * 4 / 3) / 180 * Math.PI) * 200 + 300);
+                    ctx.lineTo(( Math.sin((i * 4 / 3) / 180 * Math.PI) * (200 + value) + 300), Math.cos((i * 4 / 3) / 180 * Math.PI) * (200 + value) + 300);
+
+                    ctx.moveTo(( -Math.sin((i * 4 / 3) / 180 * Math.PI) * 200 + 300), Math.cos((i * 4 / 3) / 180 * Math.PI) * 200 + 300);
+                    ctx.lineTo(( -Math.sin((i * 4 / 3) / 180 * Math.PI) * (200 + value) + 300), Math.cos((i * 4 / 3) / 180 * Math.PI) * (200 + value) + 300);
+                //
                 }
-                ctx.stroke();
+
+                // ctx.lineWidth=1;
+                // ctx.beginPath();
+                // ctx.font="20px SimSun";
+                // for(var i=0;i<array.length;i++){
+                //     if(i==0){
+                //         ctx.moveTo(array[i].x,array[i].y);
+                //         ctx.moveTo(array[i].x,array[i].y);
+                //     }else{//注意是从1开始
+                //         var ctrlP=this.getCtrlPoint(array,i-1);
+                //         ctx.bezierCurveTo(ctrlP.pA.x, ctrlP.pA.y, ctrlP.pB.x,ctrlP.pB.y, array[i].x, array[i].y);
+                //         //ctx.fillText("("+point[i].x+","+point[i].y+")",point[i].x,point[i].y);
+                //     }
+                // }
+                // ctx.stroke();
             },
             getCtrlPoint(ps, i, a, b){
                 if(!a||!b){

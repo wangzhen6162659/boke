@@ -30,17 +30,17 @@
             <i :class="isFullScreen ? 'icon-canclefullscreen' : 'icon-fullscreen'" :title="isFullScreen ? '取消全屏' : '全屏'"></i>
           </div>
         </div>
-        <span class="tips" :title="bingImageDisc">每日一图由 {{bingImageDisc}} 提供 | Copyright © 2016~{{new Date().getFullYear()}} DAIWEI.ORG
-          <span v-if="globalInfo.isHigher768">
-            <router-link tag="a" to="/about/suggest" title="请提出你的意见">
-              <span>意见建议</span>
-            </router-link>
-            <router-link tag="a" to="/about/friendship" title="希望能互换友链">
-              <span>友情链接</span>
-            </router-link>
-            <a href="http://www.miitbeian.gov.cn/" target="_black" title="皖ICP备16011217号" style="width:100%;height:auto">皖ICP备16011217号</a>
-          </span>
-        </span>
+        <!--<span class="tips" :title="bingImageDisc">每日一图由 {{bingImageDisc}} 提供 | Copyright © 2016~{{new Date().getFullYear()}} DAIWEI.ORG-->
+          <!--<span v-if="globalInfo.isHigher768">-->
+            <!--<router-link tag="a" to="/about/suggest" title="请提出你的意见">-->
+              <!--<span>意见建议</span>-->
+            <!--</router-link>-->
+            <!--<router-link tag="a" to="/about/friendship" title="希望能互换友链">-->
+              <!--<span>友情链接</span>-->
+            <!--</router-link>-->
+            <!--<a href="http://www.miitbeian.gov.cn/" target="_black" title="皖ICP备16011217号" style="width:100%;height:auto">皖ICP备16011217号</a>-->
+          <!--</span>-->
+        <!--</span>-->
       </div>
       <!--<audio v-if="imageInfo.musicUrl" ref="homeAudio" style="display:none" loop="" :src="imageInfo.musicUrl"></audio>-->
       <coverhistory v-if="isShowAllList" @setStatus="hideAllList"></coverhistory>
@@ -53,6 +53,7 @@ import tips from 'components/common/tips/tips.vue'
 import coverhistory from 'components/common/coverhistory/coverhistory'
 import fecth from 'utils/fecth.js'
 import apiList from 'common/api/albumApiList.js'
+import myUtiles from 'utils/myUtiles.js'
 // import advertisement from 'components/common/advertisement/advertisement'
 
 // 引入背景请求的api  getBingInfo
@@ -70,9 +71,6 @@ export default {
     }
   },
   computed: {
-    bingImageDisc () {
-      return store.getters.getGlobalInfo.showBingImage ? 'bing' : '未曾遗忘的青春'
-    },
     imageInfo () {
       return store.getters.getFixedImageInfo
     },
@@ -282,7 +280,19 @@ export default {
     coverhistory
   },
   watch: {
-    '$route': 'getRoutePath'
+    // '$route': 'getRoutePath'
+    '$route' (to) {
+      if (this.$route.params.empId != undefined){
+        store.dispatch({
+          type: 'set_EmpInfo',
+          data: this.$route.params.empId
+        })
+      }
+      if (to.matched[0].path === '/home/:empId') {
+        // console.log(to)
+        myUtiles.setTitle('NoteX-' + '主页');
+      }
+    }
   },
   mounted () {
     this.showHomeContent = true
@@ -290,6 +300,7 @@ export default {
     const fixedImageBg = localStorage.getItem('fixedImageBg')
     this.index = fixedImageBg ? JSON.parse(fixedImageBg).index : store.getters.getFixedImageInfo.index
     this.getPicNum()
+    myUtiles.setTitle('NoteX-' + '主页');
   }
 }
 </script>

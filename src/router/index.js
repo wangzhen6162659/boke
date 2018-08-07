@@ -173,6 +173,9 @@ export default new Router({
           components: {
             fullscreen: Article,
             listinfo: ArticleList
+          },
+          meta: {
+            title: '博客'
           }
         },
         {

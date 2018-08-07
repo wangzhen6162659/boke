@@ -70,7 +70,8 @@
 	export default {
 		data () {
 			return {
-			  userInfo: {},
+        empId: '',
+        userInfo: {},
 				selectIndex: 0,
 				personalCenter: [],
 				suggestList: [],
@@ -92,7 +93,7 @@
           type: 'set_UserInfo',
           data: null
         })
-				this.$router.push('/home')
+				this.$router.push('/home/'+this.getUserId())
 			},
 			selectSettingIndex (e) {
 				this.selectIndex = parseInt(e.target.getAttribute('data-index'))
@@ -102,9 +103,9 @@
 				// musicApi.getAlbum(this.params.id)
 				musicApi.getLocalMusic(this.userInfo.id,2)
 			},
-			initData () {
+			initData () {debugger
           fecth.get(apiList.get, {
-						id: store.getters.getUserInfo.id || 0
+						id: this.userInfo.id || 0
 					}).then((res) => {
 						this.personalCenter = res.data.data
 						this.userSetting = {...this.userSetting, ...res.data.data}
@@ -131,7 +132,17 @@
 					...this.personalCenter,
 					...data
 				}
-			}
+			},
+      getUserId () {
+        if(this.$route.params.empId !=undefined){
+          this.empId = this.$route.params.empId;
+        } else if(store.getters.getEmpInfo != null){
+          this.empId = store.getters.getEmpInfo;
+        } else {
+          this.empId = 1;
+        }
+        return this.empId;
+      }
 		},
 		computed: {
 			musicList () {
