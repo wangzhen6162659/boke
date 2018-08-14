@@ -9,19 +9,19 @@
         <div class="left_list">
           <div class="boke_home">
             <div v-if="getIsAPP.isHigher768" class="select_button" ref="pc">
-              <router-link tag="span" :to="'/blog/articlelist/'+obj.id" class="todo_btn playing_btn" v-for="(obj,index) in pc" :key="index">
+              <router-link tag="span" :to="'/blog/'+userId+'/articlelist/'+obj.id" class="todo_btn playing_btn" v-for="(obj,index) in pc" :key="index">
                 {{obj.typeName}}
               </router-link>
-              <router-link tag="span" to="/blog/typeCreate">
+              <router-link tag="span" v-if="isUser" :to="'/blog/'+userId+'/typeCreate'">
                 <span class="iconfont iconali-plus-circle add_type"></span>
               </router-link>
 
             </div>
             <div v-if="!getIsAPP.isHigher768" class="select_m_button">
-              <router-link tag="span" :to="'/blog/articlelist/'+obj.id" class="todo_btn playing_btn" v-for="(obj,index) in pc" :key="index">
+              <router-link tag="span" :to="'/blog/'+userId+'/articlelist/'+obj.id" class="todo_btn playing_btn" v-for="(obj,index) in pc" :key="index">
                 {{obj.typeName}}
               </router-link>
-              <router-link tag="span" to="/blog/typeCreate">
+              <router-link v-if="isUser" tag="span" :to="'/blog/'+userId+'/typeCreate'">
                 <span class="iconfont iconali-plus-circle add_type"></span>
               </router-link>
               <span class="icon-gerenzhongxin"></span>
@@ -36,7 +36,7 @@
           <router-view class="boke_wrapper" name="fullscreen" :test="getBlogType"></router-view>
         </transition>
       </div>
-      <router-link tag="span" to="/blog/articleCreate">
+      <router-link v-if="isUser" tag="span" :to="'/blog/'+userId+'/articleCreate'">
         <input class="opacity" type="button" ref="nextBtn" value="新建文章">
         <!--<span class="iconfont iconali-plus-circle add_type" style="font-size:30px; text-align: right;padding-right:8px; float: right"></span>-->
       </router-link>
@@ -52,7 +52,8 @@
     data () {
       return {
         pc: [],
-        userId: ''
+        userId: '',
+        isUser: false
         // isgetimagebybing: store.getters.getShowBingImage
       }
     },
@@ -73,15 +74,17 @@
       }
     },
     mounted () {
-      this.userId = store.getters.getEmpInfo;
+      this.userId = myUtiles.getEmpId(this.$route);
+      this.isUser = myUtiles.isUserManager(this.userId);
       this.getBlogType ();
       myUtiles.setTitle('NoteX-' + '博客');
     },
     watch: {
       '$route'(to,from){
-        this.userId = store.getters.getEmpInfo;
+        this.userId = myUtiles.getEmpId(this.$route);
+        this.isUser = myUtiles.isUserManager(this.userId);
         this.getBlogType ();
-        if (to.path === '/blog'){
+        if (to.matched[0] && to.matched[0].path === '/blog/:empId'){
           myUtiles.setTitle('NoteX-' + '博客');
         }
       }

@@ -3,9 +3,12 @@
       <transition name="fade">
         <div class="bg_article" v-show="showarticle"></div>
       </transition>
+
       <transition name="silde-bottom">
         <div class="article_select" v-show="showarticle">
           <div class="select_type">
+
+            <span class="submit_articletype" style="width: 50px;height: 50px" @click="backArt"><i class="icon-back"></i></span>
             <div class="select_title">{{obj.title}}</div>
             <div class="select_content" v-html="obj.content" v-hljs></div>
           </div>
@@ -15,7 +18,7 @@
               <div class="select_user" v-if="userMessage.length==0" style="text-align: center;float: none;">暂无评论</div>
               <div v-for="(obj,index) in userMessage" style="display: inline-block; width: 100%;">
                 <div class="select_user">
-                  <div class="user-info">
+                  <div class="article-user-info">
                     <img class="photo" :src="obj.photo">
                   </div>
                   <div class="right-box">
@@ -162,6 +165,10 @@
       UEditor
     },
     methods: {
+      backArt () {
+        var type = this.$route.params.type;
+        this.$router.push('/blog/'+myUtiles.getEmpId(this.$route)+'/articlelist/' + type);
+      },
       getPlaceholder (obj) {
         this.placeholder = '回复：' + obj.nickname;
         this.placeholderId = obj.id;
@@ -269,10 +276,7 @@
         // let content = this.$refs.defaultText.getUEContent(); // 调用子组件方法
         var content = this.defaultMsg
         if (content.length == 0){
-          this.$notify({
-            title: '请输入回复内容！',
-            type: 'error'
-          });
+          this.$msg('请输入内容')
           return
         }
         var articleId = this.$route.params.id;
@@ -281,17 +285,11 @@
           var info = res.data.data;
           if (info != null) {
             this.userMessage[index] = info;
-            this.$notify({
-              title: '回复成功！',
-              type: 'success'
-            });
+            this.$msg('回复成功！')
             this.userMessage[index].activeTag = true;
             this.initMessage();
           }else {
-            this.$notify({
-              title: res.data.errmsg,
-              type: 'error'
-            });
+            this.$msg({text: res.data.errmsg, background: 'red'})
           }
         })
       },
@@ -299,10 +297,7 @@
       getUEContent() {
         let content = this.$refs.ueditor.getUEContent(); // 调用子组件方法
         if (content.length == 0){
-          this.$notify({
-            title: '请输入回复内容！',
-            type: 'error'
-          });
+          this.$msg('请输入内容')
           return
         }
         var articleId = this.$route.params.id;
@@ -313,15 +308,9 @@
           var info = res.data.data;
           if (info != null) {
             this.userMessage.push(info)
-            this.$notify({
-              title: '回复成功！',
-              type: 'success'
-            });
+            this.$msg('回复成功！')
           }else {
-            this.$notify({
-              title: res.data.errmsg,
-              type: 'error'
-            });
+            this.$msg({text: res.data.errmsg, background: 'red'})
           }
         })
       },
@@ -429,6 +418,19 @@
       width:100%
       height:auto
       margin-bottom:20px
+      .submit_articletype
+        display:block
+        width:100%
+        height:50px
+        line-height:50px
+        margin-top:30px
+        color:$text_color
+        font-size:16px
+        text-align: center;
+        cursor:pointer
+        transition:background 0.3s
+        &:hover
+          background: $btn_hover_color
       .select_title
         width:100%
         height:50px
@@ -530,7 +532,7 @@
         &:hover
           color:$text_color
           border:1px solid $text_color
-      .user-info
+      .article-user-info
         /*width:200px;*/
         float:left;
       .right-box
@@ -572,12 +574,12 @@
         font-size:12px;
         padding-left: 12px;
         min-height: 80px !important;
-      .user-info
+      .article-user-info
         width: 30px !important;
       .photo_reply
         width: 30px;
         height: 30px;
-      .user-info img.photo
+      .article-user-info img.photo
         margin-top: 15px;
         width: 30px;
         height: 30px;
@@ -614,9 +616,9 @@
       .text-content
         min-height: 120px !important;
         margin-left: 30px;
-      .user-info
+      .article-user-info
         width: 100px !important;
-      .user-info img.photo
+      .article-user-info img.photo
         margin-top: 15px;
         width: 100px;
         height: 100px;

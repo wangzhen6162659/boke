@@ -81,7 +81,7 @@
         }
       },
       getArticle (id) {
-        var path = '/blog/article/' + id
+        var path = '/blog/' + myUtiles.getEmpId(this.$route) + '/articlelist/' + this.type + '/article/' + id
         this.$router.push({path: path})
       }
     },

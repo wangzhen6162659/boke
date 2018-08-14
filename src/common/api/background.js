@@ -55,7 +55,6 @@ export function getBingInfo (url, index = 0) {
 export function getMineBgByIndex (url, index) {
   return new Promise((resolve, reject) => {
     fecth.get(url, {index: index}).then((res) => {
-      debugger
       let imageInfo = {
         type: 'home',
         url: res.data.data.url,

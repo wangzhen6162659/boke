@@ -89,7 +89,7 @@ export default new Router({
     },
     {
       // 音乐
-      path: '/music',
+      path: '/music/:empId',
       component: Music,
       children: [
         {
@@ -106,7 +106,7 @@ export default new Router({
           }
         },
         {
-          path: '/music/module/albumlist/:id',
+          path: '/music/:empId/module/albumlist/:id',
           name: 'albumlist',
           components: {
             listinfo: MusicAlbumList
@@ -114,7 +114,7 @@ export default new Router({
         },
         // 收藏的列表
         {
-          path: '/music/module/collection',
+          path: '/music/:empId/module/collection',
           name: 'collection',
           components: {
             listinfo: MusicCollection
@@ -135,7 +135,7 @@ export default new Router({
           }
         },
         {
-          path: '/music/playlist/',
+          path: '/music/:empId/playlist/',
           components: {
             listinfo: MusicPlayList
           }
@@ -157,18 +157,18 @@ export default new Router({
     },
     {
       // 博客
-      path: '/blog',
+      path: '/blog/:empId',
       component: Blog,
       children: [
         {
-          path: '/blog/articlelist/:type',
+          path: '/blog/:empId/articlelist/:type',
           name: 'articlelist',
           components: {
             listinfo: ArticleList
           }
         },
         {
-          path: '/blog/article/:id',
+          path: '/blog/:empId/articlelist/:type/article/:id',
           name: 'article',
           components: {
             fullscreen: Article,
@@ -179,7 +179,7 @@ export default new Router({
           }
         },
         {
-          path: '/blog/typeCreate',
+          path: '/blog/:empId/typeCreate',
           name: 'articleTypeCreate',
           components: {
             fullscreen: ArticleTypeCreate,
@@ -187,7 +187,7 @@ export default new Router({
           }
         },
         {
-          path: '/blog/articleCreate',
+          path: '/blog/:empId/articleCreate',
           name: 'articleCreate',
           components: {
             fullscreen: ArticleCreate,

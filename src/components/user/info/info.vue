@@ -4,10 +4,10 @@
 <!-- 		<p class="desc">敬请期待...</p>
 		<span class="loginout" @click="loginout">退出登录</span> -->
 		<div class="info-content">
-			<div class="user-basic-info" v-if='personalCenter && personalCenter'>
+			<div class="user-basic-info">
 				<div class="user-basic-l">
 					<div class="user-avatar">
-						<div class="image-avatar" :style="{backgroundImage : 'url(' + personalCenter.photo || 'http://daiwei.org/vue/bg/avatar1.jpg' + ')', backgroundSize:'cover', backgroundPosition:'center'}"></div>
+						<div class="image-avatar" :style="{backgroundImage : 'url(' + personalCenter.photo + ')', backgroundSize:'cover', backgroundPosition:'center'}"></div>
 					</div>
 					<div class="user-basic">
 						<h3 class="user-nickname">{{personalCenter.nickname == '' ? personalCenter.nickname : personalCenter.nickname}}</h3>
@@ -15,10 +15,10 @@
 					</div>
 				</div>
 				<div class="user-basic-r">
-					<div class="icon-setinfo" title="累计听歌数量">
-						<i class="icon-music"></i>
-						<span class="count">{{personalCenter.musicCount || 0}}</span>
-					</div>
+					<!--<div class="icon-setinfo" title="累计听歌数量">-->
+						<!--<i class="icon-music"></i>-->
+						<!--<span class="count">{{personalCenter.musicCount || 0}}</span>-->
+					<!--</div>-->
 					<div class="icon-setinfo need-click" @click="showSetting" title="个人设置">
 						<i class="icon-setting"></i>
 						<span class="count">个人设置</span>
@@ -103,7 +103,7 @@
 				// musicApi.getAlbum(this.params.id)
 				musicApi.getLocalMusic(this.userInfo.id,2)
 			},
-			initData () {debugger
+			initData () {
           fecth.get(apiList.get, {
 						id: this.userInfo.id || 0
 					}).then((res) => {

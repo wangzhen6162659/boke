@@ -12,7 +12,7 @@
   			<div class="left_list">
   				<div class="music_home">
   					<div v-if="getIsAPP.isHigher768" class="select_button">
-  						<router-link tag="span" to="/music/playlist" class="todo_btn playing_btn">
+  						<router-link tag="span" :to="'/music/'+ empId +'/playlist'" class="todo_btn playing_btn">
 				        	{{collectName}}
 				        </router-link>
 			  			<!--<router-link tag="span" to="/music/module/collection" class="todo_btn collect_btn">-->
@@ -26,7 +26,7 @@
 				        </router-link>
 			  		</div>
 			  		<div v-if="!getIsAPP.isHigher768" class="select_m_button">
-			  			<router-link tag="span" to="/music/playlist" class="todo_btn playing_btn">
+			  			<router-link tag="span" :to="'/music/'+ empId +'/playlist'" class="todo_btn playing_btn">
 				        	{{collectName}}
 				        </router-link>
 			  			<!--<router-link tag="span" to="/music/module/collection" class="todo_btn collect_btn">-->
@@ -49,7 +49,7 @@
 			</transition>
   			<div class="right_info">
   				<div class="bg-info">
-  					<img class="music-bg" :src="getCurrentMusic.picurl ? getCurrentMusic.picurl : 'http://www.daiwei.org/vue/bg/657952152722629515.jpg'">
+  					<img class="music-bg" :src="getCurrentMusic.picurl ? getCurrentMusic.picurl : './../../../static/defaultImg.jpg'">
   				</div>
   				<div class="lrc-content" ref="lrcContent">
   					<div class="lrc-wrapper" ref="lrcWrapper">
@@ -287,13 +287,13 @@
   	},
     watch: {
       '$route' (to, from) {
-        this.empId = store.getters.getEmpInfo;
+        this.empId = myUtiles.getEmpId(this.$route)
 
         var userInfo = fecth.getCookieValue("_user")
         if (userInfo !== '' && this.empId === JSON.parse(userInfo).id){
             this.collectName = '我的收藏';
         }
-        if (to.path === '/music'){
+        if (to.matched[0] && to.matched[0].path === '/music/:empId'){
           myUtiles.setTitle('NoteX-' + '音乐');
         }
       }

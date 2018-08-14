@@ -349,10 +349,10 @@ const musicApi = {
             userId: userInfo.id,
             musicId: opt.id,
             musicName: opt.name,
-            singerId: opt.artists[0].id,
-            singerName: opt.artists[0].name,
-            albumId: opt.album.id,
-            albumName: opt.album.name,
+            singerId: opt.ar[0].id,
+            singerName: opt.ar[0].name,
+            albumId: opt.al.id,
+            albumName: opt.al.name,
             musicDur: opt.duration,
             musicPicurl: picUrl
           }

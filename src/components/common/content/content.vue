@@ -10,14 +10,14 @@
             <li>首页</li>
           </router-link>
           <!--<a href="http://www.daiwei.org/blog" target="_black">-->
-          <router-link tag="a" to="/blog">
+          <router-link tag="a" :to="'/blog/'+getUserId">
             <li>博客</li>
           </router-link>
           <!--</a>-->
           <!--<router-link tag="a" to="/pic">-->
             <!--<li>状态</li>-->
           <!--</router-link>-->
-          <router-link tag="a" to="/music/">
+          <router-link tag="a" :to="'/music/'+getUserId">
             <li>音乐</li>
           </router-link>
           <!--<router-link tag="a" to="/about">-->
@@ -38,14 +38,14 @@
                 <li>首页</li>
               </router-link>
               <!--<a href="http://www.daiwei.org/blog" target="_black">-->
-              <router-link tag="a" to="/blog">
+              <router-link tag="a" :to="'/blog/'+getUserId">
                 <li>博客</li>
               </router-link>
               <!--</a>-->
               <!--<router-link tag="a" to="/pic">-->
                 <!--<li>状态</li>-->
               <!--</router-link>-->
-              <router-link tag="a" to="/music/">
+              <router-link tag="a" :to="'/music/'+getUserId">
                 <li>音乐</li>
               </router-link>
               <!--<router-link tag="a" to="/about">-->

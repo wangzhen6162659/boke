@@ -10,8 +10,8 @@
 			<div class="select_content">
 				<div class="content_list" v-show="singinThenStatus === 0">
 					<div class="block_area">
-						<label for="nickname">姓名</label>
-						<input type="text" id="nickname" v-model="name" placeholder="请输入您的姓名">
+						<label for="name">姓名</label>
+						<input type="text" id="name" v-model="name" placeholder="请输入您的姓名">
 					</div>
 					<div class="block_area">
 						<label>你是GG还是MM？</label>
@@ -95,7 +95,9 @@
 						if (res.data.errcode === 0) {
 							this.$msg({text: '恭喜，已激活注册的账号', background: '#00d032'})
 							this.singinThenStatus ++
-						}
+						}else {
+              this.$msg({text: res.data.errmsg, background: '#00d032'})
+            }
 					}, (err) => {
 						alert(`数据请求错误: ${JSON.stringify(res.data.errmsg)}`)
 					})

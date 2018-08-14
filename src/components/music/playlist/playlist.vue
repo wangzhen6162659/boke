@@ -78,6 +78,7 @@
         if (userInfo !== '' && store.getters.getEmpInfo === JSON.parse(userInfo).id){
           this.showdelicon = true;
         }
+        this.initMusic()
   		}
   	},
   	components: {

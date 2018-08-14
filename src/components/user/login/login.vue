@@ -13,21 +13,21 @@
 					</div>
 					<div class="block_area">
 						<label for="userPwd" >password</label>
-						<input type="password" id="userPwd" ref="usePwd" v-model="password" placeholder="登陆密码">
+						<input type="password" id="userPwd" ref="password" v-model="password" placeholder="登陆密码">
 					</div>
 					<input type="button" value="登录" @click="subInfo">
 				</div>
 				<div class="singin_div" v-show="status">
 					<div class="block_area">
-						<label for="suserName">username</label>
+						<label for="suserName">account</label>
 						<input type="text" id="suserName" v-model="saveAccount" placeholder="注册账户">
 					</div>
 					<div class="block_area">
 						<label for="suserPwd" >password</label>
-						<input type="password" id="suserPwd" ref="susePwd" v-model="savePassword" placeholder="注册密码">
+						<input type="password" id="suserPwd" ref="savePassword" v-model="savePassword" placeholder="注册密码">
 					</div>
           <div class="block_area">
-            <label for="suserName">username</label>
+            <label for="saveNickname">username</label>
             <input type="text" id="saveNickname" v-model="saveNickname" placeholder="注册昵称">
           </div>
 					<input type="button" value="注册" @click="singin">
@@ -63,7 +63,7 @@
       setCookie (cname, cvalue, exdays) {
         var d = new Date();
         // d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
-        d.setTime(d.getTime() +  60 * 1000)
+        d.setTime(d.getTime() + 30 * 60 * 1000)
         var expires = "expires=" + d.toUTCString();
         document.cookie = cname + "=" + cvalue + "; " + expires;
       },
@@ -81,7 +81,7 @@
 				this.singin()
 			},
 			login () {
-				if (this.username === '') {
+				if (this.account === '') {
 					this.$msg('请输入用户名')
 					return
 				}
@@ -125,38 +125,41 @@
 				}
 			},
 			singin () {
-				if (this.susername === '') {
+				if (this.saveAccount === '') {
 					this.$msg('请输入用户名')
 					return
 				}
 				if (!this.testPassword(this.savePassword)) {
-					this.$msg({text: '密码最少6位，包括至少1个大写字母，1个小写字母，1个数字', background: 'red'})
+					this.$msg({text: '密码最少6位，至少包括1个小写字母，1个数字', background: 'red'})
 					return
 				}
 				fecth.postJson(apiList.save, {
           account: this.saveAccount,
 					password: this.savePassword,
-          nickname: this.saveNickname
+          nickname: this.saveNickname,
+          photo: './../../../static/defaultImg.jpg'
 				}).then((res) => {
-					this.$msg(res.data.msg)
-					if (res.data.data.code !== '-1') {
+					if (res.data.data) {
 						this.rightSigninId = res.data.data.id
 						// 显示后续的操作
             this.setCookie('_token',res.data.data.token,1);
-            this.setCookie('_user',res.data.data,1);
+            this.setCookie('_user',JSON.stringify(res.data.data),1);
             store.dispatch({
               type: 'set_UserInfo',
               data: res.data.data
             })
+            this.$msg('注册成功！')
 						this.singinThen()
-					}
+					} else{
+            this.$msg(res.data.errmsg)
+          }
 				}, (err) => {
 					alert(`数据请求错误: ${JSON.stringify(err)}`)
 				})
 			},
 			testPassword (password) {
 				// 密码强度正则，最少6位，包括至少1个大写字母，1个小写字母，1个数字
-				let pPattern = /^.*(?=.{6,})(?=.*\d)(?=.*[A-Z])(?=.*[a-z]).*$/
+				let pPattern = /^.*(?=.{6,})(?=.*\d)(?=.*[A-z]).*$/
 				return pPattern.test(password)
 			}
 		},
@@ -168,7 +171,7 @@
 		}
 	}
 </script>
-<style lang="stylus" rel="stylesheet/stylus" scoped>
+<style lang="stylus" rel="stylesheet/stylus">
 @import '~common/stylus/global.styl'
 @import '~common/stylus/custom_input.styl'
 	.login
