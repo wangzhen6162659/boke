@@ -541,9 +541,9 @@
       .text-content
         min-height: 270px;
         box-sizing: border-box;
-	img {
-	 width: 100%;
-	}
+        img
+          width: 100%;
+
       .receive-content-list
         padding: 12px;
         background: rgba(255,255,255,0.1);

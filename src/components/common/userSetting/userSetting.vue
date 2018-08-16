@@ -20,6 +20,7 @@
   </transition>
 </template>
 <script>
+import bus from 'utils/bus.js'
 import fecth from 'utils/fecth.js'
 import store from 'store'
 import apiUserList from 'common/api/userApiList.js'
@@ -76,11 +77,15 @@ export default {
       }).then((res) => {
         if (res.data.errcode === 0) {
           this.newUserInfo = res.data.data
+          this.newUserInfo.nickname = decodeURI(this.newUserInfo.nickname);
           store.dispatch({
             type: 'set_UserInfo',
             data: res.data.data
           })
-          this.newavatarname = res.data.data.nickname
+          fecth.setCookie('_user',JSON.stringify(this.newUserInfo),1);
+          fecth.setCookie('_token', this.newUserInfo.token,1);
+          this.newavatarname = this.newUserInfo.nickname;
+          bus.$emit('msg', 'updateUser');
         }
         this.$emit('save', this.newUserInfo)
       }, (err) => {

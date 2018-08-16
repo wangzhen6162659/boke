@@ -172,6 +172,10 @@ export default {
 	},
   mounted () {
     this.params = this.$route.params
+    var userInfo = fecth.getCookieValue("_user")
+    if (userInfo !== '' && store.getters.getEmpInfo === JSON.parse(userInfo).id){
+      this.showdelicon = true;
+    }
   },
 	watch: {
 		// currentMusic (newval, oldval) {
@@ -179,6 +183,10 @@ export default {
 		// }
 		'$route' (to, from) {
 			this.params = this.$route.params
+      var userInfo = fecth.getCookieValue("_user")
+      if (userInfo !== '' && store.getters.getEmpInfo === JSON.parse(userInfo).id){
+        this.showdelicon = true;
+      }
 		}
 	}
 }

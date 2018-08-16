@@ -70,15 +70,15 @@
           {{getPlace.city}}
           <weather :isShow="showWeatherList"></weather>
         </span> -->
-        <router-link v-if="getUserInfo !== null" class="listmenu" tag="a" :to="'/user/'+getUserId+'/info'">
-          {{getUserInfo.nickname === '' ? (getUserInfo.username === '' ? '点击设置用户名' : getUserInfo.username) : getUserInfo.nickname}}
+        <router-link v-if="userInfo !== null" class="listmenu" tag="a" :to="'/user/'+getUserId+'/info'">
+          {{userInfo.nickname === '' ? (userInfo.username === '' ? '点击设置用户名' : userInfo.username) : userInfo.nickname}}
         </router-link>
 
         <router-link v-else class="listmenu" tag="a" to="/user/login">
           登陆
         </router-link>
 
-        <router-link v-if="getUserInfo !== null" tag="a" :to="'/home/'+getUserInfo.id" class="a-icon">
+        <router-link v-if="userInfo !== null" tag="a" :to="'/home/'+userInfo.id" class="a-icon">
           <li class="li-icon" title="我的主页" @click="hideLeftContent"><i class="iconfont iconali-gerenzhongxin"></i></li>
         </router-link>
 
@@ -100,6 +100,7 @@
 </template>
 <script>
 import store from 'store'
+import bus from 'utils/bus.js'
 import weather from 'components/common/weather/weather.vue'
 import fecth from 'utils/fecth.js'
 let t
@@ -108,7 +109,7 @@ export default {
     return {
       showLeftMenu: false,
       showWeatherList: false,
-      getUserInfo: null,
+      userInfo: null,
       empId: this.$route.params.empId,
       user: {
         id: '',
@@ -140,12 +141,10 @@ export default {
     },
     setUserInfo () {
       if (fecth.getCookieValue("_user") != ''){
-        var user = JSON.parse(fecth.getCookieValue("_user"));
-        // console.log(fecth.getCookieValue("_user"))
-        user.nickname = decodeURI(user.nickname);
-        this.getUserInfo = user;
+        this.userInfo = JSON.parse(fecth.getCookieValue("_user"));
+        this.userInfo.nickname = decodeURI(this.userInfo.nickname);
       } else {
-        this.getUserInfo = null;
+        this.userInfo = null;
       }
     },
     setEmpInfo () {
@@ -191,13 +190,16 @@ export default {
     weather
   },
   mounted (){
-    this.setUserInfo();
     this.setEmpInfo();
+    this.setUserInfo();
+    bus.$on('msg', res => {
+      this.setUserInfo();
+    })
   },
   watch: {
     '$route' (to) {
-      this.setUserInfo();
       this.setEmpInfo();
+      this.setUserInfo();
     }
   }
 }

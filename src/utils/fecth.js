@@ -67,6 +67,13 @@ function checkCode (res) {
 }
 
 export default {
+  setCookie (cname, cvalue, exdays) {
+    var d = new Date();
+    // d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+    d.setTime(d.getTime() + 30 * 60 * 1000)
+    var expires = "expires=" + d.toUTCString();
+    document.cookie = cname + "=" + cvalue + "; " + expires;
+  },
   getCookieValue(name){
     var name = escape(name);
     //读cookie属性，这将返回文档的所有cookie
