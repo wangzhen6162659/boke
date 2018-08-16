@@ -59,7 +59,7 @@
     },
     computed: {
       getCurrentBoke () {
-        return store.getters.getCurrentAudio
+        return store.getters.getFixedImageInfo
       },
       getIsAPP () {
         return store.getters.getGlobalInfo
