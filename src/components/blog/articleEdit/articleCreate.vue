@@ -1,15 +1,15 @@
 <template>
-  <div class="suggest">
+  <div class="fullform">
     <transition name="fade">
       <div class="bg_article" v-show="showarticle"></div>
     </transition>
     <!--<div class="div_back" @click="back"><i class="icon-back"></i></div>-->
-  	<div class="suggest_content" v-show="!showList">
-  		<div class="suggest_detail">
+  	<div class="fullform_content" v-show="!showList">
+  		<div class="fullform_detail">
   			<p class="title">文章名称</p>
-	  		<input class="suggest_area" v-model="articleSave.title" cols="30" rows="2"></input>
+	  		<input class="fullform_area" v-model="articleSave.title" cols="30" rows="2"></input>
 	  		<p class="title">文章类型</p>
-        <select class="suggest_area" v-model="articleSave.type">
+        <select class="fullform_area" v-model="articleSave.type">
           <option disabled value="">请选择</option>
           <option style="color: #000" v-for="option in articleTypes" v-bind:value="option.id">
             {{ option.typeName }}
@@ -17,8 +17,8 @@
         </select>
         <p class="title">文章内容</p>
           <UEditor :config=config ref="ueditor"></UEditor>
-	  		<span class="submit_suggest" @click.stop="getUEContent">提交</span>
-        <span class="submit_suggest" @click.stop="back"><i class="icon-back"></i></span>
+	  		<span class="submit_fullform" @click.stop="getUEContent">提交</span>
+        <span class="submit_fullform" @click.stop="back"><i class="icon-back"></i></span>
   		</div>
   	</div>
   </div>
@@ -107,7 +107,7 @@ export default {
 </script>
 <style lang="stylus" rel="stylesheet/stylus">
   @import '~common/stylus/global.styl'
-	.suggest
+	.fullform
 	  	position:fixed
 	    top:0
 	    left:0
@@ -142,7 +142,7 @@ export default {
 			z-index:1000
 			&:hover
 				background:rgba(0,0,0,0.3)
-		.suggest_content
+		.fullform_content
 			position:fixed
 			top:50px
 			bottom:0
@@ -161,14 +161,14 @@ export default {
 			.type_name
 				color:#fff
 				margin:0
-			.suggest_detail
+			.fullform_detail
 				display:block
 				margin:0 auto
 				/*width:400px*/
 				max-width:100%
 				.title
 					color:$text_color
-			.suggest_area
+			.fullform_area
 				background:transparent
 				color:$text_color
 				resize: none
@@ -180,7 +180,7 @@ export default {
 				border:1px solid $text_color
 				box-sizing:border-box
 				line-height:1.5
-			.submit_suggest
+			.submit_fullform
 				display:block
 				width:100%
 				height:50px
@@ -195,14 +195,14 @@ export default {
 				transition:background 0.3s
 				&:hover
 					background: $btn_hover_color
-			.read_suggest
+			.read_fullform
 				color: $text_color
 				cursor: pointer
 				text-align:center
 				&:hover
 					color: $text_color_active
 					text-decoration: underline
-		.suggest_lists
+		.fullform_lists
 			position: absolute
 			top:0
 			left:0
