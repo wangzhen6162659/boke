@@ -4,16 +4,22 @@
  */
 
 const serviceModule = {
-  /*查询文章类型*/
-  getDetail: '/song/detail',
-  /*新增文章*/
-  getLyric: '/lyric',
-  getUrl: '/music/url',
-  getSearch: '/search',
-  getAlbum: '/album',
-  getPlaylist: '/playlist/detail',
-  getCloudMusicUrl: '/playlist/detail',
-  getTopPlaylist: '/top/playlist?limit=10&order=new'
+  /*歌曲详情*/
+  getDetail: '/musicApi/song/detail',
+  /*歌曲歌词*/
+  getLyric: '/musicApi/lyric',
+  /*歌曲url*/
+  getUrl: '/musicApi/music/url',
+  /*搜索歌词*/
+  getSearch: '/musicApi/search',
+  /*专辑查找*/
+  getAlbum: '/musicApi/album',
+  /*歌单详情*/
+  getPlaylist: '/musicApi/playlist/detail',
+  /*歌单详情*/
+  getCloudMusicUrl: '/musicApi/playlist/detail',
+  /*前十歌单*/
+  getTopPlaylist: '/musicApi/top/playlist?limit=10&order=new'
 }
 const ApiList = { ...serviceModule }
 
