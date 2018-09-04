@@ -246,7 +246,11 @@ const musicApi = {
         data: i
       })
       try {
-        this.scrollAnimate(that.$refs.lrcWrapper, i * document.getElementsByClassName('lrc-item')[0].offsetHeight)
+        var lrcIndex = 0
+        for (var j = 0; j < i; j++) {
+          lrcIndex += document.getElementsByClassName('lrc-item')[j].offsetHeight
+        }
+        this.scrollAnimate(that.$refs.lrcWrapper, lrcIndex)
       } catch (e) {
         return
       }
