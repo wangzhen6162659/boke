@@ -18,12 +18,20 @@ export default {
     }
     return empId;
   },
-  isUserManager(empId){
+  //判断用户是查看自己页面
+  isUserManager(empId) {
     if (fecth.getCookieValue("_user") != '') {
       var user = JSON.parse(fecth.getCookieValue("_user"));
       if (user != null && empId == user.id){
         return true;
       }
+    }
+    return false;
+  },
+  //判断用户是否登录
+  isLogin() {
+    if (fecth.getCookieValue("_user") != ''){
+      return true;
     }
     return false;
   }

@@ -21,7 +21,8 @@
     },
     data() {
       return {
-        editor: null
+        editor: null,
+        editorContent: null
       }
     },
     mounted() {

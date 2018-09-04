@@ -53,7 +53,9 @@ import tips from 'components/common/tips/tips.vue'
 import coverhistory from 'components/common/coverhistory/coverhistory'
 import fecth from 'utils/fecth.js'
 import apiList from 'common/api/albumApiList.js'
+import publicApiList from 'common/api/publicApiList.js'
 import myUtiles from 'utils/myUtiles.js'
+import Exif from 'exif-js'
 // import advertisement from 'components/common/advertisement/advertisement'
 
 // 引入背景请求的api  getBingInfo

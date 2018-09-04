@@ -15,7 +15,12 @@
               <router-link tag="span" v-if="isUser" :to="'/blog/'+userId+'/typeCreate'">
                 <span class="iconfont iconali-plus-circle add_type"></span>
               </router-link>
-
+              <!--<router-link tag="span" v-if="isUser" :to="'/blog/'+userId+'/typeCreate'">-->
+              <span v-if="isUser" class="iconfont iconali-minus-circle add_type" style="width: auto;" @click="deleteArticleType()"></span>
+              <!--<span>-->
+                <!--<i class="iconali-minus-circle"></i>-->
+              <!--</span>-->
+              <!--</router-link>-->
             </div>
             <div v-if="!getIsAPP.isHigher768" class="select_m_button">
               <router-link tag="span" :to="'/blog/'+userId+'/articlelist/'+obj.id" class="todo_btn playing_btn" v-for="(obj,index) in pc" :key="index">
@@ -24,6 +29,7 @@
               <router-link v-if="isUser" tag="span" :to="'/blog/'+userId+'/typeCreate'">
                 <span class="iconfont iconali-plus-circle add_type"></span>
               </router-link>
+              <span v-if="isUser" class="iconfont iconali-minus-circle add_type" style="width: auto;" @click="deleteArticleType()"></span>
               <span class="icon-gerenzhongxin"></span>
             </div>
             <transition name="silde-top">
@@ -71,6 +77,21 @@
         fecth.get(apiList.findTypeByUser, {id: this.userId}).then((res) => {
           vm.pc = res.data.data;
         })
+      },
+      deleteArticleType () {
+        if (this.$route.params.type) {
+          fecth.get(apiList.deleteArticleType, {id: this.$route.params.type}).then((res) => {
+            if (res.data.data) {
+              this.getBlogType();
+              this.$router.push('/blog/'+myUtiles.getEmpId(this.$route));
+              this.$msg("删除成功");
+            } else {
+              this.$msg(res.data.errmsg);
+            }
+          })
+        } else {
+          this.$msg("请选择需要删除的种类");
+        }
       }
     },
     mounted () {

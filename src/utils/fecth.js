@@ -144,10 +144,10 @@ export default {
     var token = this.getCookieValue("_token")
     return axios({
       method: 'post',
-      baseURL: process.env.BASE_API,
+      // baseURL: process.env.BASE_API,
       url,
       data,
-      timeout: 15000,
+      timeout: 0,
       headers: {
         // 'X-Requested-With': 'XMLHttpRequest',
         'token': token,

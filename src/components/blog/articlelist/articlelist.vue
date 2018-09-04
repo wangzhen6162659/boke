@@ -5,6 +5,7 @@
         <span class="boke_index"></span>
         <span class="boke_name">标题</span>
         <span class="boke_duration">发表时间</span>
+        <span v-if="isUser" class="boke_edit_title">操作</span>
       </div>
       <!--<bokelist v-if="bokelist" :bokelist = "bokelist"></bokelist>-->
       <div class="bokelist boke_list_container">
@@ -13,15 +14,18 @@
         <div class="content">
           <!--<span class="list_empty" v-if="isInit">暂无文章列表哦 !</span>-->
           <span class="list_empty" v-if="bokelist[0].length==0">暂无文章列表哦 !</span>
-          <div class="boke_list border-1px" v-for="(obj, index) in bokelist[0]" :key="obj.id" @click="getArticle(obj.id)">
+          <div class="boke_list border-1px" v-for="(obj, index) in bokelist[0]" :key="obj.id">
             <span class="boke_index">
               <span>{{index + 1}}</span>
             </span>
-            <div class="boke_name">
+            <div class="boke_name" @click="getArticle(obj.id)">
               <span>{{obj.title}}</span>
             </div>
-            <span class="music_zhuanji" v-if="obj.createTime">
+            <span class="boke_zhuanji" v-if="obj.createTime">
               <span>{{obj.createTime}}</span>
+            </span>
+            <span class="boke_edit" v-if="isUser" @click="deleteArticle(obj.id)">
+              <i class="icon-delete"></i>
             </span>
           </div>
         </div>
@@ -35,6 +39,8 @@
 <script>
   import store from 'store'
   import blogApi from 'components/blog/blog.js'
+  import apiList from 'common/api/articleApiList.js'
+  import fecth from 'utils/fecth.js'
   import Scroll from 'components/common/bscroll/bscroll.vue'
   import myUtiles from 'utils/myUtiles.js'
   export default {
@@ -43,7 +49,8 @@
         empId: this.$route.params.empId,
         bokelist: [],
         show: false,
-        type: ''
+        type: '',
+        isUser: false
       }
     },
     components: {
@@ -83,9 +90,21 @@
       getArticle (id) {
         var path = '/blog/' + myUtiles.getEmpId(this.$route) + '/articlelist/' + this.type + '/article/' + id
         this.$router.push({path: path})
+      },
+      deleteArticle (id) {
+        fecth.get(apiList.deleteArticle, {id:id}).then((res) => {
+          if (res.data.data){
+            this.show = false
+            this.setList(this.$route.params.type);
+            this.$msg("删除成功");
+          } else {
+            this.$msg(res.data.errmsg);
+          }
+        })
       }
     },
     mounted () {
+      this.isUser = myUtiles.isUserManager(this.empId);
       this.type = this.$route.params.type
       this.setList(this.type);
       myUtiles.setTitle('NoteX-' + '博客');
@@ -95,6 +114,7 @@
         if (this.$route.params.type !== undefined) {
           this.type = this.$route.params.type;
         }
+        this.isUser = myUtiles.isUserManager(this.empId);
         this.show = false;
         this.setList(this.type);
         if (to.matched[1] && to.matched[1].path == '/blog/articlelist/:type'){
@@ -148,6 +168,10 @@
 				width:20%
 				padding:0 5px
 				box-sizing:border-box
+			&.boke_edit
+				width:10%
+				text-align:center
+				font-size:14px
 			&.boke_duration
 				width:10%
 				padding:0 5px
@@ -156,6 +180,9 @@
 				width:50px
 				height:100%
 				text-align: center;
+			&.boke_edit_title
+				text-align:center
+				width:30%
 			span
 				cursor:pointer
 				&:hover
@@ -211,11 +238,12 @@
 			.boke_name
 				width:calc(50% - 50px)
 			.boke_zhuanji
-				display:none!important
 			.boke_singer
 				width:30%!important
 			.boke_duration
 				width:20%!important
+			&.boke_edit_title
+				width:30%!important
 		.boke_list_title
 			span
 				&.boke_name
@@ -227,6 +255,8 @@
 					width:30%!important
 				&.boke_duration
 					width:20%!important
+				&.boke_edit_title
+					width:30%!important
 	.boke_list_container
 		// height:calc(100% - 50px)
 		position:absolute

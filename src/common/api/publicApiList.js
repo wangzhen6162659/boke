@@ -8,6 +8,8 @@ const serviceModule = {
   getBingDayPic: '/api/admin/public/getBingDayPic',
   /*新增文章*/
   saveArticle: '/api/admin/article/saveArticle',
+  /*新增文章*/
+  getFace: '/api/ai/face/get_face'
 }
 const ApiList = { ...serviceModule }
 

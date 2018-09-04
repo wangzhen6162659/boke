@@ -99,7 +99,7 @@
               </div>
               <div>
                 <div class="select_ueditor">
-                  <UEditor :config=config ref="ueditor"></UEditor>
+                  <UEditor :config=config ref="ueditor" @click="clickUE()"></UEditor>
                 </div>
                 <div style="text-align: right;padding-right:8px;">
                   <button @click="getUEContent()">发表</button>
@@ -141,13 +141,13 @@
         placeholderId: '',
         replyId: '',
         config: {
-          /*//可以在此处定义工具栏的内容
+          // //可以在此处定义工具栏的内容
           toolbars: [
             ['fullscreen', 'source','|', 'undo', 'redo','|','bold', 'italic', 'underline', 'fontborder', 'strikethrough',
-              '|','superscript','subscript','|', 'forecolor', 'backcolor','|', 'removeformat','|', 'insertorderedlist', 'insertunorderedlist',
+              '|','superscript','subscript','|', 'forecolor', 'backcolor','|','simpleupload','|', 'removeformat','|', 'insertorderedlist', 'insertunorderedlist',
               '|','selectall', 'cleardoc','fontfamily','fontsize','justifyleft','justifyright','justifycenter','justifyjustify','|',
               'link','unlink']
-          ],*/
+          ],
           autoHeightEnabled: false,
           autoFloatEnabled: true,　　//是否工具栏可浮动
           initialContent:'',   //初始化编辑器的内容,也可以通过textarea/script给值，看官网例子
@@ -165,6 +165,9 @@
       UEditor
     },
     methods: {
+      clickUE () {
+
+      },
       backArt () {
         var type = this.$route.params.type;
         this.$router.push('/blog/'+myUtiles.getEmpId(this.$route)+'/articlelist/' + type);
@@ -315,27 +318,42 @@
         })
       },
       initHighlight () {
-        hljs.initHighlightingOnLoad();
-      }
+        hljs.initHighlightingOnLoad()
+      },
+      ueListener () {
+        var ue = this.$refs.ueditor.editor
+        ue.addListener("ready",function () {
+          if (!myUtiles.isLogin()) {
+              ue.setDisabled()
+          }else {
+              ue.body.contentEditable = false
+              ue.setEnabled()
+          }
+        })
+      },
     },
     mounted () {
       this.init()
       this.getUserMessage()
       this.showarticle = true
+      this.ueListener()
       // this.getReady(); // Ready
       // hljs.initHighlightingOnLoad();
       // this.$nextTick(() => {
       //   this.$refs.articleVal.focus()
       // })
+    },
+    watch: {
+      '$route' (to, from) {
+        // console.log(to)
+        // // this.init()
+        // this.getUserMessage()
+        // this.showarticle = true
+        /*if (to.name == 'article'){
+          this.ueListener()
+        }*/
+      }
     }
-    // watch: {
-    //   '$route' (to, from) {
-    //     console.log(to)
-    //     // this.init()
-    //     this.getUserMessage()
-    //     this.showarticle = true
-    //   }
-    // }
   }
 </script>
 <style lang="stylus" rel="stylesheet/stylus">
@@ -446,7 +464,7 @@
         width:100%
         line-height:15px
         margin:0
-        font-size:4px
+        font-size:12px
         color:$text_color
         text-indent:5px
         margin-bottom:10px

@@ -76,7 +76,9 @@
   			this.params = this.$route.params
         var userInfo = fecth.getCookieValue("_user")
         if (userInfo !== '' && store.getters.getEmpInfo === JSON.parse(userInfo).id){
-          this.showdelicon = true;
+          this.showedIcon = true;
+        }else{
+          this.showedIcon = false;
         }
         this.initMusic()
   		}
@@ -90,7 +92,9 @@
 			this.initMusic()
       var userInfo = fecth.getCookieValue("_user")
       if (userInfo !== '' && store.getters.getEmpInfo === JSON.parse(userInfo).id){
-        this.showdelicon = true;
+        this.showedIcon = true;
+      } else{
+        this.showedIcon = false;
       }
 		})
   	}

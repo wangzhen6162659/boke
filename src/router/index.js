@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import store from './../store'
 import Home from '@/components/home'
+import Index from '@/components/index'
 const Pic = r => require.ensure([], () => r(require('@/components/pic/pic.vue')), 'pic')
 // import Pic from '@/components/pic/pic.vue'
 const Music = r => require.ensure([], () => r(require('@/components/music/music.vue')), 'music')
@@ -65,10 +66,11 @@ const Article = r => require.ensure([], () => r(require('@/components/blog/artic
 const ArticleTypeCreate = r => require.ensure([], () => r(require('@/components/blog/articleEdit/typeCreate.vue')), 'articleTypeCreate')
 
 const ArticleCreate = r => require.ensure([], () => r(require('@/components/blog/articleEdit/articleCreate.vue')), 'articleCreate')
+
 Vue.use(Router)
 
 export default new Router({
-  // mode: 'history',
+  mode: 'history',
   hashbang: true,
   history: false, // 这个参数改为false就可以了
   saveScrollPosition: true,
@@ -76,7 +78,11 @@ export default new Router({
   routes: [
     {
       path: '/',
-      redirect: '/home/:empId'
+      redirect: '/index'
+    },
+    {
+      path: '/index',
+      component: Index
     },
     {
       path: '/home/:empId',
@@ -106,7 +112,7 @@ export default new Router({
           }
         },
         {
-          path: '/music/:empId/module/albumlist/:id',
+          path: '/music/module/albumlist/:id',
           name: 'albumlist',
           components: {
             listinfo: MusicAlbumList

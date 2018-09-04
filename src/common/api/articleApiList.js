@@ -13,6 +13,8 @@ const serviceModule = {
   findReply: '/api/admin/reply/findReply',
   getArticle: '/api/admin/article/getArticle',
   pageByUser: '/api/admin/article/pageByUser',
+  deleteArticle: '/api/admin/article/deleteArticle',
+  deleteArticleType: '/api/admin/article/deleteArticleType',
 }
 const ApiList = { ...serviceModule }
 

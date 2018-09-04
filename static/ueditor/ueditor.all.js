@@ -28761,7 +28761,7 @@ UE.ui = baidu.editor.ui = {};
                 if (editor.options.wordCount) {
                     function countFn() {
                         setCount(editor,me);
-                        domUtils.un(editor.document, "click", arguments.callee);
+                        //domUtils.un(editor.document, "click", arguments.callee);
                     }
                     domUtils.on(editor.document, "click", countFn);
                     editor.ui.getDom('wordcount').innerHTML = editor.getLang("wordCountTip");

@@ -47,7 +47,7 @@
 							<span class="music_zhuanji">专辑</span>
 							<span class="music_duration">时长</span>
 						</div>
-						<musiclist v-if="musicList" :musiclist = "musicList" showdelicon="false" @init = "initMusic"></musiclist>
+						<musiclist v-if="musicList" :musiclist = "musicList" :showdelicon="showdelicon" @init = "initMusic"></musiclist>
 					</div>
 					<div class="content-info suggest-info" :class="selectIndex === 1 ? 'active': ''">
 						<li v-if="suggestList" v-for="item in suggestList">你在 {{item.suggestTime.split(' ')[0]}}日 给作者留言 # {{item.suggestContent}} #</li>
@@ -78,7 +78,8 @@
         needUpdate: false,
         userSetting: {
           isShow: false
-        }
+        },
+        showdelicon: false
 			}
 		},
 		components: {
@@ -158,6 +159,11 @@
         this.initData()
 				this.initMusic()
 			})
+      if (this.userInfo !== '' && store.getters.getEmpInfo === this.userInfo.id){
+        this.showdelicon = true;
+      } else {
+        this.showdelicon = false;
+      }
 		},
     watch: {
       '$route' (to, from) {
@@ -165,6 +171,11 @@
           this.$router.push('/user/login')
         }else {
           this.userInfo = JSON.parse(fecth.getCookieValue("_user"))
+        }
+        if (this.userInfo !== '' && store.getters.getEmpInfo === this.userInfo.id){
+          this.showdelicon = true;
+        } else {
+          this.showdelicon = false;
         }
       }
       }
