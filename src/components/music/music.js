@@ -294,7 +294,7 @@ const musicApi = {
 
     // 搜索音乐
     searchMusic (word, pages, that) {
-        fecth.getOut(apiList.getSearch,{keywords: word}, {
+        fecth.getOut(apiList.getSearch,{keywords: word,limit: 100}, {
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
             }

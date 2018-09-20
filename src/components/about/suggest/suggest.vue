@@ -85,7 +85,6 @@ export default {
 		}
 	},
 	mounted () {
-		console.log(store.getters.getUserInfo)
 	}
 }
 </script>
@@ -194,7 +193,7 @@ export default {
 				li
 					list-style: none
 					.name
-						font-size:16px 
+						font-size:16px
 						margin-right 10px
 						color: $active_color
 						font-weight: 500

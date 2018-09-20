@@ -56,7 +56,7 @@ export default {
         initialFrameWidth: null,
         initialFrameHeight: 450,
         BaseUrl: '',
-        UEDITOR_HOME_URL: 'static/ueditor/'
+        UEDITOR_HOME_URL: '/static/ueditor/'
       }
 		}
 	},
