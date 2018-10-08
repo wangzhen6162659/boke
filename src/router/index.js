@@ -71,9 +71,8 @@ Vue.use(Router)
 
 export default new Router({
   mode: 'history',
-  base: '/boke-webapp/',//这个配置也很重要，否则会出现页面空白情况
+  base: '/',//这个配置也很重要，否则会出现页面空白情况
   hashbang: true,
-  history: false, // 这个参数改为false就可以了
   saveScrollPosition: true,
   suppressTransitionError: true,
   routes: [
