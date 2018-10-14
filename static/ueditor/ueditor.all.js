@@ -8210,6 +8210,7 @@ UE.ajax = function() {
     }
 
     function doAjax(url, ajaxOptions) {
+		var token = getCookieValue("_token")
         var xhr = creatAjaxRequest(),
         //是否超时
             timeIsOut = false,
@@ -8261,6 +8262,7 @@ UE.ajax = function() {
         xhr.setRequestHeader('Authorization', sessionStorage.getItem("token") );
         if (method == "POST") {
             xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            xhr.setRequestHeader('token', token);
             xhr.send(submitStr);
         } else {
             xhr.send(null);
@@ -24561,7 +24563,6 @@ UE.plugin.register('simpleupload', function (){
 					token: token
 				},
                 success: function (data) {
-                  data = JSON.parse(data);
                   var link, loader,
                     body = (iframe.contentDocument || iframe.contentWindow.document).body,
                     result = body.innerText || body.textContent || '';
