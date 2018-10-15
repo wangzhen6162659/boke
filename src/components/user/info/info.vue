@@ -151,31 +151,40 @@
 			}
 		},
 		mounted () {
-      if (fecth.getCookieValue("_user") === ''){
+      if (fecth.getCookieValue("_user") === ''|| fecth.getCookieValue("_token") === ''){
+        this.$msg({
+          text: '请重新登录！',
+          duration: 2000
+        })
         this.$router.push('/user/login')
-      }
-      this.userInfo = JSON.parse(fecth.getCookieValue("_user"))
-			this.$nextTick(() => {
-        this.initData()
-				this.initMusic()
-			})
-      if (this.userInfo !== '' && store.getters.getEmpInfo === this.userInfo.id){
-        this.showdelicon = true;
-      } else {
-        this.showdelicon = false;
-      }
-		},
-    watch: {
-      '$route' (to, from) {
-        if (fecth.getCookieValue("_user") === ''){
-          this.$router.push('/user/login')
-        }else {
-          this.userInfo = JSON.parse(fecth.getCookieValue("_user"))
-        }
+      }else {
+        this.userInfo = JSON.parse(fecth.getCookieValue("_user"))
+        this.$nextTick(() => {
+          this.initData()
+          this.initMusic()
+        })
         if (this.userInfo !== '' && store.getters.getEmpInfo === this.userInfo.id){
           this.showdelicon = true;
         } else {
           this.showdelicon = false;
+        }
+      }
+		},
+    watch: {
+      '$route' (to, from) {
+        if (fecth.getCookieValue("_user") === '' || fecth.getCookieValue("_token") === ''){
+          this.$msg({
+            text: '请重新登录！',
+            duration: 2000
+          })
+          this.$router.push('/user/login')
+        }else {
+          this.userInfo = JSON.parse(fecth.getCookieValue("_user"))
+          if (this.userInfo !== '' && store.getters.getEmpInfo === this.userInfo.id){
+            this.showdelicon = true;
+          } else {
+            this.showdelicon = false;
+          }
         }
       }
       }
