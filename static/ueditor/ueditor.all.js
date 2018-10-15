@@ -8102,7 +8102,6 @@ UE.Editor.defaultOptions = function(editor){
                 /* 发出ajax请求 */
                 me._serverConfigLoaded = false;
 				var token = getCookieValue("_token")
-				console.log(token)
                 configUrl && UE.ajax.request(configUrl,{
                     'method': 'POST',
                     'dataType': 'json',
@@ -24577,7 +24576,7 @@ UE.plugin.register('simpleupload', function (){
                     loader.removeAttribute('id');
                     domUtils.removeClasses(loader, 'loadingclass');
                   } else {
-                    showErrorLoader && showErrorLoader(data.state);
+                    showErrorLoader && showErrorLoader(data.message);
                   }
                   form.reset();
                 }
