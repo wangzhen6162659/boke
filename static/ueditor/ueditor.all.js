@@ -24576,7 +24576,7 @@ UE.plugin.register('simpleupload', function (){
                     loader.removeAttribute('id');
                     domUtils.removeClasses(loader, 'loadingclass');
                   } else {
-                    showErrorLoader && showErrorLoader(data.message);
+                    showErrorLoader && showErrorLoader(data.errmsg);
                   }
                   form.reset();
                 }
