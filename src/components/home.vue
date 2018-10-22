@@ -17,15 +17,15 @@
           <div class="set_list" v-if="imageInfo.type === 'home'" :class="index === picNum ? 'disabled' : ''" title="上一张壁纸" @click="defaultData(2)">
             <i class="icon-left"></i>
           </div>
-          <div class="set_list" :title="isBingImage ? '设置默认壁纸' : '设置为Bing壁纸'" @click="getHomeImage">
-            <i :class="isBingImage ? 'icon-imgsetting' : 'icon-bing'"></i>
-          </div>
-          <div class="set_list" v-if="imageInfo.type === 'home'" :class="index === 0 ? 'disabled' : ''" title="下一张壁纸" @click="defaultData(1)">
-            <i class="icon-right"></i>
-          </div>
-          <div class="set_list" v-if="imageInfo.type === 'home'" @click="showAllList">
-            <i class="text">图</i>
-          </div>
+          <!--<div class="set_list" :title="isBingImage ? '设置默认壁纸' : '设置为Bing壁纸'" @click="getHomeImage">-->
+            <!--<i :class="isBingImage ? 'icon-imgsetting' : 'icon-bing'"></i>-->
+          <!--</div>-->
+          <!--<div class="set_list" v-if="imageInfo.type === 'home'" :class="index === 0 ? 'disabled' : ''" title="下一张壁纸" @click="defaultData(1)">-->
+            <!--<i class="icon-right"></i>-->
+          <!--</div>-->
+          <!--<div class="set_list" v-if="imageInfo.type === 'home'" @click="showAllList">-->
+            <!--<i class="text">图</i>-->
+          <!--</div>-->
           <div class="set_list" v-if="globalInfo.isHigher768" @click="toggleFullScreen">
             <i :class="isFullScreen ? 'icon-canclefullscreen' : 'icon-fullscreen'" :title="isFullScreen ? '取消全屏' : '全屏'"></i>
           </div>
