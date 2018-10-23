@@ -29,7 +29,7 @@
     </transition>
   </div>
 </template>
-<!--<script src="http://www.daiwei.org/global/js/jquery.mCustomScrollbar.min.js"></script>-->
+<script src="http://www.daiwei.org/global/js/jquery.mCustomScrollbar.min.js"></script>
 <script>
   // import Vue from 'vue'
   import store from 'store'
@@ -93,17 +93,17 @@
     },
     methods: {
       fetchData () {
-        // const getImageConditions = 'http://www.daiwei.org/vue/server/home.php?inAjax=1&do=getImageCondition'
-        // fecth.post(getImageConditions, {index: this.getPicDataIndex, count: 5}).then((res) => {
-        //   res.data.forEach((value, index, array) => {
-        //     this.picinfo.push(value)
-        //   })
-        //   if (JSON.stringify(res.data).length < 3) {
-        //     this.$msg('状态已完全加载.')
-        //   }
-        // }, (err) => {
-        //   alert(err)
-        // })
+        const getImageConditions = 'http://www.daiwei.org/vue/server/home.php?inAjax=1&do=getImageCondition'
+        fecth.post(getImageConditions, {index: this.getPicDataIndex, count: 5}).then((res) => {
+          res.data.forEach((value, index, array) => {
+            this.picinfo.push(value)
+          })
+          if (JSON.stringify(res.data).length < 3) {
+            this.$msg('状态已完全加载.')
+          }
+        }, (err) => {
+          alert(err)
+        })
       },
       getNewData () {
         this.getPicDataIndex ++
