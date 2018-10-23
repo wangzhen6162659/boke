@@ -285,7 +285,6 @@ const musicApi = {
                 type: data.type
             }
             this.getMusicLrc(newData, that)
-            // console.log(JSON.stringify(res.data.result.songs))
             // this.musicInfo = res.data.result.songs
         }, (err) => {
             console.log(err)
@@ -357,7 +356,7 @@ const musicApi = {
             singerName: opt.ar[0].name,
             albumId: opt.al.id,
             albumName: opt.al.name,
-            musicDur: opt.duration,
+            musicDur: opt.dt,
             musicPicurl: picUrl
           }
           let fecthUrl = '/api/admin/collect/saveCollectMusic'
