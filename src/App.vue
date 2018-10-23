@@ -121,35 +121,35 @@ export default {
       }
     },
     getPlace () {
-      fecth.get('http://www.daiwei.org/vue/server/home.php?inAjax=1&do=getAdress').then((res) => {
-        if (res.data) {
-          store.dispatch({
-            type: 'set_Place',
-            data: res.data.data
-          })
-          this.getWeather(res.data.data.city)
-        }
-      }, (err) => {
-        alert(err)
-      })
+      // fecth.get('http://www.daiwei.org/vue/server/home.php?inAjax=1&do=getAdress').then((res) => {
+      //   if (res.data) {
+      //     store.dispatch({
+      //       type: 'set_Place',
+      //       data: res.data.data
+      //     })
+      //     this.getWeather(res.data.data.city)
+      //   }
+      // }, (err) => {
+      //   alert(err)
+      // })
     },
     // 获取天气信息
     getWeather (city) {
-      fecth.post(`http://www.daiwei.org/vue/server/home.php?inAjax=1&do=getWeather`, {place: city}).then((res) => {
-        try {
-          store.dispatch({
-            type: 'set_Weather',
-            data: res.data.data.forecast
-          })
-        } catch (e) {
-          store.dispatch({
-            type: 'set_Weather',
-            data: {}
-          })
-        }
-      }, (err) => {
-        alert(err)
-      })
+      // fecth.post(`http://www.daiwei.org/vue/server/home.php?inAjax=1&do=getWeather`, {place: city}).then((res) => {
+      //   try {
+      //     store.dispatch({
+      //       type: 'set_Weather',
+      //       data: res.data.data.forecast
+      //     })
+      //   } catch (e) {
+      //     store.dispatch({
+      //       type: 'set_Weather',
+      //       data: {}
+      //     })
+      //   }
+      // }, (err) => {
+      //   alert(err)
+      // })
     },
     isApp () {
       let isTrue = false
