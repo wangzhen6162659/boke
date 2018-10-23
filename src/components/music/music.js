@@ -436,19 +436,19 @@ const musicApi = {
             fecth.get(fecthUrl, {
                 musicId: id
             }).then((res) => {
-                let collectlist = store.getters.getMusicCollectList
-                collectlist.forEach((v, i, a) => {
-                    if (id === v.music_id) {
-                        collectlist.splice(i, 1)
-                        return
+                if (res.data.data){
+                  let collectlist = store.getters.getMusicCollectList
+                  this.$msg('取消收藏成功！')
+                  collectlist.forEach((v, i, a) => {
+                    if (id === v.id) {
+                      collectlist.splice(i, 1)
+                      return
                     }
-                })
-                store.commit({
+                  })
+                  store.commit({
                     type: 'setMusicCollectList',
                     data: collectlist
-                })
-                if (res.data.data){
-                  this.$msg('取消收藏成功！')
+                  })
                 } else {
                   this.$msg(res.data.errmsg);
                 }
