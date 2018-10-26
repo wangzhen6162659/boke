@@ -276,6 +276,7 @@
       },
       //一般回复
       getText (parentId, index) {
+        console.log(document.title)
         // let content = this.$refs.defaultText.getUEContent(); // 调用子组件方法
         var content = this.defaultMsg
         if (content.length == 0){
@@ -331,12 +332,18 @@
           }
         })
       },
+      initDoc () {
+        this.init()
+        this.getUserMessage()
+        this.showarticle = true
+        this.ueListener()
+
+
+      },
     },
     mounted () {
-      this.init()
-      this.getUserMessage()
-      this.showarticle = true
-      this.ueListener()
+      this.initDoc()
+      // wxUtile.wxShare()
       // this.getReady(); // Ready
       // hljs.initHighlightingOnLoad();
       // this.$nextTick(() => {

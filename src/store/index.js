@@ -18,6 +18,7 @@ const store = new Vuex.Store({
 		router: Router,
 		audio: Audio,
 		other: Other,
+    shareInfo: Other,
     articlelist: ArticleList
 	}
 })

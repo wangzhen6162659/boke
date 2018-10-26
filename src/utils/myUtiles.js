@@ -1,9 +1,28 @@
 import store from './../store'
 import fecth from './fecth'
+import wxShare from './wxUtile.js'
 
 export default {
   setTitle(title){
     document.title = title
+    console.log(123)
+    let data = {
+      shareTitle: document.title,
+      shareUrl: window.location.href,
+      shareImg: 'http://123.56.221.77/static/defaultImg.jpg',
+      shareDesc: ''
+    }
+    console.log(123)
+    wxShare.wxShare(data.shareTitle, data.shareUrl, data.shareImg, data.shareDesc);
+    // let titil =
+    // let url = window.location.href
+    // let desc = ''
+    // let img =
+    // store.dispatch({
+    //   type: 'getShareInfo',
+    //   data: {}
+    // })
+
   },
   getEmpId(obj){
     var empId = '';

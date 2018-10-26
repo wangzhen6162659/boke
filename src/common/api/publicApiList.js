@@ -9,7 +9,9 @@ const serviceModule = {
   /*新增文章*/
   saveArticle: '/api/admin/article/saveArticle',
   /*新增文章*/
-  getFace: '/api/ai/face/get_face'
+  getFace: '/api/ai/face/get_face',
+  /*新增文章*/
+  getWxConfig: '/api/admin/public/getWxConfig'
 }
 const ApiList = { ...serviceModule }
 
