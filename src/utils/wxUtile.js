@@ -27,7 +27,8 @@ export default {
     // let url = location.href;
     // let url = 'wzroom.cn/blog/1/articlelist/2/article/359619625057';
     let url = location.href;
-      url = url.substring(url.indexOf('//') + 2, url.length);
+      // url = url.substring(url.indexOf('//') + 2, url.length);
+      url = location.href.split('#')[0];
       fecth.get(apiList.getWxConfig, {url: url}).then((res) => {
         let dataConfig = res.data;
         // fecth.setCookie('wxConfig',JSON.stringify(dataConfig));
