@@ -20,7 +20,7 @@ export default {
   wxShare(shareData) {
     // shareUrl = getWxUrl(shareUrl);
     // var cookieWxConfig = fecth.getCookieValue('wxConfig');
-    // if (cookieWxConfig != null && cookieWxConfig!= "undefined" && cookieWxConfig.length > 0){
+    // if (cookieWxConfig != null && cookieWxConfig!= 'undefined' && cookieWxConfig.length > 0){
     //   this.wxConfig(JSON.parse(fecth.getCookieValue('wxConfig')),shareData)
     // }else {
     //   let url = location.href.substring(location.href.indexOf('//') + 2, location.href.length);
@@ -44,14 +44,13 @@ export default {
       nonceStr: data.nonceStr, // 必填，生成签名的随机串
       signature: data.signature, // 必填，签名，见附录1
       jsApiList: ['checkJsApi',
-        'onMenuShareAppMessage',
-        'onMenuShareTimeline'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+        'onMenuShareTimeline','onMenuShareAppMessage','onMenuShareQQ','onMenuShareWeibo','onMenuShareQZone'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
     });
     wx.checkJsApi({
       jsApiList: ['onMenuShareAppMessage','onMenuShareTimeline'], // 需要检测的JS接口列表，所有JS接口列表见附录2,
       success: function(res) {
         // 以键值对的形式返回，可用的api值true，不可用为false
-        // 如：{"checkResult":{"chooseImage":true},"errMsg":"checkJsApi:ok"}
+        // 如：{'checkResult':{'chooseImage':true},'errMsg':'checkJsApi:ok'}
         console.log(res)
       }
     });
