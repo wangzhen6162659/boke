@@ -43,7 +43,7 @@ export default {
       wx.updateAppMessageShareData({
         title: shareData.shareTitle, // 分享标题
         desc: shareData.shareDesc, // 分享描述
-        link: getWxUrl(shareData.shareUrl), // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致 this.$router.history.current.path
+        link: shareData.shareUrl, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致 this.$router.history.current.path
         imgUrl: shareData.shareImg, // 分享图标
       }, function (res) {
         //这里是回调函数

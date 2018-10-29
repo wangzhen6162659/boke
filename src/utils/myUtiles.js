@@ -9,7 +9,7 @@ export default {
       shareTitle: document.title,
       shareUrl: window.location.href,
       shareImg: 'http://123.56.221.77/static/defaultImg.jpg',
-      shareDesc: ''
+      shareDesc: '如果你不爱学习，那么我们没办法做朋友'
     }
     wxShare.wxShare(data);
     // let titil =
