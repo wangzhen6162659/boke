@@ -24,7 +24,10 @@ export default {
     //   this.wxConfig(JSON.parse(fecth.getCookieValue('wxConfig')),shareData)
     // }else {
     //   let url = location.href.substring(location.href.indexOf('//') + 2, location.href.length);
+    // let url = location.href;
+    // let url = 'wzroom.cn/blog/1/articlelist/2/article/359619625057';
     let url = location.href;
+      url = url.substring(url.indexOf('//') + 2, url.length);
       fecth.get(apiList.getWxConfig, {url: url}).then((res) => {
         let dataConfig = res.data;
         // fecth.setCookie('wxConfig',JSON.stringify(dataConfig));
