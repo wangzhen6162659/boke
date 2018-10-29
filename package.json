@@ -79,8 +79,8 @@
     "webpack-hot-middleware": "^2.18.0",
     "webpack-merge": "^4.1.0",
     "highlight.js": "^9.12.0",
-    "exif-js": "^2.3.0",
-    "weixin-js-sdk": "^1.4.0-test"
+    "exif-js": "^2.3.0"
+//    "weixin-js-sdk": "^1.4.0-test"
   },
   "engines": {
     "node": ">= 4.0.0",
