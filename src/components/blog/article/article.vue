@@ -264,7 +264,7 @@
           var data = res.data.data
           this.obj = data
           this.initHighlight()
-          myUtiles.setTitle('NoteX-' + '博客-' + this.obj.title);
+          myUtiles.setTitle('NoteX-' + '博客-' + this.obj.title, this.$route, 'article');
         })
       },
       getUserMessage () {

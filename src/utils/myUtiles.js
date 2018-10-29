@@ -4,12 +4,14 @@ import wxShare from './wxUtile.js'
 var roots = process.env.API_ROOT
 
 export default {
-  setTitle(title){
+  setTitle(title, router, name){
+    // console.log(router.history.current.path)
+    if (router.name != name){
+      return;
+    }
+    console.log(router.name,name)
     document.title = title;
-    let url = window.location.href;
-    console.log(url)
-    url = url.substring(url.indexOf(roots)+roots.length,url.length);
-    console.log(url);
+    let url = 'http://wzroom.cn/blog/1/articlelist/2/article/359619625057';
     let data = {
       shareTitle: document.title,
       shareUrl: url,

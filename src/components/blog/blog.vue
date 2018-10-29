@@ -98,7 +98,8 @@
       this.userId = myUtiles.getEmpId(this.$route);
       this.isUser = myUtiles.isUserManager(this.userId);
       this.getBlogType ();
-      myUtiles.setTitle('NoteX-' + '博客');
+      console.log(this.$route)
+      myUtiles.setTitle('NoteX-' + '博客',this.$route, 'blog');
     },
     watch: {
       '$route'(to,from){
@@ -106,7 +107,7 @@
         this.isUser = myUtiles.isUserManager(this.userId);
         this.getBlogType ();
         if (to.matched[0] && to.matched[0].path === '/blog/:empId'){
-          myUtiles.setTitle('NoteX-' + '博客');
+          myUtiles.setTitle('NoteX-' + '博客',this.$route, 'blog');
         }
       }
     }

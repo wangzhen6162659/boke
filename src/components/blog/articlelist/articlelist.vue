@@ -107,7 +107,8 @@
       this.isUser = myUtiles.isUserManager(this.empId);
       this.type = this.$route.params.type
       this.setList(this.type);
-      myUtiles.setTitle('NoteX-' + '博客');
+      console.log(this.$route)
+      myUtiles.setTitle('NoteX-' + '博客',this.$route, 'articlelist');
     },
     watch:{
       '$route'(to){
@@ -118,6 +119,7 @@
         this.show = false;
         this.setList(this.type);
         if (to.matched[1] && to.matched[1].path == '/blog/articlelist/:type'){
+          console.log(2)
           myUtiles.setTitle('NoteX-' + '博客');
         }
       }
