@@ -61,7 +61,7 @@
   			</div>
   		</div>
   		<div class="music_ctrl">
-  			<div class="left_ctrl" style="width:100%">
+  			<div class="left_ctrl">
   				<div class="music_detail_ctrl">
   					<i class="playPrev icon-prevdetail" @click.stop="playPrev()" title="上一曲 ctrl + left"></i>
   					<i class="playPause" :class="getAudioIsPlay ? 'icon-pause' : 'icon-play'" @click.stop="playPause()" title="播放/暂停 ctrl + space"></i>

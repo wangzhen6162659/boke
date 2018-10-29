@@ -23753,9 +23753,8 @@ UE.plugin.register('music', function (){
  * @date 2013-10-14
  */
 UE.plugin.register('autoupload', function (){
-	
+
     function sendAndInsertFile(file, editor) {
-		//var token = getCookieValue("_token")
         var me  = editor;
         //模拟数据
         var fieldName, urlPrefix, maxSize, allowFiles, actionUrl,
@@ -23841,7 +23840,6 @@ UE.plugin.register('autoupload', function (){
         fd.append('type', 'ajax');
         xhr.open("post", url, true);
         xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
-		//xhr.setRequestHeader('token', token);
         xhr.addEventListener('load', function (e) {
             try{
                 var json = (new Function("return " + utils.trim(e.target.response)))();
