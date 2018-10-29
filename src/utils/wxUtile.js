@@ -57,5 +57,16 @@ export default {
         alert('分享成功');
       });
     });
+    wx.ready(function () {   //需在用户可能点击分享按钮前就先调用
+      wx.updateTimelineShareData({
+        title: shareData.shareTitle, // 分享标题
+        desc: shareData.shareDesc, // 分享描述
+        link: url, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致 this.$router.history.current.path
+        imgUrl: shareData.shareImg, // 分享图标
+      }, function (res) {
+        //这里是回调函数
+        alert('分享成功');
+      });
+    });
   }
 }
