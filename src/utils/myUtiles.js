@@ -9,7 +9,6 @@ export default {
     if (router.name != name){
       return;
     }
-    console.log(router.name,name)
     document.title = title;
     let url = 'http://wzroom.cn/blog/1/articlelist/2/article/359619625057';
     let data = {
