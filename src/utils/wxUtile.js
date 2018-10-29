@@ -19,16 +19,16 @@ function getWxUrl(path) {
 export default {
   wxShare(shareData) {
     // shareUrl = getWxUrl(shareUrl);
-    var cookieWxConfig = fecth.getCookieValue('wxConfig');
-    if (cookieWxConfig != null && cookieWxConfig!= "undefined" && cookieWxConfig.length > 0){
-      this.wxConfig(JSON.parse(fecth.getCookieValue('wxConfig')),shareData)
-    }else {
+    // var cookieWxConfig = fecth.getCookieValue('wxConfig');
+    // if (cookieWxConfig != null && cookieWxConfig!= "undefined" && cookieWxConfig.length > 0){
+    //   this.wxConfig(JSON.parse(fecth.getCookieValue('wxConfig')),shareData)
+    // }else {
       fecth.get(apiList.getWxConfig, {url: location.href.split('#')[0]}).then((res) => {
         let dataConfig = res.data;
-        fecth.setCookie('wxConfig',JSON.stringify(dataConfig));
+        // fecth.setCookie('wxConfig',JSON.stringify(dataConfig));
         this.wxConfig(dataConfig, shareData)
       })
-    }
+    // }
   },
   wxConfig(data, shareData){
     wx.config({
