@@ -23,7 +23,8 @@ export default {
     // if (cookieWxConfig != null && cookieWxConfig!= "undefined" && cookieWxConfig.length > 0){
     //   this.wxConfig(JSON.parse(fecth.getCookieValue('wxConfig')),shareData)
     // }else {
-      let url = location.href.substring(location.href.indexOf('//') + 2, location.href.length);
+    //   let url = location.href.substring(location.href.indexOf('//') + 2, location.href.length);
+    let url = location.href;
       fecth.get(apiList.getWxConfig, {url: url}).then((res) => {
         let dataConfig = res.data;
         // fecth.setCookie('wxConfig',JSON.stringify(dataConfig));
