@@ -1,13 +1,18 @@
 import store from './../store'
 import fecth from './fecth'
 import wxShare from './wxUtile.js'
+var roots = process.env.API_ROOT
 
 export default {
   setTitle(title){
-    document.title = title
+    document.title = title;
+    let url = window.location.href;
+    console.log(url)
+    url = url.substring(url.indexOf(roots)+roots.length,url.length);
+    console.log(url);
     let data = {
       shareTitle: document.title,
-      shareUrl: window.location.href,
+      shareUrl: url,
       shareImg: 'http://123.56.221.77/static/defaultImg.jpg',
       shareDesc: '如果你不爱学习，那么我们没办法做朋友'
     }
