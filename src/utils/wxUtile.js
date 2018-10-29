@@ -44,11 +44,11 @@ export default {
       nonceStr: data.nonceStr, // 必填，生成签名的随机串
       signature: data.signature, // 必填，签名，见附录1
       jsApiList: ['checkJsApi',
-        'updateAppMessageShareData',
-        'updateTimelineShareData'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+        'onMenuShareAppMessage',
+        'onMenuShareTimeline'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
     });
     wx.checkJsApi({
-      jsApiList: ['updateAppMessageShareData','updateTimelineShareData'], // 需要检测的JS接口列表，所有JS接口列表见附录2,
+      jsApiList: ['onMenuShareAppMessage','onMenuShareTimeline'], // 需要检测的JS接口列表，所有JS接口列表见附录2,
       success: function(res) {
         // 以键值对的形式返回，可用的api值true，不可用为false
         // 如：{"checkResult":{"chooseImage":true},"errMsg":"checkJsApi:ok"}
@@ -56,7 +56,7 @@ export default {
       }
     });
     wx.ready(function () {   //需在用户可能点击分享按钮前就先调用
-      wx.updateAppMessageShareData({
+      wx.onMenuShareAppMessage({
         title: shareData.shareTitle, // 分享标题
         desc: shareData.shareDesc, // 分享描述
         link: url, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致 this.$router.history.current.path
@@ -65,16 +65,15 @@ export default {
         //这里是回调函数
         alert('分享成功');
       });
-    });
-    wx.ready(function () {   //需在用户可能点击分享按钮前就先调用
-      wx.updateTimelineShareData({
+      wx.onMenuShareTimeline({
         title: shareData.shareTitle, // 分享标题
         desc: shareData.shareDesc, // 分享描述
         link: url, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致 this.$router.history.current.path
         imgUrl: shareData.shareImg, // 分享图标
-      }, function (res) {
-        //这里是回调函数
-        alert('分享成功');
+        success: function () {
+          // 用户点击了分享后执行的回调函数
+          alert('分享成功');
+        }
       });
     });
   }
