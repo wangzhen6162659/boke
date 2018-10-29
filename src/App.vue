@@ -236,7 +236,7 @@ export default {
   },
   mounted () {
     // 输出信息
-    DGlobal.utils.setConsole('前端借鉴于github/IFmiss', 1, '未曾遗忘的青春')
+    DGlobal.utils.setConsole('如果你不爱学习，那么我们没办法做朋友')
     // 设置audio 的refs
     this.setAudioRef()
     // this.$nextTick(() => {

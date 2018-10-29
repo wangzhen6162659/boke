@@ -23,7 +23,7 @@ export default {
     if (cookieWxConfig != null && cookieWxConfig.length > 0){
       this.wxConfig(JSON.parse(fecth.getCookieValue('wxConfig')),shareData)
     }else {
-      fecth.get(apiList.getWxConfig, {url: 'onMenuShareAppMessage'}).then((res) => {
+      fecth.get(apiList.getWxConfig, {url: 'updateAppMessageShareData'}).then((res) => {
         let dataConfig = res.data;
         fecth.setCookie('wxConfig',JSON.stringify(dataConfig));
         this.wxConfig(dataConfig, shareData)
@@ -31,6 +31,7 @@ export default {
     }
   },
   wxConfig(data, shareData){
+    alert(JSON.stringify(shareData))
     wx.config({
       debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
       appId: data.appId, // 必填，公众号的唯一标识
@@ -40,7 +41,7 @@ export default {
       jsApiList: data.url // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
     });
     wx.ready(function () {   //需在用户可能点击分享按钮前就先调用
-      wx.onMenuShareAppMessage({
+      wx.updateAppMessageShareData({
         title: shareData.shareTitle, // 分享标题
         desc: shareData.shareDesc, // 分享描述
         link: shareData.shareUrl, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致 this.$router.history.current.path
