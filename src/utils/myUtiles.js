@@ -11,7 +11,7 @@ export default {
       shareImg: 'http://123.56.221.77/static/defaultImg.jpg',
       shareDesc: ''
     }
-    wxShare.wxShare(data);
+    wxShare.wxShare(data.shareTitle, data.shareUrl, data.shareImg, data.shareDesc);
     // let titil =
     // let url = window.location.href
     // let desc = ''
