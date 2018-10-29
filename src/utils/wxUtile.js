@@ -23,7 +23,7 @@ export default {
     if (cookieWxConfig != null && cookieWxConfig!= "undefined" && cookieWxConfig.length > 0){
       this.wxConfig(JSON.parse(fecth.getCookieValue('wxConfig')),shareData)
     }else {
-      fecth.get(apiList.getWxConfig, {url: 'updateAppMessageShareData'}).then((res) => {
+      fecth.get(apiList.getWxConfig, {url: location.href.split('#')[0]}).then((res) => {
         let dataConfig = res.data;
         fecth.setCookie('wxConfig',JSON.stringify(dataConfig));
         this.wxConfig(dataConfig, shareData)
@@ -47,7 +47,7 @@ export default {
         imgUrl: shareData.shareImg, // 分享图标
       }, function (res) {
         //这里是回调函数
-        alert('success');
+        alert('分享成功');
       });
     });
   }
