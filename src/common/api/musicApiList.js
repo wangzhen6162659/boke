@@ -9,7 +9,7 @@ const serviceModule = {
   /*歌曲歌词*/
   getLyric: '/musicApi/lyric',
   /*歌曲url*/
-  getUrl: '/musicApi/music/url',
+  getUrl: '/musicApi/song/url',
   /*搜索歌词*/
   getSearch: '/musicApi/search',
   /*专辑查找*/
