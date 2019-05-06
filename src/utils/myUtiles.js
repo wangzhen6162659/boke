@@ -10,11 +10,11 @@ export default {
       return;
     }
     document.title = title;
-    let url = 'http://wzroom.cn/blog/1/articlelist/2/article/359619625057';
+    let url = 'https://wzroom.cn/blog/1/articlelist/2/article/359619625057';
     let data = {
       shareTitle: document.title,
       shareUrl: url,
-      shareImg: 'http://123.56.221.77/static/defaultImg.jpg',
+      shareImg: 'https://wzroom.cn/boke/boke_static/defaultImg.jpg',
       shareDesc: '如果你不爱学习，那么我们没办法做朋友'
     }
     wxShare.wxShare(data);

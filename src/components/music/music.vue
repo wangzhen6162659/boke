@@ -49,7 +49,7 @@
 			</transition>
   			<div class="right_info">
   				<div class="bg-info">
-  					<img class="music-bg" :src="getCurrentMusic.picurl ? getCurrentMusic.picurl : './../../../static/defaultImg.jpg'">
+  					<img class="music-bg" :src="getCurrentMusic.picurl ? getCurrentMusic.picurl : './../../../boke/boke_static/defaultImg.jpg'">
   				</div>
   				<div class="lrc-content" ref="lrcContent">
   					<div class="lrc-wrapper" ref="lrcWrapper">
