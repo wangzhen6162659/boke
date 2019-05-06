@@ -29,7 +29,7 @@
     </transition>
   </div>
 </template>
-<script src="http://www.daiwei.org/global/js/jquery.mCustomScrollbar.min.js"></script>
+<script src="https://wzroom.cn/boke/boke_static/font-icon/mCustomScrollbar.css"></script>
 <script>
   // import Vue from 'vue'
   import store from 'store'
