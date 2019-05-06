@@ -1,16 +1,17 @@
 // see http://vuejs-templates.github.io/webpack for documentation.
 var path = require('path')
+const system = require('./../build/system')
 
 module.exports = {
   build: {
     env: require('./prod.env'),
-    index: path.resolve(__dirname, '../dist/index.html'),
+      index: path.resolve(__dirname, '../dist/' + system.assetsIndexDirectory + '/index.html'),
     // assetsRoot: path.resolve(__dirname, '../dist/new'),
     // assetsSubDirectory: 'static',
     // assetsPublicPath: 'new/',
     // productionSourceMap: true,
     assetsRoot: path.resolve(__dirname, '../dist'),
-    assetsSubDirectory: 'static',
+    assetsSubDirectory: system.assetsSubDirectory,
     assetsPublicPath: '/',
     productionSourceMap: true,
 

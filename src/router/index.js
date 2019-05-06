@@ -70,8 +70,8 @@ const ArticleCreate = r => require.ensure([], () => r(require('@/components/blog
 Vue.use(Router)
 
 export default new Router({
-  mode: 'history',
-  base: '/',//这个配置也很重要，否则会出现页面空白情况
+  // mode: 'history',
+  base: '/boke-webapp',//这个配置也很重要，否则会出现页面空白情况
   hashbang: true,
   saveScrollPosition: true,
   suppressTransitionError: true,
