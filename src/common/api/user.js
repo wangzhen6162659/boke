@@ -30,7 +30,7 @@ export function todoUserInfo () {
 	let loginInfo = store.getters.getUserInfo
 	return new Promise((resolve, reject) => {
 		if (loginInfo === null) {
-			router.push('/user/login')
+			router.push('/user/login/-1')
 			reject(LOGIN_INFO)
     } else {
 			resolve(loginInfo)

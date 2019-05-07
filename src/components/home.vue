@@ -26,8 +26,9 @@
           <!--<div class="set_list" v-if="imageInfo.type === 'home'" @click="showAllList">-->
             <!--<i class="text">图</i>-->
           <!--</div>-->
-          <div class="set_list" v-if="globalInfo.isHigher768" @click="toggleFullScreen">
-            <i :class="isFullScreen ? 'icon-canclefullscreen' : 'icon-fullscreen'" :title="isFullScreen ? '取消全屏' : '全屏'"></i>
+          <div class="set_list" v-if="globalInfo.isHigher768">
+            <span class="iconali-icon_live_fill iconfont" @click="goVideo"></span>
+            <i :class="isFullScreen ? 'icon-canclefullscreen' : 'icon-fullscreen'" :title="isFullScreen ? '取消全屏' : '全屏'" @click="toggleFullScreen"></i>
           </div>
         </div>
         <!--<span class="tips" :title="bingImageDisc">每日一图由 {{bingImageDisc}} 提供 | Copyright © 2016~{{new Date().getFullYear()}} DAIWEI.ORG-->
@@ -90,6 +91,9 @@ export default {
   //   advertisement
   // },
   methods: {
+    goVideo () {
+      window.location.href = process.env.API_ROOT + '/webrtc_webapp/test/?1&token=' + fecth.getCookieValue('token')
+    },
     toggleFullScreen () {
       if (this.isFullScreen) {
         this.exitFullscreen()

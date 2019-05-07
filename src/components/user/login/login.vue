@@ -96,7 +96,12 @@
                 type: 'set_UserInfo',
                 data: res.data.data
               })
-              this.$router.go(-1);
+              var transUrl = decodeURIComponent(this.$route.params.url)
+              if (transUrl && transUrl !== '-1') {
+                window.location.href = transUrl + '&token=' + fecth.getCookieValue('token')
+              } else {
+                this.$router.go(-1);
+              }
             } else {
               this.$notify({
                 title: res.data.errmsg,

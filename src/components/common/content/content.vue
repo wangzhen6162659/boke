@@ -74,7 +74,7 @@
           {{userInfo.nickname === '' ? (userInfo.username === '' ? '点击设置用户名' : userInfo.username) : userInfo.nickname}}
         </router-link>
 
-        <router-link v-else class="listmenu" tag="a" to="/user/login">
+        <router-link v-else class="listmenu" tag="a" to="/user/login/-1">
           登陆
         </router-link>
 

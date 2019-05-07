@@ -156,7 +156,7 @@
           text: '请重新登录！',
           duration: 2000
         })
-        this.$router.push('/user/login')
+        this.$router.push('/user/login/-1')
       }else {
         this.userInfo = JSON.parse(fecth.getCookieValue("_user"))
         this.$nextTick(() => {
@@ -177,7 +177,7 @@
             text: '请重新登录！',
             duration: 2000
           })
-          this.$router.push('/user/login')
+          this.$router.push('/user/login/-1')
         }else {
           this.userInfo = JSON.parse(fecth.getCookieValue("_user"))
           if (this.userInfo !== '' && store.getters.getEmpInfo === this.userInfo.id){

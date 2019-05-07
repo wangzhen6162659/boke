@@ -296,11 +296,11 @@ export default new Router({
       children: [
         {
           path: '/',
-          redirect: '/user/login',
+          redirect: '/user/login/-1',
           component: UserInfo
         },
         {
-          path: '/user/login',
+          path: '/user/login/:url',
           component: Login
         },
         {
