@@ -3,7 +3,7 @@
 		<div class="empty" v-if="!videoInfo.length || searching">{{tips}}</div>
 		<div class="resultlists" v-if="videoInfo.length">
 			<h3 class="name">
-				关键词: {{keyword}}	
+				关键词: {{keyword}}
 			</h3>
 			<span class="downloadtip">复制地址在迅雷中打开即可下载 !</span>
 			<div class="resultlist" v-for="(item, index) in videoInfo">
@@ -44,7 +44,7 @@
 				if (this.keyword !== '') {
 					this.searching = true
 					this.tips = '数据查询中，请稍候...'
-					let url = 'http://www.daiwei.org/vue/server/home.php?inAjax=1&do=getResourceVideo'
+					let url = ''
 					fecth.get(url, {'keyword': this.keyword}).then((res) => {
 						if (res.data && res.data.ResultData) {
 							this.videoInfo = res.data.ResultData
@@ -115,7 +115,7 @@
 							color: $text_link_color
 							font-size:14px
 						    word-break: break-word
-					
-				
-				
+
+
+
 </style>

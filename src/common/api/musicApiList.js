@@ -10,6 +10,8 @@ const serviceModule = {
   getLyric: '/lyric',
   /*歌曲url*/
   getUrl: '/song/url',
+  /*歌曲url*/
+  getCloudUrl: 'https://music.163.com/song/media/outer/url',
   /*搜索歌词*/
   getSearch: '/search',
   /*专辑查找*/

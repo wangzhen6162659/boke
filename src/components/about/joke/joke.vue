@@ -25,7 +25,7 @@ export default {
 			this.$router.go(-1)
 		},
 		getJokeData () {
-			const apiUrl = `http://www.daiwei.org/vue/server/home.php?inAjax=1&do=getJokeInfo`
+			const apiUrl = ``
 			fecth.get(apiUrl).then((res) => {
 				this.jokeInfo = res.data
 			})

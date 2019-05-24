@@ -23,7 +23,7 @@
 		},
 		methods: {
 			getUpdateInfo () {
-				let url = 'http://www.daiwei.org/vue/server/home.php?inAjax=1&do=getUpdateInfo'
+				let url = ''
 				fecth.get(url).then((res) => {
 					this.updateInfo = res.data
 				}, (err) => {
@@ -123,5 +123,5 @@
 						font-size:14px
 						width: 25%
 						text-align:right
-					
+
 </style>

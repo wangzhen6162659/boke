@@ -38,7 +38,7 @@ export default {
 			this.getSuggestInfo()
 		},
 		submitSuggest () {
-			const fecthUrl = `http://www.daiwei.org/vue/server/home.php?inAjax=1&do=submitSuggestInfo`
+			const fecthUrl = ``
 			const suggestInfo = this.$refs.content.value
 			const contactInfo = this.$refs.contactinfo.value
 			const suggestT = this.getDateNow()
@@ -76,7 +76,7 @@ export default {
 			return year + '-' + month + '-' + day + ' ' + hours + ':' + minutes + ':' + seconds
 		},
 		getSuggestInfo () {
-			const fecthUrl = `http://www.daiwei.org/vue/server/home.php?inAjax=1&do=getSuggestInfo`
+			const fecthUrl = ``
 			fecth.get(fecthUrl).then((res) => {
 				this.suggestList = res.data
 			}, (err) => {

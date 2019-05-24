@@ -3,7 +3,7 @@
 		<div class="empty" v-if="!audioInfo.length || searching">{{tips}}</div>
 		<div class="resultlists" v-if="audioInfo.length">
 			<h3 class="name">
-				关键词: {{keyword}}	
+				关键词: {{keyword}}
 			</h3>
 			<p class="downloadtip">点击下载图标即可下载到本地</p>
 			<div class="resultlist">
@@ -46,7 +46,7 @@
 				if (this.keyword !== '') {
 					this.tips = '数据查询中，请稍候...'
 					this.searching = true
-					let url = 'http://www.daiwei.org/vue/server/home.php?inAjax=1&do=getResourceAudio'
+					let url = ''
 					fecth.get(url, {'keyword': this.keyword}).then((res) => {
 						if (res.data && res.data.ResultData) {
 							this.audioInfo = res.data.ResultData
@@ -145,5 +145,5 @@
 						.no
 							color: $text_color_opacity
 							border: 1px solid $text_color_opacity
-				
+
 </style>

@@ -16,7 +16,7 @@ const globalStore = {
 		weather: {},
 		showloading: true,
 		musicRouter: '/music/:empId/playlist',
-		host: 'http://www.daiwei.org',
+		host: '',
 		userInfo: null,
     empInfo: null,
     analyser: null

@@ -31,7 +31,7 @@ export default {
 		},
 		initData () {
 			const _this = this
-			const apiUrl = `http://www.daiwei.org/vue/server/home.php?inAjax=1&do=getLinksInfo`
+			const apiUrl = ``
 			fecth.get(apiUrl).then((res) => {
 				this.friendShipList = res.data
 				_this.$msg('想互换友链的朋友可以给我留言哦!')
@@ -86,6 +86,6 @@ export default {
 					text-align:center
 					color:#fff
 					text-decoration:underline
-				
+
 
 </style>

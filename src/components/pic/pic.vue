@@ -93,7 +93,7 @@
     },
     methods: {
       fetchData () {
-        const getImageConditions = 'http://www.daiwei.org/vue/server/home.php?inAjax=1&do=getImageCondition'
+        const getImageConditions = ''
         fecth.post(getImageConditions, {index: this.getPicDataIndex, count: 5}).then((res) => {
           res.data.forEach((value, index, array) => {
             this.picinfo.push(value)

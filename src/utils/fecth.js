@@ -206,6 +206,23 @@ export default {
       }
     )
   },
+  getBase (url,params) {
+    return axios({
+      method: 'get',
+      baseURL: '',
+      url,
+      params, // get 请求时带的参数
+      timeout: 15000
+    }).then(
+      (response) => {
+        return checkStatus(response)
+      }
+    ).then(
+      (res) => {
+        return checkCode(res)
+      }
+    )
+  },
   getOutProxy (url,params) {
     var ip = this.createIp();
     // const crypto = require('crypto');

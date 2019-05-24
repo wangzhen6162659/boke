@@ -26,7 +26,7 @@ export default {
 			this.$router.go(-1)
 		},
 		initData () {
-			var url = 'http://www.daiwei.org/vue/server/home.php?inAjax=1&do=getWorksList'
+			var url = ''
 			fecth.get(url).then((res) => {
 				this.works_list = res.data
 			}, (err) => {

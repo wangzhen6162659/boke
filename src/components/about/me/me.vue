@@ -45,7 +45,7 @@ export default {
 		},
 		getTipsInfo () {
 			const _this = this
-			const getTipsInfoApi = 'http://www.daiwei.org/vue/server/home.php?inAjax=1&do=getTipsInfo'
+			const getTipsInfoApi = ''
 			fecth.get(getTipsInfoApi).then((res) => {
 				let arrPersonal = []
 				let arrTechnology = []
@@ -65,7 +65,7 @@ export default {
 		},
 		clickTips (name) {
 			const _this = this
-			const updateTipsInfoApi = 'http://www.daiwei.org/vue/server/home.php?inAjax=1&do=updataTipsInfo'
+			const updateTipsInfoApi = ''
 			fecth.post(updateTipsInfoApi, {tipsName: name}).then((res) => {
 				_this.getTipsInfo()
 			}, (err) => {
@@ -144,5 +144,5 @@ export default {
 					z-index: -1
 				.name
 					margin-right:6px
-			
+
 </style>

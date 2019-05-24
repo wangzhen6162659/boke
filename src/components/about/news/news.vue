@@ -74,7 +74,7 @@
 		},
 		methods: {
 			getNewsInfo () {
-				const url = 'http://www.daiwei.org/vue/server/home.php?inAjax=1&do=getNewsInfo'
+				const url = ''
 				fecth.post(url, {
 					type: this.type
 				}).then((res) => {
@@ -186,7 +186,7 @@
 				box-sizing:border-box
 				opacity:1
 				transition: all 0.5s 0.3s
-				
+
 				a
 					display:block
 					border-bottom: 1px solid $border_bottom_color
