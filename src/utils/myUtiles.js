@@ -6,7 +6,7 @@ var roots = process.env.API_ROOT
 export default {
   setTitle(title, router, name){
     // console.log(router.history.current.path)
-    if (router.name != name){
+    if ((router.name || router.path.split('/')[1]) != name){
       return;
     }
     document.title = title;

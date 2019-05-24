@@ -5,7 +5,7 @@
 
 const serviceModule = {
   /*查询文章类型*/
-  upload: '/api/file/file/upload'
+  upload: '/file/file/upload'
 }
 const ApiList = { ...serviceModule }
 

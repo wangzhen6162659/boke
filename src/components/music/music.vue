@@ -283,7 +283,7 @@
           this.collectName = '我的收藏';
         }
   		})
-      myUtiles.setTitle('NoteX-' + '音乐');
+      myUtiles.setTitle('NoteX-' + '音乐', this.$route, 'music');
   	},
     watch: {
       '$route' (to, from) {
@@ -294,7 +294,7 @@
             this.collectName = '我的收藏';
         }
         if (to.matched[0] && to.matched[0].path === '/music/:empId'){
-          myUtiles.setTitle('NoteX-' + '音乐');
+          myUtiles.setTitle('NoteX-' + '音乐', this.$route, 'music');
         }
       }
     }

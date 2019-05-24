@@ -6,6 +6,8 @@ import DGlobal from 'common/js/global.js'
 // request拦截器
 var roots = process.env.API_ROOT
 var rootMusics = process.env.API_MUSIC_ROOT
+var apiPrix = process.env.API_PRIX_ROOT
+var musicApiPrix = process.env.MUSIC_API_PRIX_ROOT
 axios.interceptors.request.use(
   config => {
   // loading
@@ -92,7 +94,7 @@ export default {
     else return "";    //搜索失败，返回空字符串
   },
   post (url, data) {
-    url = roots + url;
+    url = roots + apiPrix + url;
     var token = this.getCookieValue("_token")
     return axios({
       method: 'post',
@@ -116,7 +118,7 @@ export default {
     )
   },
   postJson (url, data) {
-    url = roots + url;
+    url = roots + apiPrix + url;
     var token = this.getCookieValue("_token")
     return axios({
       method: 'post',
@@ -140,7 +142,7 @@ export default {
     )
   },
   upload (url, data) {
-    url = roots + url;
+    url = roots + apiPrix + url;
     var token = this.getCookieValue("_token")
     return axios({
       method: 'post',
@@ -165,7 +167,7 @@ export default {
   },
 
   get (url, params) {
-    url = roots + url;
+    url = roots + apiPrix + url;
     var token = this.getCookieValue("_token")
     return axios({
       method: 'get',
@@ -187,10 +189,10 @@ export default {
     )
   },
   getOut (url,params) {
-    url = rootMusics + url;
+    url = rootMusics + musicApiPrix + url;
     return axios({
       method: 'get',
-      baseURL: process.env.BASE_API,
+      baseURL: '',
       url,
       params, // get 请求时带的参数
       timeout: 15000
@@ -250,7 +252,7 @@ export default {
   return [a, b, c, d].join('.');
   },
   getWhithHeaders (url, params) {
-    url = roots + url;
+    url = roots + apiPrix + url;
     return axios({
       method: 'get',
       baseURL: process.env.BASE_API,

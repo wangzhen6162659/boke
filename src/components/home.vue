@@ -296,7 +296,7 @@ export default {
       }
       if (to.matched[0].path === '/home/:empId') {
         // console.log(to)
-        myUtiles.setTitle('NoteX-' + '主页');
+        myUtiles.setTitle('NoteX-' + '首页', this.$route, 'home');
       }
     }
   },
@@ -306,7 +306,7 @@ export default {
     const fixedImageBg = localStorage.getItem('fixedImageBg')
     this.index = fixedImageBg ? JSON.parse(fixedImageBg).index : store.getters.getFixedImageInfo.index
     this.getPicNum()
-    myUtiles.setTitle('NoteX-' + '主页');
+    myUtiles.setTitle('NoteX-' + '首页', this.$route, 'home');
   }
 }
 </script>

@@ -5,16 +5,16 @@
 
 const serviceModule = {
   /*查询文章类型*/
-  findTypeByUser: '/api/admin/article/findTypeByUser',
+  findTypeByUser: '/admin/article/findTypeByUser',
   /*新增文章*/
-  saveArticle: '/api/admin/article/saveArticle',
-  saveArticleType: '/api/admin/article/saveArticleType',
-  saveReply: '/api/admin/reply/saveReply',
-  findReply: '/api/admin/reply/findReply',
-  getArticle: '/api/admin/article/getArticle',
-  pageByUser: '/api/admin/article/pageByUser',
-  deleteArticle: '/api/admin/article/deleteArticle',
-  deleteArticleType: '/api/admin/article/deleteArticleType',
+  saveArticle: '/admin/article/saveArticle',
+  saveArticleType: '/admin/article/saveArticleType',
+  saveReply: '/admin/reply/saveReply',
+  findReply: '/admin/reply/findReply',
+  getArticle: '/admin/article/getArticle',
+  pageByUser: '/admin/article/pageByUser',
+  deleteArticle: '/admin/article/deleteArticle',
+  deleteArticleType: '/admin/article/deleteArticleType',
 }
 const ApiList = { ...serviceModule }
 

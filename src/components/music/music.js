@@ -377,7 +377,7 @@ const musicApi = {
 
     // 获取本地的音乐
     getLocalMusic (userId, tag) {
-          let fecthUrl = '/api/admin/collect/getCollectMusic';
+          let fecthUrl = '/admin/collect/getCollectMusic';
           fecth.get(fecthUrl, {
               userId: userId
           }).then((res) => {

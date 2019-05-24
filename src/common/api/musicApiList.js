@@ -5,21 +5,21 @@
 
 const serviceModule = {
   /*歌曲详情*/
-  getDetail: '/musicApi/song/detail',
+  getDetail: '/song/detail',
   /*歌曲歌词*/
-  getLyric: '/musicApi/lyric',
+  getLyric: '/lyric',
   /*歌曲url*/
-  getUrl: '/musicApi/song/url',
+  getUrl: '/song/url',
   /*搜索歌词*/
-  getSearch: '/musicApi/search',
+  getSearch: '/search',
   /*专辑查找*/
-  getAlbum: '/musicApi/album',
+  getAlbum: '/album',
   /*歌单详情*/
-  getPlaylist: '/musicApi/playlist/detail',
+  getPlaylist: '/playlist/detail',
   /*歌单详情*/
-  getCloudMusicUrl: '/musicApi/playlist/detail',
+  getCloudMusicUrl: '/playlist/detail',
   /*前十歌单*/
-  getTopPlaylist: '/musicApi/top/playlist?limit=10&order=new'
+  getTopPlaylist: '/top/playlist?limit=10&order=new'
 }
 const ApiList = { ...serviceModule }
 

@@ -5,13 +5,13 @@
 
 const serviceModule = {
   /*查询文章类型*/
-  getBingDayPic: '/api/admin/public/getBingDayPic',
+  getBingDayPic: '/admin/public/getBingDayPic',
   /*新增文章*/
-  saveArticle: '/api/admin/article/saveArticle',
+  saveArticle: '/admin/article/saveArticle',
   /*新增文章*/
-  getFace: '/api/ai/face/get_face',
+  getFace: '/ai/face/get_face',
   /*新增文章*/
-  getWxConfig: '/api/admin/public/getWxConfig'
+  getWxConfig: '/admin/public/getWxConfig'
 }
 const ApiList = { ...serviceModule }
 
