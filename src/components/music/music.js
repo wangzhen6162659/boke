@@ -259,7 +259,7 @@ const musicApi = {
     // 点击播放歌曲
     clickIndex (data, that) {
         var reqId = data.music_id ? data.music_id : data.id
-        fecth.getOut(apiList.getCloudUrl,{id: reqId + '.mp3'}).then((res) => {
+        fecth.getBase(apiList.getCloudUrl,{id: reqId + '.mp3'}).then((res) => {
             // 如果代码不允许被播放（付费音乐）
             if (res.data.data[0].url === null) {
                 that.$msg('音乐无法播放,请播放其他音频...')
@@ -501,7 +501,7 @@ const musicApi = {
         }
 
         var reqId = musicplaylist[index].music_id ? musicplaylist[index].music_id : musicplaylist[index].id
-        fecth.getOut(apiList.getCloudUrl,{id: reqId + '.mp3'}).then((res) => {
+        fecth.getBase(apiList.getCloudUrl,{id: reqId + '.mp3'}).then((res) => {
             if (res.data.data[0].url === null) {
                 let initIndex = 0
                 const currentMusic = {
