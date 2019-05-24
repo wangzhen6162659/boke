@@ -676,7 +676,7 @@ const musicApi = {
 
     // 由于网易云地址有添加防盗链  m8c,m7c 的地址替换成m8,m7 就可以正常播放
     replaceUrl (url) {
-        url = url.replace('http', 'https')
+        // url = url.replace('http', 'https')
         return url.indexOf('//m7c') < 0 ? (url.indexOf('//m8c') ? url.replace('//m8c', '//m8') : url) : url.replace('//m7c', '//m7')
     },
 
