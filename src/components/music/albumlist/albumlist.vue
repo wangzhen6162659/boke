@@ -12,7 +12,7 @@
 			<div class="music_list border-1px" v-if="musicList && musicList[0].al" v-for="(list, index) in musicList" :key="list.id" :data-musicid="list.id" :data-pic="list.al.picUrl" @click="clickPlayList(list.id, list.al.picUrl, getMusicDurationType(list.dt),index)">
 				<span class="music_index">
 					<span v-show="getCurrentMusic.id !== list.id">{{index + 1}}</span>
-					<img v-show="getCurrentMusic.id === list.id" src="" alt="未曾遗忘的青春">
+					<img v-show="getCurrentMusic.id === list.id" src="../../../../static/wave.gif" alt="未曾遗忘的青春">
 				</span>
 				<div class="music_name">
 					<span class="span_name">{{list.name}}</span>
