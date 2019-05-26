@@ -359,7 +359,7 @@ const musicApi = {
             musicDur: opt.dt,
             musicPicurl: picUrl
           }
-          let fecthUrl = '/api/admin/collect/saveCollectMusic'
+          let fecthUrl = '/admin/collect/saveCollectMusic'
           fecth.postJson(fecthUrl, options).then((res) => {
             res = res.data
             if (res.data) {
@@ -431,7 +431,7 @@ const musicApi = {
 
     // 删除收藏的音乐
     deleteMusic (id) {
-            let fecthUrl = '/api/admin/collect/deleteCollectMusic'
+            let fecthUrl = '/admin/collect/deleteCollectMusic'
             fecth.get(fecthUrl, {
                 musicId: id
             }).then((res) => {
