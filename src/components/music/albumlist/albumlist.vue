@@ -9,7 +9,7 @@
 			<span class="music_duration">时长</span>
 		</div>
 		<div class="music_list_content">
-			<div class="music_list border-1px" v-if="musicList && musicList[0].al" v-for="(list, index) in musicList" :key="list.id" :data-musicid="list.id" :data-pic="list.al.picUrl" @click="clickPlayList(list.id, list.al.picUrl, getMusicDurationType(list.dt),index)">
+			<div class="music_list border-1px" v-if="musicList && musicList[0].al" v-for="(list, index) in musicList" :key="list.id" :data-musicid="list.id" :data-pic="list.al.picUrl" @click="clickPlayList(list.id, list.al.picUrl, getMusicDurationType(list.dt),index, list.name, list.ar[0].name)">
 				<span class="music_index">
 					<span v-show="getCurrentMusic.id !== list.id">{{index + 1}}</span>
 					<img v-show="getCurrentMusic.id === list.id" src="../../../../static/wave.gif" alt="未曾遗忘的青春">
@@ -83,11 +83,13 @@
   		},
 
   		// 点击播放音乐
-  		clickPlayList (id, pic, duration, index) {
+  		clickPlayList (id, pic, duration, index, name, signer) {
   			// alert(JSON.stringify(this.$route.params))
   			const data = {
   				id: id,
   				pic: pic,
+          singer: signer,
+          name: name,
   				duration: duration,
   				index: index,
   				list: store.getters.getMusicList
