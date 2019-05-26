@@ -1,5 +1,6 @@
 <template>
   <div id="app" @resize="isApp">
+    <div @click="setPlay" v-if="isVisiableModal" class="visiable">您的浏览器是chrome, 需要点此才可完成可视化播放</div>
     <loader :isshow="getShowLoading" loaderbackground="rgba(0,0,0,0.3)"></loader>
     <div class="maincontent">
       <fixed-bg v-if="imageInfo.url && imageSetting" :imagepath="imageInfo.url" />
@@ -32,7 +33,9 @@ import {getBingInfo, getMineBgByIndex} from 'common/api/background.js'
 export default {
   data () {
     return {
-      isgetimagebybing: store.getters.getShowBingImage
+      isgetimagebybing: store.getters.getShowBingImage,
+      AC: undefined,
+      isVisiableModal: false
     }
   },
   name: 'app',
@@ -45,25 +48,27 @@ export default {
     updatetips
   },
   methods: {
+    setPlay () {
+      this.AC.resume()
+      this.isVisiableModal = false
+    },
     createAnalyser () {
-      try {
-        window.AudioContext = window.AudioContext || window.webkitAudioContext || window.mozAudioContext || window.msAudioContext;
-        const AC = new window.AudioContext();
-        const analyser = AC.createAnalyser();
-        const gainnode = AC.createGain();
-        gainnode.gain.value = 1;
+      if (store.getters.getGlobalInfo.isHigher768) {
+        try {
+            window.AudioContext = window.AudioContext || window.webkitAudioContext || window.mozAudioContext || window.msAudioContext
+            this.AC = new window.AudioContext()
+            const analyser = this.AC.createAnalyser()
+            const gainnode = this.AC.createGain()
+            gainnode.gain.value = 1
 
-        if (store.getters.getGlobalInfo.isHigher768) {
-          const source = AC.createMediaElementSource(this.$refs.myAudio);
-          source.connect(analyser);
-          analyser.connect(gainnode);
-          gainnode.connect(AC.destination);
-          AC.resume()
+            const source = this.AC.createMediaElementSource(this.$refs.myAudio)
+            source.connect(analyser)
+            analyser.connect(gainnode)
+            gainnode.connect(this.AC.destination)
+            store.commit('setAnalyser', analyser)
+        } catch (err) {
+          alert('!Your browser does not support Web Audio API!')
         }
-        //
-        store.commit('setAnalyser', analyser);
-      } catch (err){
-        alert('!Your browser does not support Web Audio API!');
       }
     },
     fetchData () {
@@ -254,7 +259,10 @@ export default {
     /**
      *  设置音乐分析器
      */
-    this.createAnalyser();
+
+    this.isVisiableModal = navigator.userAgent.toLowerCase().match(/chrome/) && store.getters.getGlobalInfo.isHigher768
+    console.log(this.isVisiableModal)
+    this.createAnalyser()
     // 挂载 onresize事件
     window.onresize = () => {
       this.isApp()
@@ -283,4 +291,11 @@ export default {
     bottom: 0
     right:0
     background:transparent
+  .visiable
+    position: absolute;
+    z-index: 1
+    top: 80%;
+    width: 100%;
+    text-align: center;
+    text-shadow:0 0 0.2em #48d9f7
 </style>
