@@ -48,22 +48,23 @@ export default {
     createAnalyser () {
       try {
         window.AudioContext = window.AudioContext || window.webkitAudioContext || window.mozAudioContext || window.msAudioContext;
+        const AC = new window.AudioContext();
+        const analyser = AC.createAnalyser();
+        const gainnode = AC.createGain();
+        gainnode.gain.value = 1;
+
+        if (store.getters.getGlobalInfo.isHigher768) {
+          const source = AC.createMediaElementSource(this.$refs.myAudio);
+          source.connect(analyser);
+          analyser.connect(gainnode);
+          gainnode.connect(AC.destination);
+          AC.resume()
+        }
+        //
+        store.commit('setAnalyser', analyser);
       } catch (err){
         alert('!Your browser does not support Web Audio API!');
       }
-      const AC = new window.AudioContext();
-      const analyser = AC.createAnalyser();
-      const gainnode = AC.createGain();
-      gainnode.gain.value = 1;
-
-      if (store.getters.getGlobalInfo.isHigher768) {
-        const source = AC.createMediaElementSource(this.$refs.myAudio);
-        source.connect(analyser);
-        analyser.connect(gainnode);
-        gainnode.connect(AC.destination);
-      }
-      //
-      store.commit('setAnalyser', analyser);
     },
     fetchData () {
       // 是否需要获取壁纸信息
